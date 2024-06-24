@@ -37,6 +37,7 @@ jest.mock('../interfaces/koriInterface', () => {
 
 const db = require('./index');
 const KoriInterface = require('../interfaces/koriInterface');
+const { describe } = require('mocha');
 
 
 describe('Database operations', () => {

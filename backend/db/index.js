@@ -448,7 +448,7 @@ const getDegreeId = async (degreeId, degreeYears) => {
     if (degreeRows.length === 0) {
       return false;
     }
-    return degreeRows;
+    return degreeRows.id;
   } catch (error) {
     console.error("Error in getDegreeId:", error);
     return false;

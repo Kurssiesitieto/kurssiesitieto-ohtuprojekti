@@ -40,6 +40,19 @@ const removePrerequisiteCourse = (course_hy_id, prerequisite_course_hy_id) => {
   }
 };
 
+const getDegreeId = (degreeId, degreeYears) => {
+  console.log('@getDegreeId', degreeId, degreeYears)
+  const degrees = [
+    {
+      "id":"1",
+      "degree_name": "Matemaattisten tieteiden kandiohjelma 2023-2026",
+      "hy_degree_id": "kh50_001",
+      "degree_years": "2023-2026"
+    }
+  ]
+  return degrees.id;
+}
+
 const getDegrees = (degreeCode, degreeYears) => {
   console.log('@getDegrees', degreeCode, degreeYears)
   const courses = [
@@ -70,5 +83,5 @@ const getDegrees = (degreeCode, degreeYears) => {
 
 module.exports = {
   addCourse, getCourses, deleteCourse, addPrerequisiteCourse,
-  removePrerequisiteCourse, getDegrees
+  removePrerequisiteCourse, getDegrees, getDegreeId
 };
