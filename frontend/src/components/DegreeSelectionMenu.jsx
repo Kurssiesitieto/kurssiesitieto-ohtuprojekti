@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/* import React, { useState } from 'react';
 import { Button, Menu, MenuItem } from '@mui/material';
 import '../styles/DegreeSelectionMenu.css';
 
@@ -51,5 +51,83 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
     </div>
   );
 }
+*/
+import React from 'react';
+import { useState, useEffect } from 'react';
+import '../styles/DegreeSelectionMenu.css';
+import Autocomplete from '@mui/material/Autocomplete';
+import { TextField } from '@mui/material';
+import Box from '@mui/material/Box';
 
+function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSubmit = (event, searchQuery) => {
+    event.preventDefault();
+    const code = searchQuery || (searchText ? searchText.split(" ")[0] : '');
+    props.handleSearch(code)
+  }
+  
+  const handleChange = (event, newValue) => {
+    setSearchText(newValue);
+  };
+
+  const handleSelect = (event, newValue) => {
+    if (newValue === null) {
+      return;
+    }
+    if (event.type === 'click' ) {
+      setSearchText(newValue.degree_name);
+      handleSubmit(event, newValue.degree_name)  
+    }
+  }
+
+  return ( 
+    <div className='degreeSelectionButton'>   
+    <form onSubmit={handleSubmit}>
+    <Autocomplete
+      className='autocomplete'
+      id="degreeSelectionButton"
+      options={listOfDegrees}
+      inputValue={searchText}
+      onInputChange={handleChange}
+      onChange={handleSelect}
+
+      getOptionLabel={(option) => option.degree_name}
+      renderOption={(props, option) => (
+        <Box component="li" sx={{ p: 2 }} {...props} className="searchResult">
+              {option.degree_name}
+        </Box>
+      )}
+    sx={{ width: 300,
+      '& .MuiAutocomplete-popupIndicator': {
+        color: 'white',
+      },
+      '& .MuiAutocomplete-clearIndicator': {
+        color: 'white',
+      },
+      '& .MuiInput-underline:before': {
+        borderBottomColor: 'white' 
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'white' 
+      },
+    }}
+      renderInput={(params) => <TextField {...params}
+        id="textField"
+        data-testid="testTextField"
+        label="Valitse tutkinto:"
+        variant="standard"
+        InputLabelProps={{style: {color: '#fff', fontSize: 20}}}
+        sx={{
+          '& .MuiInputBase-input': {
+            color: 'white',
+          }
+        }}
+      />}
+    />
+    </form>
+    </div>
+  )
+}
 export default DegreeSelectionMenu;
