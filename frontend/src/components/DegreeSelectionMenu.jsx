@@ -99,31 +99,12 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
               {option.degree_name}
         </Box>
       )}
-    sx={{ width: 300,
-      '& .MuiAutocomplete-popupIndicator': {
-        color: 'white',
-      },
-      '& .MuiAutocomplete-clearIndicator': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:before': {
-        borderBottomColor: 'white' 
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'white' 
-      },
-    }}
       renderInput={(params) => <TextField {...params}
         id="textField"
         data-testid="testTextField"
         label="Valitse tutkinto:"
         variant="standard"
-        InputLabelProps={{style: {color: '#fff', fontSize: 20}}}
-        sx={{
-          '& .MuiInputBase-input': {
-            color: 'white',
-          }
-        }}
+        className='textFieldInput'
       />}
     />
     </form>

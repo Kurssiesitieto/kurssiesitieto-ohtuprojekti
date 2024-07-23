@@ -1,7 +1,7 @@
 @import url('./Colors.css');
 
 #degreeSelectionButton {
-  position: absolute;
+  /*position: absolute;
   left: 2%;
   top: 23%;
   color: var(--text-color-primary);
@@ -11,8 +11,56 @@
   line-height: inherit;
   font: inherit;
   text-transform: none;
+  */
+  z-index: 99;
+  position: absolute;
+  border: none;
+  left: 2%;
+  top: 10%;
+  /*background: inherit;*/
 }
   
-  #degreeSelectionButton:hover {
+#degreeSelectionButton:hover {
     background-color: var(--button-background-color-hover);
-  }
+}
+
+.autocomplete {
+  width: 300px;
+}
+
+#textField .MuiInputBase-input {
+  color: var(--searchbar-color-primary) !important;
+}
+
+#textField .MuiInputLabel-root {
+  color: var(--searchbar-color-primary) !important;
+  font-size: 20px !important;
+}
+
+.textFieldInput .MuiInput-underline:before {
+  border-bottom-color: var(--searchbar-color-primary) !important;
+}
+
+.textFieldInput .MuiInput-underline:after {
+  border-bottom-color: var(--searchbar-color-primary) !important;
+}
+
+.MuiAutocomplete-popupIndicator {
+  color: var(--searchbar-color-primary) !important;
+}
+
+.MuiAutocomplete-clearIndicator {
+  color: var(--searchbar-color-primary) !important;
+}
+
+.searchResult {
+  padding: 2px;
+}
+
+.textFieldInput .MuiInputBase-root {
+  color: var(--searchbar-color-primary) !important;
+}
+
+.textFieldInput .MuiFormLabel-root {
+  color: var(--searchbar-color-primary) !important;
+}
