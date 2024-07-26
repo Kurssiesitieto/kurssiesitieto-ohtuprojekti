@@ -83,7 +83,7 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
   }
 
   return ( 
-    <div className='degreeSelectionButton'>   
+    <div className='degreeSelectionButton'> 
     <form onSubmit={handleSubmit}>
     <Autocomplete
       className='autocomplete'
@@ -112,3 +112,4 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
   )
 }
 export default DegreeSelectionMenu;
+
