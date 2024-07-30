@@ -16,6 +16,15 @@ CREATE TABLE IF NOT EXISTS degrees (
     CONSTRAINT degree_name_unique UNIQUE (degree_name)
 );
 
+CREATE TABLE IF NOT EXISTS degreeinfo (
+    id SERIAL PRIMARY KEY,
+    degree_name VARCHAR(255) NOT NULL,
+    hy_degree_id VARCHAR(50) NOT NULL,
+    degree_years VARCHAR(25) NOT NULL,
+    CONSTRAINT unique_year_for_hy_course_id_new UNIQUE (hy_degree_id, degree_years),
+    CONSTRAINT degree_name_unique_new UNIQUE (degree_name)
+);
+
 CREATE TABLE IF NOT EXISTS course_degree_relation (
     id SERIAL PRIMARY KEY,
     degree_id INT NOT NULL REFERENCES degrees(id) ON DELETE CASCADE,
