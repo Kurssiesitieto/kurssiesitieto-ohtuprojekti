@@ -13,6 +13,7 @@ const PORT = 3001; //process.env.PORT || 3001; adjust port later from .env, prob
 const { getCourses } = require('./db');
 const { executeSchemaFile } = require('./dbStartup');
 const { insertDataFromJson } = require('./dbStartup/insertDataFromJson');
+const { insertDegreeinfoFromJson } = require('./dbStartup/insertDataFromJson');
 const coursesRoutes = require('./routes/coursesRoutes');
 const degreesRoutes = require('./routes/degreesRoutes');
 const koriRoutes = require('./routes/koriRoutes');
@@ -21,6 +22,7 @@ const path = require('path');
 
 executeSchemaFile();
 insertDataFromJson();
+insertDegreeinfoFromJson();
 
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);

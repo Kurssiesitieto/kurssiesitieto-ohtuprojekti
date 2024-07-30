@@ -384,7 +384,48 @@ const addDegreeData = async (degreeInfo, courseMappings) => {
   await addDdegree(degreeCode, degreeName, degreeYears);
   await Promise.all(courseMappings.map(async course => {
     await addCourseToDegree(degreeCode, degreeYears, course.course, course.courseType || 'compulsory');
-    }))
+    }));
+};
+
+const addSingleDegreeinfo = async (degreeCode, degreeName, degreeYears) => {
+  // Workaround for now. 'ON CONSTRAINT' works with one constraint only without some tomfoolery.
+  const degreeNameIsNotUnique = async (degreeName) => {
+    const { rows } = await pool.query(
+      `SELECT EXISTS (
+          SELECT 1
+          FROM degreeinfo
+          WHERE degree_name = $1
+      ) AS degreeinfoExists`,
+      [degreeName]
+    );
+    const { degreeinfoExists } = rows[0];
+    return degreeinfoExists;
+  };
+
+  const nameInUse = await degreeNameIsNotUnique(degreeName)
+  if (nameInUse) {
+    logger.verbose(`Degree ${degreeName} already exists in the database.`);
+    return;
+  }
+
+  const { rows } = await pool.query(
+    `INSERT INTO degreeinfo (degree_name, hy_degree_id, degree_years)
+    SELECT $1, $2, $3
+    ON CONFLICT ON CONSTRAINT unique_year_for_hy_course_id_new DO NOTHING
+    RETURNING *`,
+    [degreeName, degreeCode, degreeYears]
+  );
+  if (rows.length === 0) {
+    logger.verbose(`Degree '${degreeName}' already exists in the database.`);
+    return;
+  }
+  return;
+};
+
+const addDegreeinfo = async (degreeMappings) => {
+  await Promise.all(degreeMappings.map(async degree => {
+    await addSingleDegreeinfo(degree.degreeCode, degree.degreeName, degree.degreeYears);
+  }));
 };
 
 const getAllCoursesWithPrerequisites = async () => {
@@ -511,6 +552,8 @@ module.exports = {
   addManyCourses,
   addManyPrequisiteCourses,
   addDegreeData,
+  addDegreeinfo,
+  addSingleDegreeinfo,
   resetPositions,
   //updateCourse,
   getDegrees,
