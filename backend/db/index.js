@@ -477,6 +477,22 @@ const getDegrees = async ( degreeCode, degreeYears ) => {
   return courses;
 };
 
+const getDegreeNames = async () => {
+  try {
+    const query = `
+      SELECT degree_name, hy_degree_id
+      FROM degreeinfo
+      ORDER BY degree_name DESC
+    `;
+
+    const { rows: degreeRows } = await pool.query(query);
+    return degreeRows;
+  } catch (error) {
+    logger.debug('Failed to retrieve degreenames from database', error);
+    return false;
+  }
+};
+
 const getDegreeId = async (degreeId, degreeYears) => {
   try {  
     const degreeQuery = `
@@ -557,6 +573,7 @@ module.exports = {
   resetPositions,
   //updateCourse,
   getDegrees,
+  getDegreeNames,
   getStarted,
   getDegreeId,
   savePositions,
