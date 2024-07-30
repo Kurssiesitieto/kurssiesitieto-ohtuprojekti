@@ -4,7 +4,8 @@ const router = express.Router();
 const logger = require('../middleware/logger');
 const { getDegrees,
   getStarted, 
-  getDegreeId, 
+  getDegreeId,
+  getDegreeNames, 
   savePositions,
   resetPositions} = require('../db');
 
@@ -46,6 +47,12 @@ router.get('/search_by_degree', async (req, res) => {
     logger.error(`Error fetching degrees: ${error.message}`);
     res.status(500).send('Server error');
   }
+});
+
+router.get('/degree_names', async (req, res) => {
+  const degreeNames = await getDegreeNames();
+  logger.debug("Degreenames from database", degreeNames);
+  res.json(degreeNames);
 });
 
 router.post('/save_positions', async (req, res) => {
