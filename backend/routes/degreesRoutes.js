@@ -5,7 +5,9 @@ const logger = require('../middleware/logger');
 const { getDegrees,
   getStarted, 
   getDegreeId,
-  getDegreeNames, 
+  getDegreeNames,
+  createStudyPlan,
+  addStudyPlan, 
   savePositions,
   resetPositions} = require('../db');
 
@@ -53,6 +55,19 @@ router.get('/degree_names', async (req, res) => {
   const degreeNames = await getDegreeNames();
   logger.debug("Degreenames from database", degreeNames);
   res.json(degreeNames);
+});
+
+router.post('/create_studyplan', async (req, res) => {
+  logger.info("@/api/degrees/create_studyplan, received request body:", req.body);
+  const { degree_id, name, uid } = req.body;
+  try {
+    const newPlan = await createStudyPlan(degree_id, name, uid);
+    logger.info("@api/degrees/create_studyplan, adding studyplan:", newPlan);
+    res.status(201).json(newPlan);
+  } catch (error) {
+    logger.info('Error creating study plan:', error);
+    res.status(500).json({ error: 'Suunnitelman luominen ei onnistunut' });
+  };
 });
 
 router.post('/save_positions', async (req, res) => {

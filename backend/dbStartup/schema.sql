@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS courses (
     kori_id VARCHAR(50) NOT NULL,
     course_name VARCHAR(255) NOT NULL,
     hy_course_id VARCHAR(50) NOT NULL,
-    CONSTRAINT course_kori_name_unique UNIQUE (kori_id),
-    CONSTRAINT hy_course_id_unique UNIQUE (hy_course_id)
+    CONSTRAINT unique_course_kori_name UNIQUE (kori_id),
+    CONSTRAINT unique_hy_course_id UNIQUE (hy_course_id)
 );
 
 CREATE TABLE IF NOT EXISTS degrees (
@@ -22,7 +22,28 @@ CREATE TABLE IF NOT EXISTS degreeinfo (
     hy_degree_id VARCHAR(50) NOT NULL,
     degree_years VARCHAR(25) NOT NULL,
     CONSTRAINT unique_year_for_hy_course_id_new UNIQUE (hy_degree_id, degree_years),
-    CONSTRAINT degree_name_unique_new UNIQUE (degree_name)
+    CONSTRAINT unique_degree_names UNIQUE (degree_name)
+);
+
+CREATE TABLE IF NOT EXISTS studyplans (
+    id SERIAL PRIMARY KEY,
+    degree_id INT NOT NULL REFERENCES degreeinfo(id),
+    name VARCHAR(255) NOT NULL,
+    CONSTRAINT unique_studyplan_names UNIQUE (name) 
+);
+
+CREATE TABLE IF NOT EXISTS user_plan_relation (
+    id SERIAL PRIMARY KEY,
+    uid VARCHAR(50) DEFAULT 'root',
+    plan_id INT NOT NULL REFERENCES studyplans(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS course_plan_relation (
+    id SERIAL PRIMARY KEY,
+    plan_id INT NOT NULL REFERENCES studyplans(id),
+    course_id INT NOT NULL REFERENCES courses(id),
+    relation_type VARCHAR(50) DEFAULT 'compulsory', --compulsory", "alternative" or "optional"
+    CONSTRAINT unique_course_plan_relation UNIQUE (plan_id, course_id)
 );
 
 CREATE TABLE IF NOT EXISTS course_degree_relation (
@@ -30,7 +51,7 @@ CREATE TABLE IF NOT EXISTS course_degree_relation (
     degree_id INT NOT NULL REFERENCES degrees(id) ON DELETE CASCADE,
     course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     relation_type VARCHAR(50) DEFAULT 'compulsory',  --"compulsory", "alternative" or "optional"
-    CONSTRAINT no_duplicate_course_degree_relation UNIQUE (degree_id, course_id)
+    CONSTRAINT unique_course_degree_relation UNIQUE (degree_id, course_id)
 );
 
 CREATE TABLE IF NOT EXISTS prerequisite_courses (
@@ -51,4 +72,4 @@ CREATE TABLE IF NOT EXISTS course_positions (
 
 CREATE INDEX IF NOT EXISTS idx_prerequisite_course_id ON prerequisite_courses(course_id);
 CREATE INDEX IF NOT EXISTS idx_course_degree_relation_id ON course_degree_relation(degree_id);
-
+CREATE INDEX IF NOT EXISTS idx_course_plan_relation_id ON course_plan_relation(degree_id);
