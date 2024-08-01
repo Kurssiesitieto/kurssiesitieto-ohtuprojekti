@@ -387,6 +387,67 @@ const addDegreeData = async (degreeInfo, courseMappings) => {
     }));
 };
 
+const createStudyPlan = async (degree_id, name, uid = 'root') => {
+  //TODO: make this function call addStudyPlan and addUserPlanRelation
+  const planRows = await addStudyPlan(degree_id, name);
+  logger.info('@createStudyPlan palnRows', planRows);
+  const plan_id = planRows.id;
+  logger.info('@createStudyPlan plan_id', plan_id);
+  //TODO: add/use function for getting hy_degree_id and degree_years from degree_info
+  const userPlanRelationRows = await addUserPlanRelation(plan_id, uid);
+  logger.info('@addStudyPlan, userPlanRelationRows[0]', userPlanRelationRows[0])
+  const addedPlan = {
+    plan_id: plan_id,
+    name: name,
+    degree_id: degree_id,
+    uid: uid
+  };
+  logger.info('@createStudyPlan, addedPlan', addedPlan)
+  return addedPlan;
+};
+
+const addStudyPlan = async (degree_id, name) => {
+  //TODO: check if name exists already! return errormsg
+  const planNameIsNotUnique = async (name) => {
+    const { rows } = await pool.query(
+      `SELECT EXISTS (
+          SELECT 1
+          FROM studyplans
+          WHERE name = $1
+      ) AS nameExists`,
+      [name]
+    );
+    const { nameExists } = rows[0];
+    return nameExists;
+  };
+
+  const nameInUse = await planNameIsNotUnique(name)
+  if (nameInUse) {
+    logger.verbose(`Degree ${degreeName} already exists in the database.`);
+    return;
+  }
+
+  const { rows } = await pool.query(
+    `INSERT INTO studyplans (degree_id, name)
+    VALUES ($1, $2)
+    RETURNING *;`,
+    [degree_id, name]
+  );
+  logger.info('@addStudyPlan, added rows', rows);
+  return rows[0];
+};
+
+const addUserPlanRelation = async (plan_id, uid = 'root') => {
+  logger.info("@addUserPlanRelation, input plan_id, uid", plan_id, uid)
+  const { rows } = await pool.query(
+    `INSERT INTO user_plan_relation (uid, plan_id)
+    VALUES ($1, $2)
+    RETURNING *;`,
+    [uid, plan_id]
+  );
+  return rows;
+};
+
 const addSingleDegreeinfo = async (degreeCode, degreeName, degreeYears) => {
   // Workaround for now. 'ON CONSTRAINT' works with one constraint only without some tomfoolery.
   const degreeNameIsNotUnique = async (degreeName) => {
@@ -402,7 +463,7 @@ const addSingleDegreeinfo = async (degreeCode, degreeName, degreeYears) => {
     return degreeinfoExists;
   };
 
-  const nameInUse = await degreeNameIsNotUnique(degreeName)
+  const nameInUse = await degreeNameIsNotUnique(degreeName);
   if (nameInUse) {
     logger.verbose(`Degree ${degreeName} already exists in the database.`);
     return;
@@ -480,7 +541,7 @@ const getDegrees = async ( degreeCode, degreeYears ) => {
 const getDegreeNames = async () => {
   try {
     const query = `
-      SELECT degree_name, hy_degree_id
+      SELECT degree_name, id
       FROM degreeinfo
       ORDER BY degree_name DESC
     `;
@@ -575,6 +636,9 @@ module.exports = {
   getDegrees,
   getDegreeNames,
   getStarted,
+  createStudyPlan,
+  addStudyPlan,
+  addUserPlanRelation,
   getDegreeId,
   savePositions,
   deleteCourse,

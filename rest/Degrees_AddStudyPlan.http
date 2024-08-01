@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/degrees/create_studyplan
+Content-Type: application/json
+
+{
+    "degree_id": "3",
+    "name": "Test plan 2",
+    "uid": "root"
+}
+
