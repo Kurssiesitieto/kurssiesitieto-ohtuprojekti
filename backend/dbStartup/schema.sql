@@ -72,3 +72,4 @@ CREATE TABLE IF NOT EXISTS course_positions (
 
 CREATE INDEX IF NOT EXISTS idx_prerequisite_course_id ON prerequisite_courses(course_id);
 CREATE INDEX IF NOT EXISTS idx_course_degree_relation_id ON course_degree_relation(degree_id);
+
