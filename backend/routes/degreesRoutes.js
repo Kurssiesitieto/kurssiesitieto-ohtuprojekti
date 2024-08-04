@@ -5,9 +5,9 @@ const logger = require('../middleware/logger');
 const { getDegrees,
   getStarted, 
   getDegreeId,
+  getPlansByRoot,
   getDegreeNames,
   createStudyPlan,
-  addStudyPlan, 
   savePositions,
   resetPositions} = require('../db');
 
@@ -43,7 +43,7 @@ router.get('/search_by_degree', async (req, res) => {
   logger.info(`Fetching degree with degree code: ${degreeCode} and year: ${degreeYears}`);
 
   try {
-  const courses = await getDegrees(degreeCode, degreeYears)
+  const courses = await getDegrees(degreeCode, degreeYears);
     res.json(courses);
   } catch (error) {
     logger.error(`Error fetching degrees: ${error.message}`);
@@ -51,7 +51,29 @@ router.get('/search_by_degree', async (req, res) => {
   }
 });
 
+router.get('/plans_by_root', async (req, res) => {
+  //TODO
+  //fetches the hard_coded degreenames added by uid='root' from studyplans, serves the degree selection menu in start page
+  //needs no parameters, check returning object with rest/PlanNamesByRoot.http
+  // const studyPlans = await getPlansByRoot; - not working
+  const mockPlans = [
+      {name: "TKT 2003-2006", plan_id: 1},
+      {name: "MAT 2003-2006", plan_id: 2}
+  ];
+  res.json(mockPlans);
+});
+
+router.get('/plan_by_id', async (req, res) => {
+  //TODO
+  //fetches the whole studyplan-object by studyplans.id
+  const { plan_id }  = req.body;
+  //tee kutsufunktio, joka käyttää plan_id:tä
+  //tee mock-palautus ja rest-kysely
+});
+
 router.get('/degree_names', async (req, res) => {
+  //fetches official degreenames and degreeinfo.id from degreeinfo, serves the degree selection menu when naming a new studyplan
+  //needs no parameters, check returning object with rest/DegreeNames_GetAll.http
   const degreeNames = await getDegreeNames();
   logger.debug("Degreenames from database", degreeNames);
   res.json(degreeNames);
