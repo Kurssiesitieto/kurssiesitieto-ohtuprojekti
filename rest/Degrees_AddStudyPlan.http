@@ -3,7 +3,9 @@ Content-Type: application/json
 
 {
     "degree_id": "4",
-    "name": "Test plan 3",
-    "uid": "root"
+    "name": "Test plan 8",
+    "uid": "rest"
 }
 
+//gives an error, if name has been added already
+//change name to test addind for first time, if needed

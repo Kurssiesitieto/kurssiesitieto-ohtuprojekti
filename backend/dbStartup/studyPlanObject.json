@@ -1,0 +1,36 @@
+{
+    "plan_id": 1,
+    "uid": "root",
+    "degreeCode": "kh50_001",
+    "degreeName": "Matemaattisten tieteiden kandiohjelma 2023-2026",
+    "degreeYears": "2023-2026",
+    "planName": "MAT kandi malli 2023-2026",
+    "courses": [
+    
+        {
+         "courseCode": "MAT11001",
+         "courseName": "Johdatus yliopistomatematiikkaan",
+         "groupId": "hy-CU-117375151",
+         "prerequisiteCourses": []
+        },
+        {
+         "courseCode": "MAT11002",
+         "courseName": "Lineaarialgebra ja matriisilaskenta I",
+         "groupId": "hy-CU-117375394",
+         "prerequisiteCourses": ["MAT11001"]
+        },
+        {
+         "courseCode": "MAT11003",
+         "courseName": "Raja-arvot",
+         "groupId": "hy-CU-117375413",
+         "prerequisiteCourses": [],
+         "courseType": "alternative"
+        },
+        {
+         "courseCode": "MAT11004",
+         "courseName": "Differentiaalilaskenta",
+         "groupId": "hy-CU-117375487",
+         "prerequisiteCourses": ["MAT11003"]
+        }
+    ]
+}

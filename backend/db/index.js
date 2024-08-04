@@ -387,6 +387,25 @@ const addDegreeData = async (degreeInfo, courseMappings) => {
     }));
 };
 
+const getPlansByRoot = async () => {
+  //TODO, not working even as a mock return
+  //fetches hard_coded studyplans (name, id) from studyplans with uid='root'
+  const mockPlans = {
+    plans: [
+      {name: "TKT 2003-2006", id: 1},
+      {name: "MAT 2003-2006", id: 2}
+    ]
+  };
+  logger.info("@getPlansByRoot, mockPlans", mockPlans);
+  return mockPlans;
+}; 
+
+getPlanById = async (plan_id) => {
+  //TODO
+  //fetches a studyplan (including courses) with studyplan.id
+  //returns a full studyplan with courses and dependencies
+}
+
 const createStudyPlan = async (degree_id, name, uid = 'root') => {
   //TODO: make this function call addStudyPlan and addUserPlanRelation
   const planRows = await addStudyPlan(degree_id, name);
@@ -423,7 +442,7 @@ const addStudyPlan = async (degree_id, name) => {
 
   const nameInUse = await planNameIsNotUnique(name)
   if (nameInUse) {
-    logger.verbose(`Degree ${degreeName} already exists in the database.`);
+    logger.verbose(`Plan with name ${name} already exists in the database.`);
     return;
   }
 
@@ -636,6 +655,7 @@ module.exports = {
   getDegrees,
   getDegreeNames,
   getStarted,
+  getPlansByRoot,
   createStudyPlan,
   addStudyPlan,
   addUserPlanRelation,
