@@ -14,6 +14,8 @@ const { getDegrees,
 
 router.get('/', async (req, res) => {
   /*
+  //TODO, changing code 
+  //change according to new schema, uid = "root"
   Fetches all degrees from the database and returns them as a JSON array.
   */
 
@@ -35,6 +37,7 @@ router.get('/', async (req, res) => {
 
 router.get('/search_by_degree', async (req, res) => {
   /*
+  CHANGING CODE -> search_by_studyplan ? 
   Fetches the degree structure from the database using the degree HY degree code and year.
   */
 

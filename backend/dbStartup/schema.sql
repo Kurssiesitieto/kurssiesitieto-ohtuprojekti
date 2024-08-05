@@ -7,15 +7,6 @@ CREATE TABLE IF NOT EXISTS courses (
     CONSTRAINT unique_hy_course_id UNIQUE (hy_course_id)
 );
 
-CREATE TABLE IF NOT EXISTS degrees (
-    id SERIAL PRIMARY KEY,
-    degree_name VARCHAR(255) NOT NULL,
-    hy_degree_id VARCHAR(50) NOT NULL,
-    degree_years VARCHAR(25) NOT NULL,
-    CONSTRAINT unique_year_for_hy_course_id UNIQUE (hy_degree_id, degree_years),
-    CONSTRAINT degree_name_unique UNIQUE (degree_name)
-);
-
 CREATE TABLE IF NOT EXISTS degreeinfo (
     id SERIAL PRIMARY KEY,
     degree_name VARCHAR(255) NOT NULL,
@@ -46,14 +37,6 @@ CREATE TABLE IF NOT EXISTS course_plan_relation (
     CONSTRAINT unique_course_plan_relation UNIQUE (plan_id, course_id)
 );
 
-CREATE TABLE IF NOT EXISTS course_degree_relation (
-    id SERIAL PRIMARY KEY,
-    degree_id INT NOT NULL REFERENCES degrees(id) ON DELETE CASCADE,
-    course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    relation_type VARCHAR(50) DEFAULT 'compulsory',  --"compulsory", "alternative" or "optional"
-    CONSTRAINT unique_course_degree_relation UNIQUE (degree_id, course_id)
-);
-
 CREATE TABLE IF NOT EXISTS prerequisite_courses (
     id SERIAL PRIMARY KEY,
     course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
@@ -64,11 +47,8 @@ CREATE TABLE IF NOT EXISTS prerequisite_courses (
 
 CREATE TABLE IF NOT EXISTS course_positions (
     id SERIAL PRIMARY KEY,
-    degree_id INT NOT NULL REFERENCES degrees(id) ON DELETE CASCADE,
+    plan_id INT NOT NULL REFERENCES studyplans(id) ON DELETE CASCADE,
     course_id INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     x INT NOT NULL,
     y INT NOT NULL
 );
-
-CREATE INDEX IF NOT EXISTS idx_prerequisite_course_id ON prerequisite_courses(course_id);
-CREATE INDEX IF NOT EXISTS idx_course_degree_relation_id ON course_degree_relation(degree_id);
