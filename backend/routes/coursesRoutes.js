@@ -34,8 +34,12 @@ function asyncHandler(fn) {
 }
 router.post('/addCourseToStudyplan', asyncHandler(async (req, res) => {
   //TODO 
+  //needs = plan_id
+  //add course to courses
+  //add course_plan -relation
   const { courseCode, prerequisiteCodes } = req.body; 
   //update graph
+  //return ??
 }));
 
 router.get('/databaseGetCourses', asyncHandler(async (req, res) => {

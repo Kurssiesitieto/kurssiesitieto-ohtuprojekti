@@ -1,0 +1,8 @@
+GET http://sisu.helsinki.fi/kori/api/search_by_code?=TKT20006
+
+// "code": "TKT20006"
+// "groupId": "hy-CU-118024909"
+
+GET https://sisu.helsinki.fi/kori/api/course-units?groupId=hy-CU-118024909
+
+//tarvitaan kurssin nimi?

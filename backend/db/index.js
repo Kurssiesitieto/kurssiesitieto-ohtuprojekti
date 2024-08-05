@@ -10,12 +10,14 @@ const { Pool } = require('pg');
 const kori = new KoriInterface();
 
 const getStarted = async () => {
+  //TODO: change to new schema
     const result = await pool.query('SELECT * FROM degrees ORDER BY degree_name')
     return result;
 };
 
 
 const selectPool = () => {
+  //SEEMS OK
   if (process.env.DATABASE_POOLMODE === "direct") {
     logger.info("Using direct DATABASE_POOLMODE")
     return new Pool({
@@ -573,7 +575,9 @@ const getDegreeNames = async () => {
   }
 };
 
+/*
 const getDegreeId = async (degreeId, degreeYears) => {
+  //TODO, change to new schema using degreeinfo
   try {  
     const degreeQuery = `
     SELECT id 
@@ -585,9 +589,50 @@ const getDegreeId = async (degreeId, degreeYears) => {
     if (degreeRows.length === 0) {
       return false;
     }
-    return degreeRows
+    return degreeRows;
   } catch (error) {
     console.error("Error in getDegreeId:", error);
+    return false;
+  }
+};
+*/
+
+const getDegreeinfoId = async (degreeCode, degreeYears) => {
+  //TODO, connect to route (?)
+  try {  
+    const degreeQuery = `
+    SELECT id 
+    FROM degreeinfo
+    WHERE hy_degree_id = $1 AND degree_years = $2`;
+
+    const { rows: degreeRows } = await pool.query(degreeQuery, [degreeCode, degreeYears]);
+
+    if (degreeRows.length === 0) {
+      return false;
+    }
+    return degreeRows;
+  } catch (error) {
+    console.error("Error in getDegreeId:", error);
+    return false;
+  }
+};
+
+const getDegreeinfo = async (degreeId) => {
+  //TODO, connect to route
+  try {
+    const infoQuery = `
+    SELECT id, degree_name, hy_degree_id, degree_years
+    FROM degreeinfo
+    WHERE id = $1`;
+
+    const {infoRows } = await pool.query(infoQuery, [degreeId]);
+
+    if (infoRows.length === 0) {
+      return false;
+    }
+    return infoRows;
+  } catch (error) {
+    console.error("Error in getDegreeinfo", error);
     return false;
   }
 };
@@ -654,12 +699,13 @@ module.exports = {
   //updateCourse,
   getDegrees,
   getDegreeNames,
+  getDegreeinfo,
+  getDegreeinfoId,
   getStarted,
   getPlansByRoot,
   createStudyPlan,
   addStudyPlan,
   addUserPlanRelation,
-  getDegreeId,
   savePositions,
   deleteCourse,
   endDatabase: async () => {

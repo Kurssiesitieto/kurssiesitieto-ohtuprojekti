@@ -4,7 +4,7 @@ const router = express.Router();
 const logger = require('../middleware/logger');
 const { getDegrees,
   getStarted, 
-  getDegreeId,
+  getDegreeinfoId,
   getPlansByRoot,
   getDegreeNames,
   createStudyPlan,
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
   /*
   //TODO, changing code 
   //change according to new schema, uid = "root"
-  Fetches all degrees from the database and returns them as a JSON array.
+  Fetches all studyplans (name & id) from the database and returns them as a JSON array.
   */
 
   try {
@@ -96,8 +96,9 @@ router.post('/create_studyplan', async (req, res) => {
 });
 
 router.post('/save_positions', async (req, res) => {
+  //TODO, fix to fit new schema
   try {
-    const degreeRows = await getDegreeId(req.body.degreeId, req.body.degreeYears);
+    const degreeRows = await getDegreeinfoId(req.body.degreeId, req.body.degreeYears);
     if (degreeRows.length === 0) {
         return res.status(404).send('Degree not found');
     }
@@ -116,7 +117,7 @@ router.post('/save_positions', async (req, res) => {
 
 router.post('/reset_positions', async (req, res) => {
   try {
-    const degreeRows = await getDegreeId(req.body.degreeId, req.body.degreeYears);
+    const degreeRows = await getDegreeinfoId(req.body.degreeId, req.body.degreeYears);
     await resetPositions(degreeRows[0].id)
     return res.status(200).send('Positions resetted successfully');
   } catch (error) {
