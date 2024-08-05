@@ -20,9 +20,22 @@ const koriRoutes = require('./routes/koriRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const path = require('path');
 
+const initializeDatabase = async () => {
+  try {
+    await executeSchemaFile();
+    await insertDegreeinfoFromJson();
+  } catch (error) {
+    logger.error('Error during database initialization:', error);
+    process.exit(1); // Exit the process with an error code
+  }
+};
+
+initializeDatabase();
+/*
 executeSchemaFile();
 //insertDataFromJson(); OLD DEGREE, needs change
 insertDegreeinfoFromJson();
+*/
 
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
