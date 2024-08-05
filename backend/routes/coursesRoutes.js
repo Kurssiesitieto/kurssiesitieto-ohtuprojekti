@@ -32,6 +32,11 @@ function asyncHandler(fn) {
     }
   };
 }
+router.post('/addCourseToStudyplan', asyncHandler(async (req, res) => {
+  //TODO 
+  const { courseCode, prerequisiteCodes } = req.body; 
+  //update graph
+}));
 
 router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
   const courses = await getCourses();
@@ -47,7 +52,9 @@ router.get('/databaseGetCourseWithRequirements/:course_id', asyncHandler(async (
 }));
 
 router.post('/databaseCreateCourse', asyncHandler(async (req, res) => {
+  //new attribute: uid
   logger.debug("Received request body:", req.body);
+  //const { uid } = req.body;
   const { official_course_id, course_name, kori_name } = req.body;
   const newCourse = await addCourse(official_course_id, course_name, kori_name);
   logger.debug("Adding course", newCourse);
@@ -64,6 +71,12 @@ router.delete('/databaseDeleteCourse/:kori_name', asyncHandler(async (req, res) 
     res.status(404).send({ message: 'Course not found or could not be deleted' });
   }
 }));
+
+router.post('addCourseAndPrerequisites', asyncHandler (async (req, res) => {
+  //TODO 
+  //add course and prerequisite courses into database
+  const { courseCode } = req.body;
+}))
 
 router.put('/databaseUpdateCourse/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;

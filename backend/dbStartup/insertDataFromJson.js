@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 //const { Pool } = require('pg');
 require('dotenv').config();
-const { addManyCourses, addManyPrequisiteCourses, addDegreeData, addDegreeinfo } = require('../db');
+const { addDegreeinfo } = require('../db');
+//const { addManyCourses, addManyPrequisiteCourses, addDegreeData, addDegreeinfo } = require('../db');
 
 //const pool = new Pool({
 //  connectionString: process.env.DATABASE_URL,
@@ -47,7 +48,7 @@ function mapDegreesForDegreeinfo(jsonData) {
   return degreeMappings;
 }
 
-
+/* NEEDS CHANGES
 const insertDataFromJson = async () => {
   //  Loads data from degreeToDb.json and inserts it into the database.
   try {
@@ -69,6 +70,7 @@ const insertDataFromJson = async () => {
     console.error('Error inserting degreedata:', err);
   }
 };
+*/
 
 const insertDegreeinfoFromJson = async () => {
   // Loads data from degreeInfoToDb.json and inserts it into the database.
@@ -83,5 +85,6 @@ const insertDegreeinfoFromJson = async () => {
 };
 
 module.exports = {
-  insertDataFromJson, insertDegreeinfoFromJson
+  //insertDataFromJson, 
+  insertDegreeinfoFromJson
 };
