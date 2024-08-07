@@ -28,15 +28,25 @@
     top: 17%;
     right: 7%;
     border-radius: 8px;
-    border: 1px solid transparent;
+    border: none;
     padding: 0.6em 1.2em;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
-    transition: border-color 0.25s;
-    background-color: white;
     color: #0e596d;
+    background-color: white;
+}
+
+.choose-degree-dropdown-button:hover {
+    text-decoration: underline;
+    background-color: white;
+}
+
+.header2-text {
+    position: absolute;
+    top: 0%;
+    right: 15%;
 }
 
 .add-new-button {

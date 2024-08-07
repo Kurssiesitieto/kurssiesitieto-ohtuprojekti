@@ -76,7 +76,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan }) =>
 
   return (
     <div className="study-plans-view">
-      <h2>Luo uusi kurssikokonaisuus</h2>
+      <h2 className = "header2-text">Luo uusi kurssikokonaisuus</h2>
       <div>
       <form onSubmit={createStudyPlan}>
         <div className="name-input-box">
@@ -84,13 +84,13 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan }) =>
           <input
             value={newName}
             onChange={({ target }) => setNewName(target.value)}
-            placeholder="Name"
+            placeholder="Nimi"
           />
         </div>
         <p>{selectedDegree.degree_name}</p>
 
         <div>
-          <button className="choose-degree-dropdown-button" onClick={handleMenuClick}>
+          <button type = "button" className="choose-degree-dropdown-button" onClick={handleMenuClick}>
             Valitse pääaine
           </button>            
           <Menu
@@ -106,7 +106,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan }) =>
           </Menu>
         </div>
            
-        <button type="submit">Luo uusi</button>
+        <button className = "add-new-button" type="submit">Luo uusi</button>
       </form>
     </div>
     </div>
