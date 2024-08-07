@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/AddStudyPlans.css';
 import { error as displayError } from './messager/messager';
-import { Menu, MenuItem} from '@mui/material'; 
+import { Menu, MenuItem} from '@mui/material';
 
 
 const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
@@ -68,11 +68,11 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
 
   return (
     <div className="study-plans-view">
-      <h2>Kurssikokonaisuuden luominen</h2>
+      <h2>Luo uusi kurssikokonaisuus</h2>
       <div>
       <form onSubmit={createStudyPlan}>
-        <div>
-            Anna kurssi kokonaisuudelle nimi:
+        <div className="name-input-box">
+            Anna kurssi kokonaisuudelle nimi:<br/>
           <input
             value={newName}
             onChange={({ target }) => setNewName(target.value)}
@@ -81,8 +81,8 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
         </div>
         <p>{selectedDegree.degree_name}</p>
 
-        <div className="buttons">
-          <button type="button" onClick={handleMenuClick}>
+        <div>
+          <button className="choose-degree-dropdown-button" onClick={handleMenuClick}>
             Valitse pääaine
           </button>            
           <Menu
@@ -97,8 +97,9 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
             ))}
           </Menu>
         </div>
-           
+        <div className="add-new-button"> 
         <button type="submit" onClick={onCreate}>Luo uusi</button>
+        </div>  
       </form>
     </div>
     </div>

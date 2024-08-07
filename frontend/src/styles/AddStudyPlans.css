@@ -6,8 +6,8 @@
     right: 0;
     width: 32%;
     height: 100%;
-    color: var(--sidebar-text-color);
-    background-color: var(--sidebar-background-color);
+    color: var(--add-study-plans-text-color);
+    background-color: var(--add-study-plans-background-color);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
     z-index: 1000;
@@ -15,4 +15,42 @@
     flex-direction: column;
     align-items: center;
     justify-content: start;
+}
+
+.name-input-box {
+    position: absolute;
+    top: 15%;
+    right: 45%
+}
+
+.choose-degree-dropdown-button {
+    position: absolute;
+    top: 17%;
+    right: 7%;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    background-color: white;
+    color: #0e596d;
+}
+
+.add-new-button {
+    position: absolute;
+    top: 40%;
+    right: 35%;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    background-color: var(--button-background-color);
+    color: var(--text-color-primary);
 }
