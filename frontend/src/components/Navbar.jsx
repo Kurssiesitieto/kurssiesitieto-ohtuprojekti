@@ -9,7 +9,7 @@ import InfoButton from './InfoButton';
 import AddStudyPlansButton from './AddStudyPlansButton';
 import LoginButton from './LoginButton';
 
-export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handleSearch, baseURL, selectedDegreeName}) => {
+export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handleSearch, baseURL, selectedDegreeName, newCoursePlan, setNewCoursePlan}) => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [isAddStudyPlansOpen, setIsAddStudyPlansOpen] = useState(false);
   const [isAddPrerequisitesOpen, setIsAddPrerequisitesOpen] = useState(false);
@@ -46,8 +46,8 @@ export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handl
         <li><InfoButton onClick={openInfoBox}/></li>
         <li><InfoBox isOpen={isInfoBoxOpen} onClose={() => setIsInfoBoxOpen(false)} baseURL={baseURL} /></li>
         <li><AddStudyPlansButton onClick={openAddStudyPlans} /></li>
-        <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} /></li>
-        <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={openAddPrerequisites} /></li>
+        <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} setNewCoursePlan={setNewCoursePlan} /></li>
+        <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={openAddPrerequisites} newCoursePlan={newCoursePlan} /></li>
       </ul>
     </nav>
   );

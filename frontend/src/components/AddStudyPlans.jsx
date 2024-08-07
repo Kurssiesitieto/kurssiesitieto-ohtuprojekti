@@ -4,7 +4,7 @@ import { error as displayError } from './messager/messager';
 import { Menu, MenuItem} from '@mui/material';
 
 
-const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
+const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan }) => {
   const [newName, setNewName] = useState('')
   const [listOfDegrees, setDegreeToList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,27 +28,35 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
     fetchDegrees();
   }, []);
 
-  const createStudyPlan = async (event) => {  // UUSI ROUTE api/degrees/create_studyplan
-    event.preventDefault()
-
-    /* Route tarvitsee seuraavat:
-    POST http://localhost:3001/api/degrees/create_studyplan
-    {
-    "degree_id": "4",
-    "name": "Test plan 13",
-    "uid": "rest"
-    }
+  const createStudyPlan = async (event) => {  
     
     const studyPlanObject = {
-      name: NewName,
-      degree: selectedDegree
-    }
+      degree_name: newName,
+      degree_years: selectedDegree.degree_years,
+      hy_degree_id: selectedDegree.hy_degree_id,
+      //uid: 'rest'
+    };/*
 
-    addStudyPlan(blogObject) */
-    setNewName('')
-    setSelectedDegree('')
+    try {
+      const response = await axiosInstance.post(`/api/degrees/create_studyplan`, studyPlanObject);
+      if (response.status === 201) { // Assumption that successful creation returns 201
+        setNewCoursePlan(response.data); // Assumption that response.data contains the created study plan
+        onCreate();
+        setNewName('');
+        setSelectedDegree([]);
+      } else {
+        displayError("Opintosuunnitelman luominen epäonnistui.");
+      }
+    } catch (error) {
+      console.error("Error when creating study plan:", error);
+      displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
+    }*/
+    setNewCoursePlan(studyPlanObject) // Here are placeholders since the API is not yet functional    
+    setNewName('');
+    setSelectedDegree([]);
+    onCreate();
+    };
 
-  }
   if (!isOpen) {
     return null;
   }
@@ -97,9 +105,8 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate }) => {
             ))}
           </Menu>
         </div>
-        <div className="add-new-button"> 
-        <button type="submit" onClick={onCreate}>Luo uusi</button>
-        </div>  
+           
+        <button type="submit">Luo uusi</button>
       </form>
     </div>
     </div>
