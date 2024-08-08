@@ -24,6 +24,7 @@ const initializeDatabase = async () => {
   try {
     await executeSchemaFile();
     await insertDegreeinfoFromJson();
+    await insertPlansFromJson(); //OLD DEGREE, needs change - NOT fully working yet
   } catch (error) {
     logger.error('Error during database initialization:', error);
     process.exit(1); // Exit the process with an error code
@@ -31,9 +32,6 @@ const initializeDatabase = async () => {
 };
 
 initializeDatabase();
-
-
-insertPlansFromJson(); //OLD DEGREE, needs change - NOT fully working yet
 
 
 app.use((req, res, next) => {
