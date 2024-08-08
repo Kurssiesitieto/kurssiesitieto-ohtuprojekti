@@ -12,11 +12,11 @@ const { getDegrees,
   resetPositions} = require('../db');
 
 
-router.get('/', async (req, res) => {
+router.get('/official', async (req, res) => {
   /*
-  //TODO, changing code 
+  //TODO, changing code ; start-pagen 'näytä tutkinnot', näyttää kovakoodattujen studyplansien nimet
   //change according to new schema, uid = "root"
-  Fetches all studyplans (name & id) from the database and returns them as a JSON array.
+  Fetches all official studyplans (name & id) from the database and returns them as a JSON array.
   */
 
   try {
@@ -33,6 +33,13 @@ router.get('/', async (req, res) => {
     logger.error(`Error fetching degrees: ${error.message}`);
     res.status(500).send('Server error');
   }
+});
+
+router.get('/public', async (req, res) => {
+  /* TODO, shows all degrees by logged_in uid, 'root', 'public'
+  Fetches all official studyplans (name & plan_id & uid) from the database and returns them as a JSON array.
+  */
+ const { uid } = req.body; // if null, uid = 'root' (?) 
 });
 
 router.get('/search_by_degree', async (req, res) => {

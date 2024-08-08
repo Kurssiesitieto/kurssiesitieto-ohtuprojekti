@@ -80,6 +80,7 @@ const insertPlansFromJson = async () => {
   // lines that don't work yet, are commented out
   try {
     const dataPath = path.join(__dirname, 'plansToDb.json');
+    logger.debug('dataPath', dataPath);
     const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     logger.debug('@insertPlansFromJson, jsonData', jsonData);
     logger.debug('Keys in jsonData: ', Object.keys(jsonData));
@@ -107,7 +108,9 @@ const insertPlansFromJson = async () => {
     //logger.info('@insertPlansFromJson, degreeId', degreeId)
     const courseDegreeMappings = mapCoursesForDegree(jsonData);
     await addManyCourses(courseCodes); 
+    /* TODO, needs fixing to include plan_id in prerequisites
     await addManyPrequisiteCourses(courseMappings);
+    */
     //await addDegreeData(degreeInfo, courseDegreeMappings);
 
   } catch (err) {

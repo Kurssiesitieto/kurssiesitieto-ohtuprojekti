@@ -493,7 +493,7 @@ const addSingleDegreeinfo = async (degreeCode, degreeName, degreeYears) => {
   const { rows } = await pool.query(
     `INSERT INTO degreeinfo (degree_name, hy_degree_id, degree_years)
     SELECT $1, $2, $3
-    ON CONFLICT ON CONSTRAINT unique_year_for_hy_course_id_new DO NOTHING
+    ON CONFLICT ON CONSTRAINT unique_year_for_hy_degree_id DO NOTHING
     RETURNING *`,
     [degreeName, degreeCode, degreeYears]
   );
