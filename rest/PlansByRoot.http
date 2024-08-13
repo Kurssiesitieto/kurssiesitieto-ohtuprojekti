@@ -1,3 +1,2 @@
 GET http://localhost:3001/api/degrees/plans_by_root
 
-//needs backend support

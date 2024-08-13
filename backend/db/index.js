@@ -390,17 +390,24 @@ const addDegreeData = async (degreeInfo, courseMappings) => {
 };
 
 const getPlansByRoot = async () => {
-  //TODO, not working even as a mock return
-  //fetches hard_coded studyplans (name, id) from studyplans with uid='root'
-  const mockPlans = {
-    plans: [
-      {name: "TKT 2003-2006", id: 1},
-      {name: "MAT 2003-2006", id: 2}
-    ]
-  };
-  logger.info("@getPlansByRoot, mockPlans", mockPlans);
-  return mockPlans;
-}; 
+  const query = `
+      SELECT sp.id AS plan_id, di.degree_name 
+      FROM studyplans sp
+      JOIN degreeinfo di ON sp.degree_id = di.id
+      JOIN user_plan_relation upr ON sp.id = upr.plan_id
+      WHERE upr.uid = 'root';
+  `;
+
+  const { rows } = await pool.query(query);
+  
+  const plans = rows.map(row => ({
+      plan_id: row.plan_id,
+      degree_name: row.degree_name
+  }));
+
+  return plans;
+};
+
 
 getPlanById = async (plan_id) => {
   //TODO
@@ -712,6 +719,7 @@ module.exports = {
     await pool.end();
   },
 };
+
 
 /*
 exports.query = (text, params, callback) => {

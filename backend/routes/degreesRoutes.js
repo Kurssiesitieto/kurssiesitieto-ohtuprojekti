@@ -62,15 +62,13 @@ router.get('/search_by_degree', async (req, res) => {
 });
 
 router.get('/plans_by_root', async (req, res) => {
-  //TODO
-  //fetches the hard_coded degreenames added by uid='root' from studyplans, serves the degree selection menu in start page
-  //needs no parameters, check returning object with rest/PlanNamesByRoot.http
-  // const studyPlans = await getPlansByRoot; - not working
-  const mockPlans = [
-      {name: "TKT 2003-2006", plan_id: 1},
-      {name: "MAT 2003-2006", plan_id: 2}
-  ];
-  res.json(mockPlans);
+  try {
+      const plans = await getPlansByRoot();
+      res.json(plans);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 router.get('/plan_by_id', async (req, res) => {
