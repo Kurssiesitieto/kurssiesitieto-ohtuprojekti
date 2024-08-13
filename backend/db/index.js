@@ -408,6 +408,26 @@ const getPlansByRoot = async () => {
   return plans;
 };
 
+const getPlansByRootAndUser = async (uid) => {
+  const query = `
+      SELECT sp.id AS plan_id, di.degree_name 
+      FROM studyplans sp
+      JOIN degreeinfo di ON sp.degree_id = di.id
+      JOIN user_plan_relation upr ON sp.id = upr.plan_id
+      WHERE upr.uid = $1 OR upr.uid = 'root';
+  `;
+
+  const { rows } = await pool.query(query, [uid]);
+
+  const plans = rows.map(row => ({
+      plan_id: row.plan_id,
+      degree_name: row.degree_name
+  }));
+
+  return plans;
+};
+
+
 
 getPlanById = async (plan_id) => {
   //TODO
@@ -710,6 +730,7 @@ module.exports = {
   getDegreeinfoId,
   getStarted,
   getPlansByRoot,
+  getPlansByRootAndUser,
   createStudyPlan,
   addStudyPlan,
   addUserPlanRelation,

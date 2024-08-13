@@ -6,6 +6,7 @@ const { getDegrees,
   getStarted, 
   getDegreeinfoId,
   getPlansByRoot,
+  getPlansByRootAndUser,
   getDegreeNames,
   createStudyPlan,
   savePositions,
@@ -64,6 +65,17 @@ router.get('/search_by_degree', async (req, res) => {
 router.get('/plans_by_root', async (req, res) => {
   try {
       const plans = await getPlansByRoot();
+      res.json(plans);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/plans_by_root_and_user', async (req, res) => {
+  const { uid } = req.body;
+  try {
+      const plans = await getPlansByRootAndUser(uid);
       res.json(plans);
   } catch (err) {
       console.error(err.message);
