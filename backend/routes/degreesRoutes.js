@@ -45,7 +45,7 @@ router.get('/public', async (req, res) => {
 
 router.get('/search_by_degree', async (req, res) => {
   /*
-  CHANGING CODE -> search_by_studyplan ? 
+  CHANGING CODE -> "Valitse tutkinto" - menu has used this, new route: '/search_plans_by_id'
   Fetches the degree structure from the database using the degree HY degree code and year.
   */
 

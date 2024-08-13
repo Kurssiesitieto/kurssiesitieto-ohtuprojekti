@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const logger = require('../middleware/logger');
 const { addDegreeinfo, getDegreeinfoId, addManyCourses } = require('../db');
-const { addManyPrequisiteCourses, addDegreeData } = require('../db');
+const { addManyPrerequisiteCourses, addDegreeData } = require('../db');
 
 //const pool = new Pool({
 //  connectionString: process.env.DATABASE_URL,
@@ -64,7 +64,7 @@ const insertDataFromJson = async () => {
     };
     const courseDegreeMappings = mapCoursesForDegree(jsonData);
     await addManyCourses(courseCodes); 
-    await addManyPrequisiteCourses(courseMappings);
+    await addManyPrerequisiteCourses(courseMappings);
     await addDegreeData(degreeInfo, courseDegreeMappings);
 
   } catch (err) {
@@ -109,7 +109,7 @@ const insertPlansFromJson = async () => {
     const courseDegreeMappings = mapCoursesForDegree(jsonData);
     await addManyCourses(courseCodes); 
     /* TODO, needs fixing to include plan_id in prerequisites
-    await addManyPrequisiteCourses(courseMappings);
+    await addManyPrerequisiteCourses(courseMappings);
     */
     //await addDegreeData(degreeInfo, courseDegreeMappings);
 

@@ -40,6 +40,11 @@ const pool = selectPool();
 // Course CRUD
 
 const addCourse = async (addedCourse) => {
+  /* Function call comes through addManyCourses, is used by dbStartUp/insertDataFromJson
+  addManyCourses takes a list of coursecodes = ['MAT11001, MAT11002']
+  Uses somehow KoriInterface to get the course name and group_id
+  A separate route api/courses/addCourse is created for developer use
+  */ 
   const response = await kori.searchCourses(addedCourse);
   const exactMatch = response.searchResults.find(course => course.name === addedCourse || course.code === addedCourse);
   if (!exactMatch) {
@@ -164,50 +169,50 @@ const updateCourse = async (id, official_course_id, course_name, kori_name) => {
 
 // Dependency
 
-const addPrerequisiteCourse = async (course_hy_id, prerequisite_course_hy_id) => {
+const addPrerequisiteCourse = async (plan_id, course_hy_id, prerequisite_course_hy_id) => {
+  logger.info('@addPrerequisiteCourse, plan_id, course_hy_id, prerequisite_course_hy_id',
+    plan_id, course_hy_id, prerequisite_course_hy_id
+  );
   const query = `
-  INSERT INTO prerequisite_courses (course_id, prerequisite_course_id)
-  SELECT c1.id, c2.id
-  FROM (SELECT id FROM courses WHERE hy_course_id = $1) AS c1, 
-       (SELECT id FROM courses WHERE hy_course_id = $2) AS c2
+  INSERT INTO prerequisite_courses (plan_id, course_id, prerequisite_course_id)
+  SELECT $1, c1.id, c2.id
+  FROM (SELECT id FROM courses WHERE hy_course_id = $2) AS c1, 
+       (SELECT id FROM courses WHERE hy_course_id = $3) AS c2
   ON CONFLICT ON CONSTRAINT unique_course_prerequisite DO NOTHING
   RETURNING *`;
   const { rows } = await pool.query(
     query,
-    [course_hy_id, prerequisite_course_hy_id]
+    [plan_id, course_hy_id, prerequisite_course_hy_id]
   );
   return rows[0];
 };
 
-const addManyPrequisiteCourses = async (listOfPrerequisites) => {
-  /* Accepts list of objects that represents a course and its prerequisites.
+const addManyPrerequisiteCourses = async (planId, courseCode, prerequisiteCodes) => {
+  //OLD SCHEMA, needs alteration
+  /* Accepts plan_id, courseCode, and a list of prerequisiteCodes.
 
-  The expected format for the prerequisite object is for example:
+  The expected format for prerequisiteCodes is for example:
   [
-    {
-      course: 'TKT20018',
-      prerequisiteCourse: 'TKT10003',
-      relationType: 'optional'
-    },
-    {
-      course: 'TKT20018',
-      prerequisiteCourse: 'TKT10004',
-      relationType: 'optional'
-    },
+    'TKT10003',
+    'TKT10004',
   ]
+  Relation type will be 'compulsory' by default. Using other types requires changes.
   */
-
-  for (const prerequisite of listOfPrerequisites) {
-    const { course, prerequisiteCourse } = prerequisite;
+  const plan_id = planId;
+  const course_hy_id = courseCode;
+  for (const prerequisite_course_hy_id of prerequisiteCodes) {
     try {
-      const result = await addPrerequisiteCourse(course, prerequisiteCourse);
+      const result = await addPrerequisiteCourse(plan_id, course_hy_id, prerequisite_course_hy_id);
       if (result) {
-        logger.info(`Prerequisite for course ${course} with prerequisite ${prerequisiteCourse} of type successfully added to the database.`);
+        logger.info(`Prerequisite for course ${course_hy_id} with prerequisite ${prerequisite_course_hy_id}
+          of type successfully added to the database.`);
       } else {
-        logger.verbose(`No new prerequisite relation added for course ${course} with prerequisite ${prerequisiteCourse}. It might already exist.`);
+        logger.verbose(`No new prerequisite relation added for course ${course_hy_id} with
+          prerequisite ${prerequisite_course_hy_id}. It might already exist.`);
       }
     } catch (err) {
-      logger.error(`Error adding prerequisite for course ${course} with prerequisite ${prerequisiteCourse} to the database:`, err);
+      logger.error(`Error adding prerequisite for course ${course_hy_id} with prerequisite ${prerequisite_course_hy_id}
+        to the database:`, err);
     }
   }
 };
@@ -215,6 +220,7 @@ const addManyPrequisiteCourses = async (listOfPrerequisites) => {
 // Frontend is not fixed for this yet
 const removePrerequisiteCourse = async (course_hy_id, prerequisite_course_hy_id) => {
   /* 
+  OLD SCHEMA, needs updating
   Receives args course_id and prerequisite_course_id and removes the relation from the database. 
   The id's are like TKT10001, TKT10002 etc.
   */
@@ -236,6 +242,7 @@ const removePrerequisiteCourse = async (course_hy_id, prerequisite_course_hy_id)
 
 // Fetches a course and all it's required courses recursively.
 async function fetchCourseWithPrerequisites(courseKoriName) {
+  //OLD SCHEMA, needs updating - include plan_id into consideration
   const allCourses = await fetchAllCoursesWithDirectPrerequisites();
 
   // Create a mapping of kori_name to official_course_id for direct lookup
@@ -252,6 +259,8 @@ async function fetchCourseWithPrerequisites(courseKoriName) {
     if (!course) return null;
 
     const courseWithDependencies = {
+      //needs updating as different studyplans may have different prerequisites
+      //according to what the user has selected
       name: course.course_name,
       identifier: course.official_course_id,
       koriName: koriName, // Adding koriName to the course object
@@ -309,16 +318,17 @@ async function fetchAllCoursesWithDirectPrerequisites() {
 
 const addCourseToDegree = async (hyDegreeId, degreeYears, hyCourseId, relationType = 'compulsory') => {
   try {
+    //OLD code for old schema, to be replaced with addCourseToStudyplan
     const { rows } = await pool.query(
       `INSERT INTO course_degree_relation (degree_id, course_id, relation_type)
       VALUES (
         (SELECT id FROM degrees WHERE hy_degree_id = $1 AND degree_years = $2),
-        (SELECT id FROM courses WHERE hy_course_id = $4),
-        $3
+        (SELECT id FROM courses WHERE hy_course_id = $3),
+        $4
       )
       ON CONFLICT ON CONSTRAINT no_duplicate_course_degree_relation DO NOTHING
       RETURNING *;`,
-      [hyDegreeId, degreeYears, relationType, hyCourseId]
+      [hyDegreeId, degreeYears, hyCourseId, relationType]
     );
 
     if (rows.length === 0) {
@@ -331,7 +341,48 @@ const addCourseToDegree = async (hyDegreeId, degreeYears, hyCourseId, relationTy
   }
 }
 
+const addCourseToStudyplan = async (planId, hyCourseId, relationType = 'compulsory') => {
+  //TODO
+  //adds course_plan relation
+  try {
+    //OLD code for old schema, to be replaced with addCourseToStudyplan
+    const { rows } = await pool.query(
+      `INSERT INTO course_plan_relation (plan_id, course_id, relation_type)
+      VALUES (
+        $1,
+        (SELECT id FROM courses WHERE hy_course_id = $2),
+        $3
+      )
+      ON CONFLICT ON CONSTRAINT unique_course_plan_relation DO NOTHING
+      RETURNING *;`,
+      [planId, hyCourseId, relationType]
+    );
+
+    if (rows.length === 0) {
+      logger.verbose(`Course ${hyCourseId} already exists in the studyplan ${planId}.`);
+      return;
+    }
+    return rows[0];
+  } catch (error) {
+    logger.verbose('Error inserting data into course_degree_relation table:', error);
+  }
+}
+
+const addCourseAndPrerequisitesToStudyplan = async (plan_id, courseCode, prerequisiteCodes = []) => {
+  /* A higher function that calls helper functions
+  Adds courses and presequisitecourses to courses-table
+  Adds course-prerequisitecourse -relations to prerequisites-table (with plan_id)
+  */
+  const allCourses = [courseCode, ...prerequisiteCodes]
+  await addManyCourses(allCourses);
+  await addManyPrerequisiteCourses(plan_id, courseCode, prerequisiteCodes);
+  for (const course of allCourses) {
+    await addCourseToStudyplan(plan_id, course);
+  }
+}
+
 const addDdegree = async (degreeCode, degreeName, degreeYears) => {
+  //OLD SCHEMA, needs updating or removal - new function most likely addStudyplan or addDegreeinfo
 
   // Workaround for now. 'ON CONSTRAINT' works with one constraint only without some tomfoolery.
   const degreeNameIsNotUnique = async (degreeName) => {
@@ -718,7 +769,8 @@ module.exports = {
   getCourseWithReqursivePrerequisites,
   addCourse,
   addManyCourses,
-  addManyPrequisiteCourses,
+  addManyPrerequisiteCourses,
+  addCourseAndPrerequisitesToStudyplan,
   addDegreeData,
   addDegreeinfo,
   addSingleDegreeinfo,

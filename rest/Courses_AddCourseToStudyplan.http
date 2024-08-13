@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/courses/addCourseToStudyplan
+Content-Type: application/json
+
+{
+    "plan_id": 2,
+    "courseCode": "TKT10004",
+    "prerequisiteCodes": ["TKT10002"]
+}

@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/courses/addCourse/
+Content-Type: application/json
+
+{
+    "courseCode": "TKT21038"
+}

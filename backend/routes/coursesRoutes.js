@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getCourses, addCourse, deleteCourse, updateCourse,
   addPrerequisiteCourse, removePrerequisiteCourse,
+  addCourseAndPrerequisitesToStudyplan,
   fetchCourseWithPrerequisites,
   getAllCoursesWithPrerequisites,
   getCourseWithReqursivePrerequisites } = require('../db');
@@ -34,12 +35,29 @@ function asyncHandler(fn) {
 }
 router.post('/addCourseToStudyplan', asyncHandler(async (req, res) => {
   //TODO 
+  //adds a course with its prerequisitecourses to studyplan
   //needs = plan_id
   //add course to courses
   //add course_plan -relation
-  const { courseCode, prerequisiteCodes } = req.body; 
+  logger.debug('@api/courses/addCourseToStudyplan');
+  const { plan_id, courseCode, prerequisiteCodes = [] } = req.body; 
+  try {
+    await addCourseAndPrerequisitesToStudyplan(plan_id, courseCode, prerequisiteCodes);
+    res.status(200).json({ message: 'Courses added to study plan successfully' });
+  } catch (error) {
+    logger.error('Error adding courses to study plan:', error);
+    res.status(500).json({ error: 'Failed to add courses to study plan' });
+  }
   //update graph
   //return ??
+}));
+
+router.post('/addCourse', asyncHandler(async (req, res) => {
+  //a helper route for develepoers to figure out if addCourse works with new schema
+  logger.info('@api/courses/addCourse, incoming req.body', req.body);
+  const { courseCode } = req.body;
+  const addedCourse = await addCourse(courseCode);
+  res.json(addedCourse);
 }));
 
 router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
@@ -49,6 +67,7 @@ router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
 }));
 
 router.get('/databaseGetCourseWithRequirements/:course_id', asyncHandler(async (req, res) => {
+  //TODO, update for new schema
   const { course_id } = req.params;
   const courseRequirements = await getCourseWithReqursivePrerequisites(course_id);
   logger.debug("Course requirements", courseRequirements);
@@ -75,12 +94,6 @@ router.delete('/databaseDeleteCourse/:kori_name', asyncHandler(async (req, res) 
     res.status(404).send({ message: 'Course not found or could not be deleted' });
   }
 }));
-
-router.post('addCourseAndPrerequisites', asyncHandler (async (req, res) => {
-  //TODO 
-  //add course and prerequisite courses into database
-  const { courseCode } = req.body;
-}))
 
 router.put('/databaseUpdateCourse/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
