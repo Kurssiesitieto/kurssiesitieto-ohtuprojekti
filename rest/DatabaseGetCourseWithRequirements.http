@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/courses/databaseGetCourseWithRequirements/1/MAT21001

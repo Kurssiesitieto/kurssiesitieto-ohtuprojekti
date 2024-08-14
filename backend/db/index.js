@@ -8,13 +8,13 @@ const KoriInterface = require('../interfaces/koriInterface');
 
 const { Pool } = require('pg');
 const kori = new KoriInterface();
-
+/*
 const getStarted = async () => {
   //TODO: change to new schema
     const result = await pool.query('SELECT * FROM degrees ORDER BY degree_name')
     return result;
 };
-
+*/
 
 const selectPool = () => {
   //SEEMS OK
@@ -97,7 +97,7 @@ const deleteCourse = async (kori_name) => {
 };
 
 
-const getCourseWithReqursivePrerequisites = async (course_hy_id) => {
+const getCourseWithReqursivePrerequisites = async (plan_id, hy_course_id) => {
   const query = `
   WITH RECURSIVE PrerequisitePath AS (
     SELECT
@@ -108,19 +108,19 @@ const getCourseWithReqursivePrerequisites = async (course_hy_id) => {
         pc.prerequisite_course_id AS prerequisite_id,
         COALESCE(
           (
-            SELECT array_agg(pc.hy_course_id)
+            SELECT array_agg(pc2.hy_course_id)
             FROM prerequisite_courses pr
-            JOIN courses pc ON pr.prerequisite_course_id = pc.id
-            WHERE pr.course_id = c.id
+            JOIN courses pc2 ON pr.prerequisite_course_id = pc2.id
+            WHERE pr.course_id = c.id AND pr.plan_id = $1
           ),
           '{}'::text[]
         ) AS dependencies
     FROM
         courses c
     LEFT JOIN
-        prerequisite_courses pc ON c.id = pc.course_id
+        prerequisite_courses pc ON c.id = pc.course_id AND pc.plan_id = $1
     WHERE
-        c.hy_course_id = $1
+        c.hy_course_id = $2
     UNION 
     SELECT
         c.id,
@@ -130,17 +130,17 @@ const getCourseWithReqursivePrerequisites = async (course_hy_id) => {
         pc.prerequisite_course_id,
         COALESCE(
           (
-            SELECT array_agg(pc.hy_course_id)
+            SELECT array_agg(pc2.hy_course_id)
             FROM prerequisite_courses pr
-            JOIN courses pc ON pr.prerequisite_course_id = pc.id
-            WHERE pr.course_id = c.id
+            JOIN courses pc2 ON pr.prerequisite_course_id = pc2.id
+            WHERE pr.course_id = c.id AND pr.plan_id = $1
           ),
           '{}'::text[]
         ) AS dependencies
     FROM
         courses c
     LEFT JOIN
-        prerequisite_courses pc ON c.id = pc.course_id
+        prerequisite_courses pc ON c.id = pc.course_id AND pc.plan_id = $1
     JOIN
         PrerequisitePath pp ON pp.prerequisite_id = c.id
   )
@@ -153,7 +153,7 @@ const getCourseWithReqursivePrerequisites = async (course_hy_id) => {
   FROM
       PrerequisitePath p;
   `;
-  const { rows } = await pool.query(query, [course_hy_id]);
+  const { rows } = await pool.query(query, [plan_id, hy_course_id]);
   return rows;
 };
 
@@ -780,7 +780,7 @@ module.exports = {
   getDegreeNames,
   getDegreeinfo,
   getDegreeinfoId,
-  getStarted,
+  //getStarted,
   getPlansByRoot,
   getPlansByRootAndUser,
   createStudyPlan,

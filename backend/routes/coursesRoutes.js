@@ -66,10 +66,9 @@ router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
   res.json(courses);
 }));
 
-router.get('/databaseGetCourseWithRequirements/:course_id', asyncHandler(async (req, res) => {
-  //TODO, update for new schema
-  const { course_id } = req.params;
-  const courseRequirements = await getCourseWithReqursivePrerequisites(course_id);
+router.get('/databaseGetCourseWithRequirements/:plan_id/:course_id', asyncHandler(async (req, res) => {
+  const { plan_id, course_id } = req.params;
+  const courseRequirements = await getCourseWithReqursivePrerequisites(plan_id, course_id);
   logger.debug("Course requirements", courseRequirements);
   res.json(courseRequirements);
 }));
