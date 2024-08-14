@@ -10,6 +10,7 @@ const { getDegrees,
   getDegreeNames,
   createStudyPlan,
   savePositions,
+  getCoursesByPlan,
   resetPositions} = require('../db');
 
 
@@ -58,6 +59,26 @@ router.get('/search_by_degree', async (req, res) => {
     res.json(courses);
   } catch (error) {
     logger.error(`Error fetching degrees: ${error.message}`);
+    res.status(500).send('Server error');
+  }
+});
+
+router.post('/search_plan_by_id', async (req, res) => { 
+  //searches a studyplan with a plan_id
+  const { plan_id } = req.body;
+    
+  if (!plan_id) {
+    logger.error('Plan ID is missing in headers');
+    return res.status(400).send('Plan ID is required');
+  }
+
+  logger.info(`Fetching courses for plan ID: ${plan_id}`);
+
+  try {    
+    const courses = await getCoursesByPlan(plan_id);
+    res.json(courses);
+  } catch (error) {
+    logger.error(`Error fetching courses for plan ID ${plan_id}: ${error.message}`);
     res.status(500).send('Server error');
   }
 });

@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/degrees/search_plan_by_id
+Content-Type: application/json
+
+{
+    "plan_id": 1
+}

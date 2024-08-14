@@ -601,41 +601,34 @@ const getAllCoursesWithPrerequisites = async () => {
   return rows;
 };
 
-const getDegrees = async ( degreeCode, degreeYears ) => {
-  const query = `SELECT id FROM degrees WHERE hy_degree_id = $1 AND degree_years = $2`;
-  const { rows } = await pool.query(
-    query, [degreeCode, degreeYears]
-  );
-
-  let degreeId = rows[0].id;
-  const query2 = `
+const getCoursesByPlan = async (plan_id) => {
+  const query = `
     SELECT 
       c.course_name AS name, 
       c.kori_id, 
       c.hy_course_id AS identifier, 
-      cdr.relation_type AS type,
+      cpr.relation_type AS type,
       cp.x AS x,
       cp.y AS y,
       COALESCE(
         (
-          SELECT array_agg(pc.hy_course_id)
+          SELECT array_agg(pc2.hy_course_id)
           FROM prerequisite_courses pr
-          JOIN courses pc ON pr.prerequisite_course_id = pc.id
-          WHERE pr.course_id = c.id
+          JOIN courses pc2 ON pr.prerequisite_course_id = pc2.id
+          WHERE pr.course_id = c.id AND pr.plan_id = $1
         ),
         '{}'::text[]
       ) AS dependencies
-    FROM course_degree_relation cdr
-    JOIN courses c ON cdr.course_id = c.id
-    LEFT JOIN course_positions cp ON cp.degree_id = cdr.degree_id AND cp.course_id = cdr.course_id
-    WHERE cdr.degree_id = $1
+    FROM course_plan_relation cpr
+    JOIN courses c ON cpr.course_id = c.id
+    LEFT JOIN course_positions cp ON cp.plan_id = cpr.plan_id AND cp.course_id = cpr.course_id
+    WHERE cpr.plan_id = $1
   `;
 
-  const { rows: courses } = await pool.query(
-    query2, [degreeId]
-  );
+  const { rows: courses } = await pool.query(query, [plan_id]);
   return courses;
 };
+
 
 const getDegreeNames = async () => {
   try {
@@ -776,7 +769,7 @@ module.exports = {
   addSingleDegreeinfo,
   resetPositions,
   //updateCourse,
-  getDegrees,
+  //getDegrees,
   getDegreeNames,
   getDegreeinfo,
   getDegreeinfoId,
@@ -788,6 +781,7 @@ module.exports = {
   addUserPlanRelation,
   savePositions,
   deleteCourse,
+  getCoursesByPlan,
   endDatabase: async () => {
     await pool.end();
   },
