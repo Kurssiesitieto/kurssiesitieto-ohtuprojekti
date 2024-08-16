@@ -9,7 +9,7 @@ const StartPage = ({ axiosInstance }) => {
 
   const fetchDegrees = async () => {
     try {
-      const response = await axiosInstance.get(`/api/degrees`);
+      const response = await axiosInstance.get(`/api/degrees/plans_by_root`);
       if (response == null) {
         displayError("Palvelimelle ei saatu yhteyttä")
         return;

@@ -15,20 +15,20 @@ const MainPage = ({ axiosInstance }) => {
   const [selectedDegreeName, setSelectedDegreeName] = useState('');
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
+  const [currentPlanId, setCurrentPlanId] = useState(null);
 
+  console.log("newCoursePlan", newCoursePlan)
 
   const fetchDegreeCourses = async (degree) => {
+    console.log("fetchDegreeCourses degree", degree)
     try {
       if (degree == null) {
         displayError("Jokin meni pieleen tutkintotietoja haettaessa!");
         console.error("Degree is null!");
         return;
       }
-      const response = await axiosInstance.get(`/api/degrees/search_by_degree`, {
-        headers: {
-          'degree-id': degree.hy_degree_id,
-          'degree-years': degree.degree_years,
-        }
+      const response = await axiosInstance.post(`/api/degrees/search_plan_by_id`, { 
+        plan_id: degree.plan_id,
       });
 
       if (response == null) {
@@ -45,10 +45,11 @@ const MainPage = ({ axiosInstance }) => {
         courseData.description,
         courseData.x,
         courseData.y
-      ));      
+      ));
+      console.log("fetchDegreeCourses convertedCourses", convertedCourses)
       setCourses(convertedCourses);
       setSelectedDegreeName(degree.degree_name);
-      if (!convertedCourses || convertedCourses.length === 0) {
+      if (!convertedCourses ) {
         throw new Error("Kurssitietoja ei löytynyt!");
       }      
     } catch (error) {
@@ -62,7 +63,7 @@ const MainPage = ({ axiosInstance }) => {
       return;
     }
     let response;
-    response = await axiosInstance.get('/api/courses/databaseGetCourseWithRequirements/' + courseId);
+    response = await axiosInstance.get(`/api/courses/databaseGetCourseWithRequirements/${currentPlanId}/${courseId}`);
     if (response == null || response.status === 404) {
       displayError("Kurssitietoja ei löytynyt!");
       return;
@@ -79,7 +80,7 @@ const MainPage = ({ axiosInstance }) => {
 
   const fetchDegrees = async () => {
     try {
-      const response = await axiosInstance.get(`/api/degrees`);
+      const response = await axiosInstance.get(`/api/degrees/plans_by_root`); //Need to update when uid available
       if (response == null) {
         displayError("Palvelimelle ei saatu yhteyttä");
         return;
@@ -99,7 +100,8 @@ const MainPage = ({ axiosInstance }) => {
     const degreeParam = localStorage.getItem('selectedDegree');        
     if (degreeParam) {
       const degree = JSON.parse(degreeParam);
-      setStartDegree(degree); 
+      setCurrentPlanId(degree.plan_id)
+      setStartDegree(degree);      
     }
   }, []);
 
@@ -127,6 +129,7 @@ const MainPage = ({ axiosInstance }) => {
   }, [newCoursePlan]);
 
   const handleDegreeChange = (degree) => {
+    setCurrentPlanId(degree.plan_id)
     fetchDegreeCourses(degree);
   };
 
