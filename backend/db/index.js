@@ -159,9 +159,7 @@ const updateCourse = async (id, official_course_id, course_name, kori_name) => {
 // Dependency
 
 const addPrerequisiteCourse = async (plan_id, course_hy_id, prerequisite_course_hy_id) => {
-  logger.info('@addPrerequisiteCourse, plan_id, course_hy_id, prerequisite_course_hy_id',
-    plan_id, course_hy_id, prerequisite_course_hy_id
-  );
+  //console.log('@addPrerequisiteCourse, plan_id', plan_id);
   const query = `
   INSERT INTO prerequisite_courses (plan_id, course_id, prerequisite_course_id)
   SELECT $1, c1.id, c2.id
@@ -365,21 +363,12 @@ const getPlansByRootAndUser = async (uid) => {
   return plans;
 };
 
-
-
-getPlanById = async (plan_id) => {
-  //TODO
-  //fetches a studyplan (including courses) with studyplan.id
-  //returns a full studyplan with courses and dependencies
-}
-
 const createStudyPlan = async (degree_id, name, uid = 'root') => {
-  //TODO: make this function call addStudyPlan and addUserPlanRelation
   const planRows = await addStudyPlan(degree_id, name);
-  logger.info('@createStudyPlan palnRows', planRows);
   const plan_id = planRows.id;
-  logger.info('@createStudyPlan plan_id', plan_id);
-  //TODO: add/use function for getting hy_degree_id and degree_years from degree_info
+  //TODO: add/use function for getting hy_degree_id and degree_years from degree_info (?)
+  //is that necessary? When starting, json-file has degree_id included
+  //is this info available, when the user has selected the study program from dropdown menu?
   const userPlanRelationRows = await addUserPlanRelation(plan_id, uid);
   logger.info('@addStudyPlan, userPlanRelationRows[0]', userPlanRelationRows[0])
   const addedPlan = {
@@ -516,7 +505,6 @@ const getCoursesByPlan = async (plan_id) => {
   return courses;
 };
 
-
 const getDegreeNames = async () => {
   try {
     const query = `
@@ -547,6 +535,7 @@ const getDegreeinfoId = async (degreeCode, degreeYears) => {
     if (degreeRows.length === 0) {
       return false;
     }
+    logger.info('degreeRows[0]', degreeRows[0])
     return degreeRows;
   } catch (error) {
     console.error("Error in getDegreeId:", error);

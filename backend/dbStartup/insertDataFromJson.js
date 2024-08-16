@@ -3,39 +3,30 @@ const path = require('path');
 //const { Pool } = require('pg');
 require('dotenv').config();
 const logger = require('../middleware/logger');
-const { addDegreeinfo, getDegreeinfoId, addManyCourses } = require('../db');
+const { addDegreeinfo, getDegreeinfoId, addManyCourses, createStudyPlan, addCourseAndPrerequisitesToStudyplan } = require('../db');
 const { addManyPrerequisiteCourses, addDegreeData } = require('../db');
 
 //const pool = new Pool({
 //  connectionString: process.env.DATABASE_URL,
 //});
 
-function mapPrerequisites(jsonData) {
-  let courseMappings = [];
+const processPrerequisites = async (plan_id, jsonData) => {
+  const { courses } = jsonData;
+  for (const course of courses) {
+    const { courseCode, prerequisiteCourses } = course;
+    await addManyPrerequisiteCourses(plan_id, courseCode, prerequisiteCourses);
+  }
+  //should this return something or give an error (for testing)?
+};
 
-  jsonData.courses.forEach(course => {
-      course.prerequisiteCourses.forEach(prerequisiteCourse => {
-          courseMappings.push({
-              course: course.courseCode,
-              prerequisiteCourse: prerequisiteCourse, 
-              courseType: course.courseType || 'compulsory' // Include relation type if available, otherwise 'compulsory'
-          });
-      });
-  });
-  return courseMappings;
-}
-
-function mapCoursesForDegree(jsonData) {
-  let courseMappings = [];
-
-  jsonData.courses.forEach(course => {
-    courseMappings.push({
-      course: course.courseCode, 
-      courseType: course.courseType || 'compulsory' // Include relation type if available, otherwise 'compulsory'
-    });
-  });
-  return courseMappings;
-}
+const processCoursePlanRelations = async (plan_id, jsonData) => {
+  const { courses } = jsonData;
+  for (const course of courses) {
+    const { courseCode, prerequisiteCourses } = course;
+    await addCourseAndPrerequisitesToStudyplan(plan_id, courseCode, prerequisiteCourses);
+  }
+  //shoud this return something or give an error (for testing)?
+};
 
 function mapDegreesForDegreeinfo(jsonData) {
   let degreeMappings = [];
@@ -49,30 +40,6 @@ function mapDegreesForDegreeinfo(jsonData) {
   return degreeMappings;
 }
 
-/* NEEDS CHANGES - saved as an example to look at, while workin on fix
-const insertDataFromJson = async () => {
-  //  Loads data from degreeToDb.json and inserts it into the database.
-  try {
-    const dataPath = path.join(__dirname, 'degreeToDb.json');
-    const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    const courseCodes = jsonData.courses.map(course => (course.courseCode));
-    const courseMappings = mapPrerequisites(jsonData);
-    const degreeInfo = {
-      degreeName: jsonData.degreeName,
-      degreeYears: jsonData.degreeYears,
-      degreeCode: jsonData.degreeCode, 
-    };
-    const courseDegreeMappings = mapCoursesForDegree(jsonData);
-    await addManyCourses(courseCodes); 
-    await addManyPrerequisiteCourses(courseMappings);
-    await addDegreeData(degreeInfo, courseDegreeMappings);
-
-  } catch (err) {
-    console.error('Error inserting degreedata:', err);
-  }
-};
-*/
-
 const insertPlansFromJson = async () => {
   //  Loads data from plansToDb.json and inserts it into the database, uid = 'root'
   // NOT fully working, problems with accessing the values of jsonData-object
@@ -82,39 +49,23 @@ const insertPlansFromJson = async () => {
     const dataPath = path.join(__dirname, 'plansToDb.json');
     logger.debug('dataPath', dataPath);
     const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    logger.debug('@insertPlansFromJson, jsonData', jsonData);
-    logger.debug('Keys in jsonData: ', Object.keys(jsonData));
-    logger.debug('Values in jsonData.uid: ', Object.values(jsonData.uid));
-    const key = Object.keys(jsonData)[0];
-    logger.debug('@insertPlansFromJson, key = Object.keys(jsonData)[0]', key);
-    //const { uid, degreeYears, degreeCode } = jsonData;
-    const { degreeYears, degreeCode } = jsonData;
-    //logger.info('@insertPlansFromJson, degreeYears', degreeYears);
-    //logger.info('@insertPlansFromJson, degreeCode', degreeCode);
-    //logger.info('@insertPlansFromJson, uid', uid);
-
-    //const uid = JSON.parse(JSON.stringify(jsonData.uid));
-    logger.debug('@insertPlansFromJson, jsonData', jsonData);
-
+    const { uid, degreeYears, degreeCode, name } = jsonData;
+    const degreeIdRows = await getDegreeinfoId(degreeCode, degreeYears);
+    const degree_id = degreeIdRows[0].id;
+    const planRows = await createStudyPlan(degree_id, name, uid);
     const courseCodes = jsonData.courses.map(course => (course.courseCode));
-    //logger.info('@insertPlansFromJson, courseCodes', courseCodes);
-    const courseMappings = mapPrerequisites(jsonData);
-    //logger.info('@insertPlansFromJson, courseMappings', courseMappings)
-
-    //TODO tarvitaan metodi, joka etsii degreeinfo.id:n näillä tiedoilla,
-    //jotta voidaan tallentaa tutkinto, vai onko se jo olemassa?
-    //const degreeIdRows = await getDegreeinfoId(degreeCode, degreeYears);
-    //const degreeId = degreeIdRows.id;
-    //logger.info('@insertPlansFromJson, degreeId', degreeId)
-    const courseDegreeMappings = mapCoursesForDegree(jsonData);
-    await addManyCourses(courseCodes); 
+    await addManyCourses(courseCodes);
+    //const courseDegreeMappings = mapCoursesForDegree(jsonData); //needs work
     /* TODO, needs fixing to include plan_id in prerequisites
     await addManyPrerequisiteCourses(courseMappings);
+    This adds course_plan -relation for each course
     */
-    //await addDegreeData(degreeInfo, courseDegreeMappings);
-
-  } catch (err) {
-    console.error('Error inserting degreedata:', err);
+    // Assuming plan_id is defined somewhere in your code
+    const plan_id = planRows.plan_id;
+    await processPrerequisites(plan_id, jsonData);
+    await processCoursePlanRelations(plan_id, jsonData);
+    } catch (err) {
+    console.error('Error inserting json-data:', err);
   }
 };
 
