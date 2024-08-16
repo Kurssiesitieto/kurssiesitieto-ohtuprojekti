@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 // const { pool } = require('../dbStartup');
 const logger = require('../middleware/logger');
-const { getDegrees,
-  getStarted, 
+const {  
   getDegreeinfoId,
   getPlansByRoot,
   getPlansByRootAndUser,
@@ -14,28 +13,6 @@ const { getDegrees,
   resetPositions} = require('../db');
 
 
-router.get('/official', async (req, res) => {
-  /*
-  //TODO, changing code ; start-pagen 'näytä tutkinnot', näyttää kovakoodattujen studyplansien nimet
-  //change according to new schema, uid = "root"
-  Fetches all official studyplans (name & id) from the database and returns them as a JSON array.
-  */
-
-  try {
-    //const result = await pool.query('SELECT * FROM degrees ORDER BY degree_name');
-    const result = await getStarted()
-    const degrees = result.rows.map(degree => ({ 
-      degree_name: degree.degree_name, 
-      degree_years: degree.degree_years,
-      hy_degree_id: degree.hy_degree_id
-    }));
-    logger.verbose("Degrees fetched:", degrees);
-    res.json(degrees);
-  } catch (error) {
-    logger.error(`Error fetching degrees: ${error.message}`);
-    res.status(500).send('Server error');
-  }
-});
 
 router.get('/public', async (req, res) => {
   /* TODO, shows all degrees by logged_in uid, 'root', 'public'

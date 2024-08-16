@@ -49,8 +49,6 @@ router.get('/getKori', async (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(courses);
   
-      //res.setHeader('Content-Type', 'application/json');
-      //res.send(JSON.stringify(courses, null, 2));
     } catch (err) {
       console.error("Error accessing Kori API:", err);
       res.status(500).send('Server error');

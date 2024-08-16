@@ -8,13 +8,7 @@ const KoriInterface = require('../interfaces/koriInterface');
 
 const { Pool } = require('pg');
 const kori = new KoriInterface();
-/*
-const getStarted = async () => {
-  //TODO: change to new schema
-    const result = await pool.query('SELECT * FROM degrees ORDER BY degree_name')
-    return result;
-};
-*/
+
 
 const selectPool = () => {
   //SEEMS OK
@@ -87,15 +81,10 @@ const addManyCourses = async (listOfCourses) => {
 
 
 const getCourses = async () => {
+  //Do we need to update this?
   const { rows } = await pool.query('SELECT * FROM courses');
   return rows;
 };
-
-const deleteCourse = async (kori_name) => {
-  const result = await pool.query('DELETE FROM course_info WHERE kori_name = $1 RETURNING *', [kori_name]);
-  return result.rowCount;
-};
-
 
 const getCourseWithReqursivePrerequisites = async (plan_id, hy_course_id) => {
   const query = `
@@ -217,26 +206,6 @@ const addManyPrerequisiteCourses = async (planId, courseCode, prerequisiteCodes)
   }
 };
 
-// Frontend is not fixed for this yet
-const removePrerequisiteCourse = async (course_hy_id, prerequisite_course_hy_id) => {
-  /* 
-  OLD SCHEMA, needs updating
-  Receives args course_id and prerequisite_course_id and removes the relation from the database. 
-  The id's are like TKT10001, TKT10002 etc.
-  */
-  const { rowCount } = await pool.query(
-    `DELETE FROM prerequisite_courses
-    WHERE course_id = (SELECT id FROM courses WHERE courses.hy_course_id = $1) AND 
-          prerequisite_course_id = (SELECT id FROM courses WHERE courses.hy_course_id = $2)`,
-    [course_hy_id, prerequisite_course_hy_id]
-  );
-
-  if (rowCount === 0) {
-    logger.error("No prerequisite was removed. Check if the specified relation exists.");
-  } else {
-    logger.info("Prerequisite removed successfully.");
-  }
-};
 
 // Complex, need to move them to a separate file later!
 
@@ -316,30 +285,6 @@ async function fetchAllCoursesWithDirectPrerequisites() {
   return rows;
 }
 
-const addCourseToDegree = async (hyDegreeId, degreeYears, hyCourseId, relationType = 'compulsory') => {
-  try {
-    //OLD code for old schema, to be replaced with addCourseToStudyplan
-    const { rows } = await pool.query(
-      `INSERT INTO course_degree_relation (degree_id, course_id, relation_type)
-      VALUES (
-        (SELECT id FROM degrees WHERE hy_degree_id = $1 AND degree_years = $2),
-        (SELECT id FROM courses WHERE hy_course_id = $3),
-        $4
-      )
-      ON CONFLICT ON CONSTRAINT no_duplicate_course_degree_relation DO NOTHING
-      RETURNING *;`,
-      [hyDegreeId, degreeYears, hyCourseId, relationType]
-    );
-
-    if (rows.length === 0) {
-      logger.verbose(`Course ${hyCourseId} already exists in the degree ${hyDegreeId}.`);
-      return;
-    }
-    return rows[0];
-  } catch (error) {
-    logger.verbose('Error inserting data into course_degree_relation table:', error);
-  }
-}
 
 const addCourseToStudyplan = async (planId, hyCourseId, relationType = 'compulsory') => {
   //TODO
@@ -381,64 +326,6 @@ const addCourseAndPrerequisitesToStudyplan = async (plan_id, courseCode, prerequ
   }
 }
 
-const addDdegree = async (degreeCode, degreeName, degreeYears) => {
-  //OLD SCHEMA, needs updating or removal - new function most likely addStudyplan or addDegreeinfo
-
-  // Workaround for now. 'ON CONSTRAINT' works with one constraint only without some tomfoolery.
-  const degreeNameIsNotUnique = async (degreeName) => {
-    const { rows } = await pool.query(
-      `SELECT EXISTS (
-          SELECT 1
-          FROM degrees
-          WHERE degree_name = $1
-      ) AS degreeExists`,
-      [degreeName]
-    );
-    const { degreeExists } = rows[0];
-    return degreeExists;
-  };
-
-  const nameInUse = await degreeNameIsNotUnique(degreeName)
-  if (nameInUse) {
-    logger.verbose(`Degree ${degreeName} already exists in the database.`);
-    return;
-  }
-
-  const { rows } = await pool.query(
-    `INSERT INTO degrees (degree_name, hy_degree_id, degree_years)
-    SELECT $1, $2, $3
-    ON CONFLICT ON CONSTRAINT unique_year_for_hy_course_id DO NOTHING
-    RETURNING *`,
-    [degreeName, degreeCode, degreeYears]
-  );
-  if (rows.length === 0) {
-    logger.verbose(`Degree '${degreeName}' already exists in the database.`);
-    return;
-  }
-  return;
-};
-
-const addDegreeData = async (degreeInfo, courseMappings) => {
-  /*
-  Adds json data to database. 
-
-  degreeInfo format: 
-  {
-    degreeName: 'Tietojenkäsittelytieteen kandidaattitutkinto 2023-2026',
-    degreeCode: 'kh50_05',
-    degreeYears: '2023-2026'
-  }
-
-  courseCodes format:
-  ['TKT10001', 'TKT10002', 'TKT10003']
-  */
-
-  const { degreeName, degreeYears, degreeCode } = degreeInfo;
-  await addDdegree(degreeCode, degreeName, degreeYears);
-  await Promise.all(courseMappings.map(async course => {
-    await addCourseToDegree(degreeCode, degreeYears, course.course, course.courseType || 'compulsory');
-    }));
-};
 
 const getPlansByRoot = async () => {
   const query = `
@@ -646,27 +533,6 @@ const getDegreeNames = async () => {
   }
 };
 
-/*
-const getDegreeId = async (degreeId, degreeYears) => {
-  //TODO, change to new schema using degreeinfo
-  try {  
-    const degreeQuery = `
-    SELECT id 
-    FROM degrees 
-    WHERE hy_degree_id = $1 AND degree_years = $2`;
-
-    const { rows: degreeRows } = await pool.query(degreeQuery, [degreeId, degreeYears]);
-
-    if (degreeRows.length === 0) {
-      return false;
-    }
-    return degreeRows;
-  } catch (error) {
-    console.error("Error in getDegreeId:", error);
-    return false;
-  }
-};
-*/
 
 const getDegreeinfoId = async (degreeCode, degreeYears) => {
   //TODO, connect to route (?)
@@ -757,48 +623,27 @@ module.exports = {
   getAllCoursesWithPrerequisites,
   fetchCourseWithPrerequisites,
   addPrerequisiteCourse,
-  removePrerequisiteCourse,
   getCourses,
   getCourseWithReqursivePrerequisites,
   addCourse,
   addManyCourses,
   addManyPrerequisiteCourses,
   addCourseAndPrerequisitesToStudyplan,
-  addDegreeData,
   addDegreeinfo,
   addSingleDegreeinfo,
   resetPositions,
-  //updateCourse,
-  //getDegrees,
   getDegreeNames,
   getDegreeinfo,
   getDegreeinfoId,
-  //getStarted,
   getPlansByRoot,
   getPlansByRootAndUser,
   createStudyPlan,
   addStudyPlan,
   addUserPlanRelation,
   savePositions,
-  deleteCourse,
   getCoursesByPlan,
   endDatabase: async () => {
     await pool.end();
   },
 };
 
-
-/*
-exports.query = (text, params, callback) => {
-  return pool.query(text, params, callback)
-}
-
-export async function getCourses() {
-  const { rows } = await pool.query('SELECT * FROM Courses');
-  return rows;
-}
-
-export async function endDatabase() {
-  await pool.end();
-}
-*/

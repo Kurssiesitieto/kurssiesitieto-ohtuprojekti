@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getCourses, addCourse, deleteCourse, updateCourse,
-  addPrerequisiteCourse, removePrerequisiteCourse,
+const { getCourses, addCourse, 
+  addPrerequisiteCourse,
   addCourseAndPrerequisitesToStudyplan,
   fetchCourseWithPrerequisites,
   getAllCoursesWithPrerequisites,
@@ -34,11 +34,6 @@ function asyncHandler(fn) {
   };
 }
 router.post('/addCourseToStudyplan', asyncHandler(async (req, res) => {
-  //TODO 
-  //adds a course with its prerequisitecourses to studyplan
-  //needs = plan_id
-  //add course to courses
-  //add course_plan -relation
   logger.debug('@api/courses/addCourseToStudyplan');
   const { plan_id, courseCode, prerequisiteCodes = [] } = req.body; 
   try {
@@ -61,6 +56,7 @@ router.post('/addCourse', asyncHandler(async (req, res) => {
 }));
 
 router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
+  //Do we need this??
   const courses = await getCourses();
   logger.debug("Courses from database", courses);
   res.json(courses);
@@ -76,30 +72,12 @@ router.get('/databaseGetCourseWithRequirements/:plan_id/:course_id', asyncHandle
 router.post('/databaseCreateCourse', asyncHandler(async (req, res) => {
   //new attribute: uid
   logger.debug("Received request body:", req.body);
-  //const { uid } = req.body;
   const { official_course_id, course_name, kori_name } = req.body;
   const newCourse = await addCourse(official_course_id, course_name, kori_name);
   logger.debug("Adding course", newCourse);
   res.json(newCourse);
 }));
 
-router.delete('/databaseDeleteCourse/:kori_name', asyncHandler(async (req, res) => {
-  const { kori_name } = req.params;
-  const rowsDeleted = await deleteCourse(kori_name);
-  
-  if (rowsDeleted > 0) {
-    res.send({ message: 'Course deleted successfully' });
-  } else {
-    res.status(404).send({ message: 'Course not found or could not be deleted' });
-  }
-}));
-
-router.put('/databaseUpdateCourse/:id', asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { official_course_id, course_name, kori_name } = req.body;
-  const updatedCourse = await updateCourse(id, official_course_id, course_name, kori_name);
-  res.json(updatedCourse);
-}));
 
 // Add dependencies
 
@@ -110,11 +88,6 @@ router.post('/addPrerequisiteCourse', asyncHandler(async (req, res) => {
   res.json(newPrerequisite);
 }));
 
-router.delete('/removePrerequisiteCourse', asyncHandler(async (req, res) => {
-  const { course_hy_id, prerequisite_course_hy_id } = req.body;
-  await removePrerequisiteCourse(course_hy_id, prerequisite_course_hy_id);
-  res.send({ message: 'Prerequisite course relation removed successfully' });
-}));
 
 // Fetch based on dependencies
 
