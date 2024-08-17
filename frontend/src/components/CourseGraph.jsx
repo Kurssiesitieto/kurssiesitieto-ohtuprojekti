@@ -25,13 +25,18 @@ const CourseGraph = ({ axiosInstance, courses, setIsSidebarOpen, setSelectedCour
     }, [setNodes, setEdges]);
 
     useEffect(() => {
-        const newNodes = courses.map(course => course.createNode());
+        if (!courses || courses.length === 0) {            
+            setNodes([]);
+            setEdges([]);
+            return;
+        }
+    
+        const newNodes = courses.map(course => course.createNode()).filter(node => node && node.id);
         const newEdges = courses.flatMap(course => {
             return course.createEdges().map(edge => ({
                 ...edge,
-                //animated: true If anybody needs this later, leaving it here
             }));
-        });
+        }).filter(edge => edge && edge.id);
     
         prevNumNodesRef.current = nodes;
         setNodes(newNodes);
@@ -43,16 +48,15 @@ const CourseGraph = ({ axiosInstance, courses, setIsSidebarOpen, setSelectedCour
             onLayout(newNodes, newEdges);
         }
     }, [courses, onLayout, setNodes, setEdges]);
-
+    
     useEffect(() => {
-        
-        if (reactflowInstance) {
-            if (prevNumNodesRef.current.length === nodes.length && (prevNumNodesRef.current[0].id === nodes[0].id || prevNumNodesRef === true)) { 
+        if (reactflowInstance && nodes.length > 0) {
+            if (prevNumNodesRef.current.length === nodes.length && (prevNumNodesRef.current[0]?.id === nodes[0]?.id || prevNumNodesRef === true)) { 
                 return;
             }
             reactflowInstance.fitView();
         }
-    }, [nodes])
+    }, [nodes, reactflowInstance]);
 
 
 
