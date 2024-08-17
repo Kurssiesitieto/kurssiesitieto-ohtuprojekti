@@ -11,9 +11,9 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedDegree, setSelectedDegree] = useState([]);
 
-  const fetchDegrees = async () => {  // UUSI ROUTE api/degrees/degree_names
+  const fetchDegrees = async () => {  
     try {
-      const response = await axiosInstance.get(`/api/degrees`);
+      const response = await axiosInstance.get(`/api/degrees/degree_names`);
       if (response == null) {
         displayError("Palvelimelle ei saatu yhteyttä")
         return;
@@ -29,19 +29,20 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     fetchDegrees();
   }, []);
 
-  const createStudyPlan = async (event) => {  
-    
+  const createStudyPlan = async (event) => {    
+    event.preventDefault();
+
     const studyPlanObject = {
-      degree_name: newName,
-      degree_years: selectedDegree.degree_years,
-      hy_degree_id: selectedDegree.hy_degree_id,
-      //uid: 'rest'
-    };/*
+      degree_id: selectedDegree.id,
+      name: newName,      
+      uid: 'rest'  // Needs to give an uid when the functionality is available
+    };
 
     try {
       const response = await axiosInstance.post(`/api/degrees/create_studyplan`, studyPlanObject);
       if (response.status === 201) { // Assumption that successful creation returns 201
-        setNewCoursePlan(response.data); // Assumption that response.data contains the created study plan
+        const { plan_id } = response.data;        
+        setNewCoursePlan({ plan_id, degree_name: selectedDegree.degree_name, });        
         onCreate();
         setNewName('');
         setSelectedDegree([]);
@@ -51,10 +52,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     } catch (error) {
       console.error("Error when creating study plan:", error);
       displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
-    }*/
-    setNewCoursePlan(studyPlanObject) // Here are placeholders since the API is not yet functional    
-    setNewName('');
-    setSelectedDegree([]);
+    }    
     onCreate();
     };
 
@@ -71,8 +69,8 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
   };
 
   const handleDegreeClick = (degree) => {
-    setAnchorEl(null);
-    setSelectedDegree(degree)
+    setAnchorEl(null);    
+    setSelectedDegree(degree)    
   };
 
   return (
@@ -86,7 +84,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
             position: 'absolute',
             top: '10px',
             right: '10px',
-            color: '#007bff', // Blue color for the icon
+            color: '#007bff', 
           }}
         >
           <CloseIcon />
@@ -102,7 +100,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
               onClose={handleMenuClose}
             >
               {listOfDegrees.map((degree) => (
-                <MenuItem key={degree.hy_degree_id} onClick={() => handleDegreeClick(degree)}>
+                <MenuItem key={degree.id} onClick={() => handleDegreeClick(degree)}>
                   {degree.degree_name}
                 </MenuItem>
               ))}

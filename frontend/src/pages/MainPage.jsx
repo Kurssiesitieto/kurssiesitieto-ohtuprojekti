@@ -17,10 +17,8 @@ const MainPage = ({ axiosInstance }) => {
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
 
-  console.log("newCoursePlan", newCoursePlan)
 
-  const fetchDegreeCourses = async (degree) => {
-    console.log("fetchDegreeCourses degree", degree)
+  const fetchDegreeCourses = async (degree) => {    
     try {
       if (degree == null) {
         displayError("Jokin meni pieleen tutkintotietoja haettaessa!");
@@ -45,8 +43,7 @@ const MainPage = ({ axiosInstance }) => {
         courseData.description,
         courseData.x,
         courseData.y
-      ));
-      console.log("fetchDegreeCourses convertedCourses", convertedCourses)
+      ));      
       setCourses(convertedCourses);
       setSelectedDegreeName(degree.degree_name);
       if (!convertedCourses ) {
@@ -80,7 +77,7 @@ const MainPage = ({ axiosInstance }) => {
 
   const fetchDegrees = async () => {
     try {
-      const response = await axiosInstance.get(`/api/degrees/plans_by_root`); //Need to update when uid available
+      const response = await axiosInstance.get(`/api/degrees/plans_by_root`); //Needs to update when uid available
       if (response == null) {
         displayError("Palvelimelle ei saatu yhteyttä");
         return;

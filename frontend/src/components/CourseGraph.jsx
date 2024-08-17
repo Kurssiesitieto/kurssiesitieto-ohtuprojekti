@@ -25,23 +25,22 @@ const CourseGraph = ({ axiosInstance, courses, setIsSidebarOpen, setSelectedCour
     }, [setNodes, setEdges]);
 
     useEffect(() => {
-        if (courses.length > 0) {
-            const newNodes = courses.map(course => course.createNode());
-            const newEdges = courses.flatMap(course => {
-                return course.createEdges().map(edge => ({
-                    ...edge,
-                    //animated: true If anybody needs this later, leaving it here
-                }));
-            });
-
-            prevNumNodesRef.current = nodes;
-            setNodes(newNodes);
-            setEdges(newEdges);
-
-            if ((newNodes[0].position.x === null || newNodes[0].position.x === undefined) &&
-                (newNodes[0].position.y === null || newNodes[0].position.y === undefined)) {
-                onLayout(newNodes, newEdges);
-            }
+        const newNodes = courses.map(course => course.createNode());
+        const newEdges = courses.flatMap(course => {
+            return course.createEdges().map(edge => ({
+                ...edge,
+                //animated: true If anybody needs this later, leaving it here
+            }));
+        });
+    
+        prevNumNodesRef.current = nodes;
+        setNodes(newNodes);
+        setEdges(newEdges);
+    
+        if (newNodes.length > 0 && 
+            (newNodes[0].position.x === null || newNodes[0].position.x === undefined) &&
+            (newNodes[0].position.y === null || newNodes[0].position.y === undefined)) {
+            onLayout(newNodes, newEdges);
         }
     }, [courses, onLayout, setNodes, setEdges]);
 

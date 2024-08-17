@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/AddPrerequisites.css';
-import { Menu, MenuItem, IconButton} from '@mui/material';
+import { IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-//import { error as displayError } from './messager/messager';
+import { error as displayError } from './messager/messager';
 
 
-const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick}) => {
+const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, DegreeChange}) => {
   const [courseCode, setCourseCode] = useState('');
   const [prerequisiteCodes, setPrerequisiteCodes] = useState('');
 
 
-  const addPrerequisites = async (event) => {   // 
+  const addPrerequisites = async (event) => { 
     event.preventDefault();
-    /*
+    
     const prerequisitesObject = {
+      plan_id: newCoursePlan.plan_id,
       courseCode: courseCode,
-      prerequisiteCodes: prerequisiteCodes.split(',').map(code => code.trim()), // 
-      studyPlanId: newCoursePlan.id // 
+      prerequisiteCodes: prerequisiteCodes.split(',').map(code => code.trim()) 
     };
 
     try {
-      const response = await axiosInstance.post('/api/degrees/addCourseToStudyplan', prerequisitesObject);
-      if (response.status === 200) { // Assumption that successful creation returns 200
+      const response = await axiosInstance.post('/api/courses/addCourseToStudyplan', prerequisitesObject);
+      if (response.status === 200) { 
         setCourseCode('');
         setPrerequisiteCodes('');
       } else {
@@ -31,10 +31,11 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick}) => {
     } catch (error) {
       console.error("Error adding course to study plan:", error);
       displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
-    } */
+    } 
     
     setCourseCode('');
     setPrerequisiteCodes('');
+    DegreeChange(newCoursePlan)
   };
 
   if (!isOpen) {
@@ -52,7 +53,7 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick}) => {
             position: 'absolute',
             top: '10px',
             right: '10px',
-            color: '#007bff', // Blue color for the icon
+            color: '#007bff', 
           }}
         >
           <CloseIcon />

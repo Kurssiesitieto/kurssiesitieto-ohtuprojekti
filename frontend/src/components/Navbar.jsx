@@ -51,7 +51,7 @@ export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handl
         <li><InfoBox isOpen={isInfoBoxOpen} onClose={() => setIsInfoBoxOpen(false)} baseURL={baseURL} /></li>
         <li><AddStudyPlansButton onClick={openAddStudyPlans} /></li>
         <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} setNewCoursePlan={setNewCoursePlan} onClick={openAddStudyPlans}/></li>
-        <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={changeOpenAddPrerequisites} newCoursePlan={newCoursePlan} /></li>
+        <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={changeOpenAddPrerequisites} newCoursePlan={newCoursePlan} DegreeChange={handleDegreeChange}/></li>
       </ul>
     </nav>
   );

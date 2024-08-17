@@ -40,7 +40,7 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
       >
         {listOfDegrees.map((degreeOption) => (
           <MenuItem
-            key={degreeOption.degree_name}
+            key={degreeOption.plan_id}
             onClick={() => handleSelect(degreeOption)}
             id={`degree-option-${degreeOption.degree_name.replace(/\s+/g, '-').toLowerCase()}`}
           >
