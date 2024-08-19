@@ -44,7 +44,7 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, Degre
 
   return (
     <div className="prerequisites-view">
-      <h2>Tutkinnon luominen: TÄHÄN selectedDegree.degree_name </h2>
+      <h2>{newCoursePlan.plan_name} </h2>
       <IconButton 
           onClick={onClick} 
           aria-label="close" 
