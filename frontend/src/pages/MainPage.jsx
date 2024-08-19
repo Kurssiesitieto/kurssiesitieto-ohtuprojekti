@@ -82,8 +82,7 @@ const MainPage = ({ axiosInstance }) => {
         displayError("Palvelimelle ei saatu yhteyttä");
         return;
       }
-      setDegreeToList(response.data);
-      console.log("fetchDegrees response.data", response.data)
+      setDegreeToList(response.data);      
     } catch (error) {
       console.error("Error when fetching degree data: ", error);
       displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");

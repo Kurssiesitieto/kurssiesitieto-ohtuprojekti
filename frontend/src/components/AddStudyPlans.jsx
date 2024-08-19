@@ -50,10 +50,13 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
         displayError("Opintosuunnitelman luominen epäonnistui.");
       }
     } catch (error) {
-      console.error("Error when creating study plan:", error);
-      displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
-    }    
-    onCreate();
+      if (error.response && error.response.status === 500) {
+        displayError("Kurssikokonaisuuden nimi on jo käytössä. Valitse uusi.");
+      } else {
+        console.error("Error when creating study plan:", error);
+        displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
+    }} 
+    //onCreate();
     };
 
   if (!isOpen) {
