@@ -44,7 +44,7 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
             onClick={() => handleSelect(degreeOption)}
             id={`degree-option-${degreeOption.degree_name.replace(/\s+/g, '-').toLowerCase()}`}
           >
-            {degreeOption.degree_name}
+            {degreeOption.plan_name}
           </MenuItem>
         ))}
       </Menu>

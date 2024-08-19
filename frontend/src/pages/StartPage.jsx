@@ -69,7 +69,7 @@ const StartPage = ({ axiosInstance }) => {
             onClose={handleMenuClose}
           >
             {listOfDegrees.map((degree) => (
-              <MenuItem key={degree.hy_degree_id} onClick={() => handleDegreeClick(degree)}>
+              <MenuItem key={degree.plan_id} onClick={() => handleDegreeClick(degree)}>
                 {degree.degree_name}
               </MenuItem>
             ))}

@@ -327,7 +327,7 @@ const addCourseAndPrerequisitesToStudyplan = async (plan_id, courseCode, prerequ
 
 const getPlansByRoot = async () => {
   const query = `
-      SELECT sp.id AS plan_id, di.degree_name 
+      SELECT sp.id AS plan_id, sp.name AS plan_name, di.degree_name 
       FROM studyplans sp
       JOIN degreeinfo di ON sp.degree_id = di.id
       JOIN user_plan_relation upr ON sp.id = upr.plan_id
@@ -338,6 +338,7 @@ const getPlansByRoot = async () => {
   
   const plans = rows.map(row => ({
       plan_id: row.plan_id,
+      plan_name: row.plan_name,
       degree_name: row.degree_name
   }));
 
@@ -346,7 +347,7 @@ const getPlansByRoot = async () => {
 
 const getPlansByRootAndUser = async (uid) => {
   const query = `
-      SELECT sp.id AS plan_id, di.degree_name 
+      SELECT sp.id AS plan_id, sp.name AS plan_name, di.degree_name 
       FROM studyplans sp
       JOIN degreeinfo di ON sp.degree_id = di.id
       JOIN user_plan_relation upr ON sp.id = upr.plan_id
@@ -357,6 +358,7 @@ const getPlansByRootAndUser = async (uid) => {
 
   const plans = rows.map(row => ({
       plan_id: row.plan_id,
+      plan_name: row.plan_name,
       degree_name: row.degree_name
   }));
 

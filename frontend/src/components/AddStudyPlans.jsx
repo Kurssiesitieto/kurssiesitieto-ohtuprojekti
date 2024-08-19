@@ -41,8 +41,8 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     try {
       const response = await axiosInstance.post(`/api/degrees/create_studyplan`, studyPlanObject);
       if (response.status === 201) { // Assumption that successful creation returns 201
-        const { plan_id } = response.data;        
-        setNewCoursePlan({ plan_id, degree_name: selectedDegree.degree_name, });        
+        const { plan_id } = response.data;      
+        setNewCoursePlan({ plan_id, plan_name:newName, degree_name: selectedDegree.degree_name, });        
         onCreate();
         setNewName('');
         setSelectedDegree([]);

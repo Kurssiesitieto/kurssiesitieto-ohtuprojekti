@@ -45,7 +45,7 @@ const MainPage = ({ axiosInstance }) => {
         courseData.y
       ));      
       setCourses(convertedCourses);
-      setSelectedDegreeName(degree.degree_name);
+      setSelectedDegreeName(degree.plan_name);
       if (!convertedCourses ) {
         throw new Error("Kurssitietoja ei löytynyt!");
       }      
@@ -83,6 +83,7 @@ const MainPage = ({ axiosInstance }) => {
         return;
       }
       setDegreeToList(response.data);
+      console.log("fetchDegrees response.data", response.data)
     } catch (error) {
       console.error("Error when fetching degree data: ", error);
       displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.");
