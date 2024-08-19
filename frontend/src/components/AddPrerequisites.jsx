@@ -16,8 +16,9 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, Degre
     const prerequisitesObject = {
       plan_id: newCoursePlan.plan_id,
       courseCode: courseCode,
-      prerequisiteCodes: prerequisiteCodes.split(',').map(code => code.trim()) 
+      prerequisiteCodes: prerequisiteCodes ? prerequisiteCodes.split(',').map(code => code.trim()) : [] 
     };
+    console.log("prerequisitesObject", prerequisitesObject)
 
     try {
       const response = await axiosInstance.post('/api/courses/addCourseToStudyplan', prerequisitesObject);
