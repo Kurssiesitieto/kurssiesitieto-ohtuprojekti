@@ -42,9 +42,6 @@ function mapDegreesForDegreeinfo(jsonData) {
 
 const insertPlansFromJson = async () => {
   //  Loads data from plansToDb.json and inserts it into the database, uid = 'root'
-  // NOT fully working, problems with accessing the values of jsonData-object
-  // inserts courses and prerequisiteCourses at the moment
-  // lines that don't work yet, are commented out
   try {
     const dataPath = path.join(__dirname, 'plansToDb.json');
     logger.debug('dataPath', dataPath);
@@ -55,17 +52,28 @@ const insertPlansFromJson = async () => {
     const planRows = await createStudyPlan(degree_id, name, uid);
     const courseCodes = jsonData.courses.map(course => (course.courseCode));
     await addManyCourses(courseCodes);
-    //const courseDegreeMappings = mapCoursesForDegree(jsonData); //needs work
-    /* TODO, needs fixing to include plan_id in prerequisites
-    await addManyPrerequisiteCourses(courseMappings);
-    This adds course_plan -relation for each course
-    */
-    // Assuming plan_id is defined somewhere in your code
     const plan_id = planRows.plan_id;
     await processPrerequisites(plan_id, jsonData);
     await processCoursePlanRelations(plan_id, jsonData);
     } catch (err) {
-    console.error('Error inserting json-data:', err);
+    console.error('Error inserting json-data for math:', err);
+  }
+  //  Loads data from TKT23-26.json and inserts it into the database, uid = 'root'
+  try {
+    const dataPath = path.join(__dirname, 'TKT23-26.json');
+    logger.debug('dataPath', dataPath);
+    const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    const { uid, degreeYears, degreeCode, name } = jsonData;
+    const degreeIdRows = await getDegreeinfoId(degreeCode, degreeYears);
+    const degree_id = degreeIdRows[0].id;
+    const planRows = await createStudyPlan(degree_id, name, uid);
+    const courseCodes = jsonData.courses.map(course => (course.courseCode));
+    await addManyCourses(courseCodes);
+    const plan_id = planRows.plan_id;
+    await processPrerequisites(plan_id, jsonData);
+    await processCoursePlanRelations(plan_id, jsonData);
+    } catch (err) {
+    console.error('Error inserting json-data for CS:', err);
   }
 };
 
