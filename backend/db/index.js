@@ -81,7 +81,7 @@ const addManyCourses = async (listOfCourses) => {
 
 
 const getCourses = async () => {
-  //Do we need to update this?
+  //Do we need to update this? or delete? we have getCoursesByPlan
   const { rows } = await pool.query('SELECT * FROM courses');
   return rows;
 };
@@ -479,7 +479,7 @@ const getAllCoursesWithPrerequisites = async () => {
   return rows;
 };
 
-const getCoursesByPlan = async (plan_id) => {
+const getCoursesByPlan = async (plan_id = 1) => {
   const query = `
     SELECT 
       c.course_name AS name, 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getCourses, addCourse, 
+const { getCoursesByPlan,
+  addCourse,
   addPrerequisiteCourse,
   addCourseAndPrerequisitesToStudyplan,
   fetchCourseWithPrerequisites,
@@ -48,17 +49,18 @@ router.post('/addCourseToStudyplan', asyncHandler(async (req, res) => {
 }));
 
 router.post('/addCourse', asyncHandler(async (req, res) => {
-  //a helper route for develepoers to figure out if addCourse works with new schema
+  //a helper route for developers to figure out if addCourse works with new schema
   logger.info('@api/courses/addCourse, incoming req.body', req.body);
   const { courseCode } = req.body;
   const addedCourse = await addCourse(courseCode);
   res.json(addedCourse);
 }));
 
-router.get('/databaseGetCourses', asyncHandler(async (req, res) => {
-  //Do we need this??
-  const courses = await getCourses();
-  logger.debug("Courses from database", courses);
+router.get('/databaseGetCoursesByPlan/:plan_id', asyncHandler(async (req, res) => {
+  const { plan_id } = req.params;
+  logger.info('plan_id: ', plan_id)
+  const courses = await getCoursesByPlan(plan_id);
+  logger.debug("Courses from database for a gicen plan_id", courses);
   res.json(courses);
 }));
 
