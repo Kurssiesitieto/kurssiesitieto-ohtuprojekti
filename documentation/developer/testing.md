@@ -1,6 +1,6 @@
 # Unit Testing
 
-We use Jest to do unit testing, and agreed to place the unit tests in the same locations as the files that are being tested by them. These tests are also part of the CI/CD.
+We use Jest to do unit testing for backend and Vitest for frontend, and agreed to place the unit tests in the same locations as the files that are being tested by them. These tests are also part of the CI/CD.
 
 Something to keep in mind, there may be difficulties in testing the APIs used by this project, as they are managed separately by other people outside of this project. We did not come across any limitations when we developed the project, but it should be noted that we also did not involve automated tests that fetched external information (Except for cypress, which was not part of CI/CD)!
 

@@ -30,7 +30,7 @@ const areHeadersValid = (headers) => {
 
 const createUser = (headers) => {
     const {
-      uid: username = '',
+      uid: username = 'testuser',
       mail: email = '',
       preferredlanguage: language = '',
       hypersonsisuid: id = '',
@@ -53,11 +53,11 @@ const userMiddleware = (req, res, next) => {
   console.log(req.headers)
   const headers = getHeaders(req);
 
-    if (!areHeadersValid(headers)) {
-      req.kirjauduttu = false;
-      req.user = null;
-      return next();
-    }
+//    if (!areHeadersValid(headers)) {
+//      req.kirjauduttu = false;
+//      req.user = 'käyttäjää ei tunnistettu';
+//      return next();
+//    }
   
     req.kirjauduttu = true;
     req.user = createUser(headers);

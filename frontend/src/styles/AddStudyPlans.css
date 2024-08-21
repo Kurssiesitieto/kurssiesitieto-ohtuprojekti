@@ -9,7 +9,7 @@
     color: var(--sidebar-text-color);
     background-color: var(--sidebar-background-color);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-    padding: 70px;
+    padding: 2%;
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -18,99 +18,52 @@
 }
 
 .study-plans-view h3 {
-    font-size: 2rem;
+    font-size: 160%;
     color: #0a455c;
     margin-bottom: 10%;
-  }
+}
 
 .dropdown {
     position: relative;
-    display: block; /* Changed to block to ensure the button appears below */
-    margin-bottom: 10px; /* Add space below the dropdown text if needed */
-  }
+    display: block;
+    margin-bottom: 1%;
+}
   
 .dropdown-button {
     cursor: pointer;
-    color: #0a455c; /* Optional: Customize the color */
+    color: #0a455c;
     background-color: white;
-    font-size: 20px;
-    padding: 1% 100px;
+    font-size: 100%;
+    padding: 1% 24%;
     border-color: #0a455c;
     border-radius: 0%;
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
 .buttons {
     display: flex;
-    justify-content: flex-start; /* Align button to the left */
+    justify-content: flex-start;
 }
 
-.submit-button {
-    padding: 6px 12px; /* Adjust padding to make the button smaller */
-    font-size: 14px; /* Adjust font size */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.selected-degree {
+    font-size: 80%;
+    color: #333;
+    margin-top: 8%;
 }
-
-.submit-button:hover {
-    background-color: #0056b3;
-}
-
-.degree-menu-item {
-    font-size: 12px; /* Adjust the font size to be smaller */
-  }
-
-  .selected-degree {
-    font-size: 14px; /* Adjust the font size as needed */
-    color: #333; /* Optional: Customize the text color */
-    margin-top: 8px; /* Add spacing from the input field */
-    padding: 8px; /* Add padding inside the box */
-    border: 1px solid #ccc; /* Define the border (color and thickness) */
-    border-radius: 4px; /* Optional: Round the corners of the box */
-    display: inline-block; /* Ensure the box fits the content */
-    background-color: #f9f9f9; /* Optional: Add a background color */
-  }
   
-  .selected-degree:empty {
-    padding: 0; /* Remove padding when there is no content */
-    border: none; /* Remove border when there is no content */
-    background-color: transparent; /* Remove background when there is no content */
-  }
+.selected-degree:empty {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
 
 .form-label {
     font-size: 18px;
-    margin-left: 0; /* Ensures no additional left margin */
-    padding-left: 0; /* Removes any padding on the left */
-    text-align: left; /* Explicitly aligns text to the left */
-    display: block; /* Ensures the label is treated as a block element */
+    margin-left: 0;
+    padding-left: 0; 
+    text-align: left;
+    display: block;
     margin-top: 20%;
-  }
+}
 
 .form-input {
     width: 100%;
@@ -123,16 +76,24 @@
 .submit-button {
     display: flex;
     justify-content: left;
-    padding: 8px 12px; /* Smaller padding to reduce the button size */
-    font-size: 16px; /* Smaller font size */
-    width: auto; /* Auto width so the button size fits the content */
+    padding: 8px 12px;
+    font-size: 16px;
+    width: auto;
     background-color: #0e688b;
     color: white;
     border: none;
-    border-radius: 0px; /* Optional: Keep the corners rounded */
+    border-radius: 0px;
     cursor: pointer;
 }
 
 .submit-button:hover {
     background-color: #1386b4;
+}
+
+.close-button {
+    border-radius: 100%;
+}
+
+.close-button:hover {
+    background-color: #c3d9e2;
 }

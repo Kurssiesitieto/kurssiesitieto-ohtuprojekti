@@ -35,6 +35,7 @@
 
 ### Testing
 
-- Jest
+- Jest (backend)
+- Vitest (frontend)
 - Nodemon
 - Cypress

@@ -8,7 +8,7 @@ This project is a web application designed to help students plan their studies b
 
 This project is part of Software engineering course in University of Helsinki (Ohjelmistoprojekti TKT20007)
 
-[Link to the visualization tool](https://shibboleth.ext.ocp-test-0.k8s.it.helsinki.fi/esitieto)
+[Link to the visualization tool](https://shibboleth.ext.ocp-test-0.k8s.it.helsinki.fi/esitieto) (username: esitieto, password: esitieto007)
 
 # Table of Contents
 - [Prerequisite course visualization tool](#course-prerequisite-visualization-tool)
@@ -64,7 +64,7 @@ npm run build
 npm run prod
 ```
 
-Runs the app on http://localhost:3001/
+Runs the app on http://localhost:3000/
 
 
 Where does the application go on it's day off? nowhere the application can't walk silly.
