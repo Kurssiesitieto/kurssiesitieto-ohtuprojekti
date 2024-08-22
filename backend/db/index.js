@@ -482,9 +482,10 @@ const getAllCoursesWithPrerequisites = async () => {
 const getCoursesByPlan = async (plan_id = 1) => {
   const query = `
     SELECT 
-      c.course_name AS name, 
-      c.kori_id, 
-      c.hy_course_id AS identifier, 
+      c.id, 
+      c.kori_id,
+      c.course_name, 
+      c.hy_course_id, 
       cpr.relation_type AS type,
       cp.x AS x,
       cp.y AS y,

@@ -11,14 +11,15 @@ export const SearchBar = (props) => {
   const axios = props.axiosInstance;
 
   const fetchDatabaseSearchSuggestions = async (axios) => {
-    try {
-        const response = await axios.get('/api/courses/databaseGetCourses')
-        setDbCourses(response.data)
-        return response.data
+    try {        
+        const response = await axios.get('/api/courses/databaseGetCoursesByPlan/1');
+        setDbCourses(response.data);
+        return response.data;
     } catch (error) {
-        console.error("Error fetching all courses", error)
+        console.error("Error fetching courses for plan 1", error);
     }
-  }
+}
+  console.log("dbCourses", dbCourses)
 
   useEffect(() => {
     fetchDatabaseSearchSuggestions(axios)
