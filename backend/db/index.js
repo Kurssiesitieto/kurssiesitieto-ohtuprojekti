@@ -471,20 +471,15 @@ const savePositions = async (degreeId, coursePositions) => {
       return false;
     }
   
-    let insertValues = '';
-    coursePositions.forEach(position => {
-      const matchingCourse = courseRows.find(course => course.hy_course_id === position.id);
-      if (matchingCourse) {
-          insertValues += `(${degreeId}, ${matchingCourse.id}, ${position.position.x}, ${position.position.y}), `;
-      }
-    });
-  
-    insertValues = insertValues.slice(0, -2);
-  
     const insertQuery = `
       INSERT INTO course_positions(degree_id, course_id, x, y)
-      VALUES ${insertValues}`;
-    await pool.query(insertQuery);
+      VALUES ($1, $2, FLOOR($3), FLOOR($4))`;
+
+    for await (const position of coursePositions) {
+      const matchingCourse = courseRows.find(course => course.hy_course_id === position.id);
+      if (matchingCourse) {
+        await pool.query(insertQuery, [degreeId, matchingCourse.id, position.position.x, position.position.y]);
+      }};
     return true
   } catch (error) {
       console.error('Error saving positions:', error);
