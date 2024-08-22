@@ -17,6 +17,7 @@ const MainPage = ({ axiosInstance }) => {
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
 
+  console.log("courses", courses)
 
   const fetchDegreeCourses = async (degree) => {    
     try {

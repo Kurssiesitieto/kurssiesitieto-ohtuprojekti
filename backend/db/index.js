@@ -484,8 +484,10 @@ const getCoursesByPlan = async (plan_id = 1) => {
     SELECT 
       c.id, 
       c.kori_id,
-      c.course_name, 
-      c.hy_course_id, 
+      c.course_name,
+      c.hy_course_id,
+      c.course_name as name, 
+      c.hy_course_id AS identifier,
       cpr.relation_type AS type,
       cp.x AS x,
       cp.y AS y,
