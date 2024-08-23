@@ -3,7 +3,7 @@ const { findCourseWithDependencies } = require("./coursesRoutes");
 const request = require("supertest");
 const express = require("express");
 const app = express();
-const logger = require('../middleware/logger');
+//const logger = require('../middleware/logger'); commented out for linting
 app.use(express.json());
 app.use("/", routes);
 

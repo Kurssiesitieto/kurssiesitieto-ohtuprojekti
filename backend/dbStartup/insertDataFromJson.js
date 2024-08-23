@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const logger = require('../middleware/logger');
 const { addDegreeinfo, getDegreeinfoId, addManyCourses, createStudyPlan, addCourseAndPrerequisitesToStudyplan } = require('../db');
-const { addManyPrerequisiteCourses, addDegreeData } = require('../db');
+const { addManyPrerequisiteCourses } = require('../db');
 
 //const pool = new Pool({
 //  connectionString: process.env.DATABASE_URL,
@@ -86,7 +86,7 @@ const insertDegreeinfoFromJson = async () => {
     await addDegreeinfo(degreeMappings);
   } catch (err) {
     console.error('Error inserting degreeinfo:', err);
-  };
+  }
 };
 
 module.exports = {

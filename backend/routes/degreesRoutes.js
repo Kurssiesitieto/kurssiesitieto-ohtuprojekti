@@ -13,19 +13,19 @@ const {
   resetPositions} = require('../db');
 
 
-
 router.get('/public', async (req, res) => {
   /* TODO, shows all degrees by logged_in uid, 'root', 'public'
   Fetches all official studyplans (name & plan_id & uid) from the database and returns them as a JSON array.
   */
- const { uid } = req.body; // if null, uid = 'root' (?) 
+ // const { uid } = req.body; // if null, uid = 'root' (?) - commented out for linting
 });
 
+/* LEGACY CODE
 router.get('/search_by_degree', async (req, res) => {
-  /*
+  
   CHANGING CODE -> "Valitse tutkinto" - menu has used this, new route: '/search_plans_by_id'
   Fetches the degree structure from the database using the degree HY degree code and year.
-  */
+  
 
   const degreeCode = req.headers['degree-id'].toLowerCase();
   const degreeYears = req.headers['degree-years'];
@@ -39,6 +39,7 @@ router.get('/search_by_degree', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+*/
 
 router.post('/search_plan_by_id', async (req, res) => { 
   //searches a studyplan with a plan_id
@@ -80,11 +81,10 @@ router.post('/plans_by_root_and_user', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 router.get('/plan_by_id', async (req, res) => {
-  //TODO
+  //TODO - OR ???
   //fetches the whole studyplan-object by studyplans.id
-  const { plan_id }  = req.body;
+  // const { plan_id }  = req.body; - commented out for lint
   //tee kutsufunktio, joka käyttää plan_id:tä
   //tee mock-palautus ja rest-kysely
 });
@@ -107,7 +107,7 @@ router.post('/create_studyplan', async (req, res) => {
   } catch (error) {
     logger.info('Error creating study plan:', error);
     res.status(500).json({ error: 'Suunnitelman luominen ei onnistunut' });
-  };
+  }
 });
 
 router.post('/save_positions', async (req, res) => {
