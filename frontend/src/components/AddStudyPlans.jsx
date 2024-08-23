@@ -38,7 +38,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     const studyPlanObject = {
       degree_id: selectedDegree.id,
       name: newName,      
-      uid: 'rest'  // Needs to give an uid when the functionality is available
+      uid: 'root'  // Needs to give an uid when the functionality is available
     };
 
     try {
