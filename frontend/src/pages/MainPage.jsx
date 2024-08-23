@@ -5,6 +5,7 @@ import Course from '../models/Course';
 import Messenger from '../components/messager/MessagerComponent';
 import { error as displayError } from '../components/messager/messager';
 import { Navbar } from '../components/Navbar.jsx';
+import StartPage from './StartPage';
 
 const MainPage = ({ axiosInstance }) => {
   const [listOfDegrees, setDegreeToList] = useState([]);
@@ -13,13 +14,15 @@ const MainPage = ({ axiosInstance }) => {
   const [selectedCourseGroupID, setSelectedCourseGroupID] = useState('');
   const [courses, setCourses] = useState([]);
   const [selectedDegreeName, setSelectedDegreeName] = useState('');
-  const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
+  const [isStartPageOpen, setIsStartPageOpen] = useState(true);
+  const [logged, setLogged] = useState(false);
 
-  console.log("courses", courses)
+  
 
-  const fetchDegreeCourses = async (degree) => {    
+  const fetchDegreeCourses = async (degree) => {  
+    console.log("degree", degree)  
     try {
       if (degree == null) {
         displayError("Jokin meni pieleen tutkintotietoja haettaessa!");
@@ -94,30 +97,16 @@ const MainPage = ({ axiosInstance }) => {
     fetchDegrees();
   }, []);
 
-  useEffect(() => {    
-    const degreeParam = localStorage.getItem('selectedDegree');        
-    if (degreeParam) {
-      const degree = JSON.parse(degreeParam);
-      setCurrentPlanId(degree.plan_id)
-      setStartDegree(degree);      
-    }
-  }, []);
-
   useEffect(() => {
-    if (listOfDegrees.length > 0) {      
-      if (startDegree) {
-        fetchDegreeCourses(startDegree);
-        localStorage.removeItem('selectedDegree');
-        setStartDegree(null)
-      } else {        
+    console.log("listOfDegrees", listOfDegrees)
+    if (listOfDegrees.length < 0) {        
         const degreeToFetch = listOfDegrees.find(degree => degree.degree_name === 'Tietojenkäsittelytieteen kandidaattitutkinto 2023-2026');
         if (degreeToFetch) {
           fetchDegreeCourses(degreeToFetch);
         } else {
           fetchDegreeCourses(listOfDegrees[0]);
         }
-      }
-    }
+      }  
   }, [listOfDegrees]);
 
   useEffect(() => {    
@@ -130,6 +119,18 @@ const MainPage = ({ axiosInstance }) => {
     setCurrentPlanId(degree.plan_id)
     fetchDegreeCourses(degree);
   };
+
+  if (!logged && isStartPageOpen) {
+    return (
+      <StartPage
+        axiosInstance={axiosInstance}
+        listOfDegrees={listOfDegrees}
+        onDegreeChange={handleDegreeChange}
+        setCurrentPlanId={setCurrentPlanId}
+        setIsStartPageOpen={setIsStartPageOpen}
+      />
+    );
+  }
 
   return (
     <div>

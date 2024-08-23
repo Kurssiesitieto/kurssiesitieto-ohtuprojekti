@@ -1,29 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/StartPage.css';
-import { error as displayError } from '../components/messager/messager';
 import { Menu, MenuItem} from '@mui/material'; 
 
-const StartPage = ({ axiosInstance }) => {
-  const [listOfDegrees, setDegreeToList] = useState([]);
+const StartPage = ({ listOfDegrees, onDegreeChange, setCurrentPlanId, setIsStartPageOpen }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const fetchDegrees = async () => {
-    try {
-      const response = await axiosInstance.get(`/api/degrees/plans_by_root`);
-      if (response == null) {
-        displayError("Palvelimelle ei saatu yhteyttä")
-        return;
-      }
-      setDegreeToList(response.data);
-    } catch (error) {
-      console.error("Error when fetching degree data: ", error);
-      displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.")
-    }
-  };
-
-  useEffect(() => {
-    fetchDegrees();
-  }, []);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,10 +14,9 @@ const StartPage = ({ axiosInstance }) => {
   };
 
   const handleDegreeClick = (degree) => {
-    setAnchorEl(null);
-    localStorage.setItem('selectedDegree', JSON.stringify(degree));
-    const baseURL = import.meta.env.BASE_URL.replace('/esitieto', '');
-      window.location.href = baseURL + "public";
+    setCurrentPlanId(degree.plan_id)
+    onDegreeChange(degree)
+    setIsStartPageOpen(false)
   };
         
     const handleLoginClick = () => {
