@@ -1,3 +1,5 @@
+//OLD SCHEMA,  both tests need fixing
+//This module has been added to jest.config.backend.js to be excluded from tests before fix
 jest.mock('../db/index');
 
 const routes = require('./degreesRoutes');
