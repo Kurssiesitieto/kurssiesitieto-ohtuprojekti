@@ -9,7 +9,7 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, Degre
   const [courseCode, setCourseCode] = useState('');
   const [prerequisiteCodes, setPrerequisiteCodes] = useState('');
 
-  console.log("newCoursePlan", newCoursePlan.plan_name)
+  const planName = newCoursePlan?.plan_name || '';
 
 
   const addPrerequisites = async (event) => { 
@@ -20,7 +20,6 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, Degre
       courseCode: courseCode,
       prerequisiteCodes: prerequisiteCodes ? prerequisiteCodes.split(',').map(code => code.trim()) : [] 
     };
-    console.log("prerequisitesObject", prerequisitesObject)
 
     try {
       const response = await axiosInstance.post('/api/courses/addCourseToStudyplan', prerequisitesObject);
@@ -55,7 +54,7 @@ const AddPrerequisites = ({ isOpen, axiosInstance, newCoursePlan, onClick, Degre
           <CloseIcon />
       </IconButton> 
       </div>
-      <h3 className='header2'>{newCoursePlan.plan_name}</h3>     
+      <h3 className='header2'>{planName}</h3>     
       <form onSubmit={addPrerequisites}>
         <div>
           <label className='form-label-give-course'>Anna lisättävän kurssin kurssikoodi:</label>
