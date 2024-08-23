@@ -130,6 +130,34 @@ describe('Database operations', () => {
     });
   });
   */
+
+  // --- Studyplans ---
+  describe('getPlansByRoot', () => {
+    it('should return all studyplans by root', async () => {
+      const mockRootPlans =[
+        {
+        "plan_id": 1,
+        "plan_name": 'TKT kandi 2023-2026',
+        "degree_name": 'Tietojenkäsittelytieteen kandiohjelma 2023-2026'
+        },
+        {
+          "plan_id": 2,
+          "plan_name": 'MAT kandi 2023-2026',
+          "degree_name": 'Matemaattisten tieteiden kandiohjelma 2023-2026'
+        }
+      ];
+
+      require('pg').Pool().query.mockResolvedValueOnce(
+        { rows: mockRootPlans, rowCount: mockRootPlans.length });
+
+      const result = await db.getPlansByRoot();
+  
+      expect(result).toEqual(mockRootPlans);
+
+      
+    });
+  });
+
   // --- Courses ---
   /*NOT WORKING, needs fix
   describe('addCourse', () => {
