@@ -100,6 +100,7 @@ const config = {
   "kurssiesitieto-ohtuprojekti/backend/middleware/user.integration.test.js",
   "kurssiesitieto-ohtuprojekti/backend/middleware/user.unit.test.js",
   "kurssiesitieto-ohtuprojekti/backend/routes/loginRoutes.test.js",
+  "kurssiesitieto-ohtuprojekti/backend/routes/degreesRoutes.test.js"
   ],
 
   // Activates notifications for test results
