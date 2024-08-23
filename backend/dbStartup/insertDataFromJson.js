@@ -41,9 +41,9 @@ function mapDegreesForDegreeinfo(jsonData) {
 }
 
 const insertPlansFromJson = async () => {
-  //  Loads data from plansToDb.json and inserts it into the database, uid = 'root'
+  //  Loads data from TKT23-26.json and inserts it into the database, uid = 'root'
   try {
-    const dataPath = path.join(__dirname, 'plansToDb.json');
+    const dataPath = path.join(__dirname, 'TKT23-26.jsonp');
     logger.debug('dataPath', dataPath);
     const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     const { uid, degreeYears, degreeCode, name } = jsonData;
@@ -58,9 +58,9 @@ const insertPlansFromJson = async () => {
     } catch (err) {
     console.error('Error inserting json-data for math:', err);
   }
-  //  Loads data from TKT23-26.json and inserts it into the database, uid = 'root'
+  //  Loads data from plansToDb.json and inserts it into the database, uid = 'root'
   try {
-    const dataPath = path.join(__dirname, 'TKT23-26.json');
+    const dataPath = path.join(__dirname, 'plansToDb.json');
     logger.debug('dataPath', dataPath);
     const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     const { uid, degreeYears, degreeCode, name } = jsonData;
