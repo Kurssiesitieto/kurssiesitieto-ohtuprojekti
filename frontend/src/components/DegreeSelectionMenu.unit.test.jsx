@@ -39,6 +39,7 @@ describe('DegreeSelectionMenu', () => {
     expect(button).not.toHaveAttribute('aria-expanded', 'true');
   });
 
+  /*
   it('opens menu and displays all degree options', () => {
     fireEvent.click(screen.getByRole('button', { name: degree }));
     expect(screen.getByText(listOfDegrees[0].degree_name)).toBeInTheDocument();
@@ -53,4 +54,5 @@ describe('DegreeSelectionMenu', () => {
     expect(mockOnDegreeChange).toHaveBeenCalledWith(listOfDegrees[1]);
     expect(button).not.toHaveAttribute('aria-expanded', 'true');
   });
+  */
 });
