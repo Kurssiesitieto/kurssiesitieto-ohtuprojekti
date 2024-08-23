@@ -50,7 +50,7 @@ class HelsinkiInterface {
 
     }
   
-    async degreeStructure(id, lvName='hy-lv-74') {
+    async degreeStructure(id, lvName='hy-lv-75') {
         /*
         Gets the degree structure using <id> which should be the degree code.
         Shows the <period> specific structure.

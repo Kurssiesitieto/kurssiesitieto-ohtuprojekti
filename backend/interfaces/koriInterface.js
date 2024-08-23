@@ -30,7 +30,7 @@ class KoriInterface {
         return pattern.test(input);
     }
   
-    async courseInfo(id, hyYearCode='hy-lv-74') {
+    async courseInfo(id, hyYearCode='hy-lv-75') {
         /*
         Get the course info using <id> which should be the course groupId. Gives the <hyYearCode> implementation of the course.
 
@@ -53,7 +53,7 @@ class KoriInterface {
         }
     }
 
-    async searchCourses(search, hyYearCode='hy-lv-74') {
+    async searchCourses(search, hyYearCode='hy-lv-75') {
         /*
         Lists max 200 courses that contain the <search> string. Gives the <hyYearCode> implementation of the courses.
 
