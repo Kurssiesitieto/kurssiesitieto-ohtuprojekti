@@ -95,7 +95,7 @@ const MainPage = ({ axiosInstance }) => {
 
   useEffect(() => {    
     fetchDegrees();
-  }, []);
+  }, [newCoursePlan]);
 
   useEffect(() => {
     console.log("listOfDegrees", listOfDegrees)
