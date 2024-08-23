@@ -21,8 +21,7 @@ const validateHelsinkiEmail = (email) => {
 const getHeaders = (req) => process.env.NODE_ENV === 'production' ? req.headers : mockHeaders;
 
 const areHeadersValid = (headers) => {
-    // if (!headers.uid || !validateHelsinkiEmail(headers.mail)) {
-    if (!headers.uid) {
+    if (!headers.uid || !validateHelsinkiEmail(headers.mail)) {
       return false;
     }
     return true;
@@ -50,14 +49,13 @@ const createUser = (headers) => {
 };
 
 const userMiddleware = (req, res, next) => {
-  console.log(req.headers)
   const headers = getHeaders(req);
 
-//    if (!areHeadersValid(headers)) {
-//      req.kirjauduttu = false;
-//      req.user = 'käyttäjää ei tunnistettu';
-//      return next();
-//    }
+  if (!areHeadersValid(headers)) {
+    req.kirjauduttu = false;
+    req.user = null;
+    return next();
+  }
   
     req.kirjauduttu = true;
     req.user = createUser(headers);

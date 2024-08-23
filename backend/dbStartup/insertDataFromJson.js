@@ -43,7 +43,7 @@ function mapDegreesForDegreeinfo(jsonData) {
 const insertPlansFromJson = async () => {
   //  Loads data from TKT23-26.json and inserts it into the database, uid = 'root'
   try {
-    const dataPath = path.join(__dirname, 'TKT23-26.jsonp');
+    const dataPath = path.join(__dirname, 'TKT23-26.json');
     logger.debug('dataPath', dataPath);
     const jsonData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     const { uid, degreeYears, degreeCode, name } = jsonData;
