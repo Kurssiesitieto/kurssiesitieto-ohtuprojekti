@@ -526,7 +526,6 @@ const getDegreeNames = async () => {
   }
 };
 
-
 const getDegreeinfoId = async (degreeCode, degreeYears) => {
   //TODO, connect to route (?)
   try {  
@@ -543,7 +542,7 @@ const getDegreeinfoId = async (degreeCode, degreeYears) => {
     logger.info('degreeRows[0]', degreeRows[0])
     return degreeRows;
   } catch (error) {
-    console.error("Error in getDegreeId:", error);
+    console.error("Error in getDegreeinfoId:", error);
     return false;
   }
 };
