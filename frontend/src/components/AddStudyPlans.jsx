@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/AddStudyPlans.css';
 import { error as displayError } from './messager/messager';
-import { Menu, MenuItem, IconButton} from '@mui/material';
+import { MenuItem, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';

@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { describe, it, vi, expect } from 'vitest';
+import { render } from '@testing-library/react';
+import { describe, it, vi } from 'vitest';
 import AddPrerequites from './AddPrerequisites';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 // Mocking useNavigate
 vi.mock('react-router-dom', async (importOriginal) => {
