@@ -11,7 +11,6 @@ import Select from '@mui/material/Select';
 const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onClick }) => {
   const [newName, setNewName] = useState('')
   const [listOfDegrees, setDegreeToList] = useState([]);
-/*  const [anchorEl, setAnchorEl] = useState(null); */
   const [selectedDegree, setSelectedDegree] = useState("");
 
 
@@ -67,26 +66,11 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     return null;
   }
 
-  
-
-//kokeilu
-
-const handleChange = (event) => {
-  setSelectedDegree(event.target.value);
-};
-
-//kokeilu
-
-/*  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleChange = (event) => {
+    setSelectedDegree(event.target.value);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-*/
   const handleDegreeClick = (degree) => {
-  /*  setAnchorEl(null);*/
     setSelectedDegree(degree)
   };
 
@@ -103,29 +87,6 @@ const handleChange = (event) => {
       </div>
       <h3>Luo kurssikokonaisuus</h3>
       <div>
-{/*
-      <div className="dropdown">
-            <button className="dropdown-button" onClick={handleMenuClick}>
-              Valitse pääaine
-            </button>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              {listOfDegrees.map((degree) => (
-                <MenuItem key={degree.id} onClick={() => handleDegreeClick(degree)}>
-                  {degree.degree_name}
-                </MenuItem>
-              ))}
-            </Menu>
-      </div>
-
-*/ }
-
-
-
-    
       <div>
        <Box sx={{ minWidth: 300 }}>
         <FormControl fullWidth>
@@ -146,7 +107,6 @@ const handleChange = (event) => {
        </Box>
 
       </div>
-    {/*  <p className="selected-degree">{selectedDegree.degree_name}</p>*/}
       <form onSubmit={createStudyPlan}>
           <div>
             <label className="form-label">Anna kurssikokonaisuudelle nimi:</label> 
