@@ -17,6 +17,7 @@ const MainPage = ({ axiosInstance }) => {
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(false);
+  const [userUid, setUserUid] = useState(null);
 
   console.log("courses", courses)
 
@@ -145,9 +146,16 @@ const MainPage = ({ axiosInstance }) => {
         const data = await response.json();
 
         setLoggedInUser(data.kirjauduttu);
+        
+        if (data.kirjauduttu && data.user) {
+          setUserUid(data.user.username);
+        } else {
+          setUserUid(null);
+        }
       } catch (error) {
         console.error('Error checking login status:', error);
         setLoggedInUser(false);
+        setUserUid(null);
       }
     };
     checkLoginStatus();
@@ -176,6 +184,7 @@ const MainPage = ({ axiosInstance }) => {
           newCoursePlan={newCoursePlan}
           setNewCoursePlan={setNewCoursePlan}
           loggedInUser={loggedInUser}
+          userUid={userUid}
         />
       </div>
 
