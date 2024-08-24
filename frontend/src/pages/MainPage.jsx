@@ -16,6 +16,7 @@ const MainPage = ({ axiosInstance }) => {
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(false);
 
   console.log("courses", courses)
 
@@ -131,6 +132,27 @@ const MainPage = ({ axiosInstance }) => {
     fetchDegreeCourses(degree);
   };
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await fetch('/api/kirjauduttu', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        setLoggedInUser(data.kirjauduttu);
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        setLoggedInUser(false);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
   return (
     <div>
       <Messenger />
@@ -153,6 +175,7 @@ const MainPage = ({ axiosInstance }) => {
           baseURL={axiosInstance.defaults.baseURL}
           newCoursePlan={newCoursePlan}
           setNewCoursePlan={setNewCoursePlan}
+          loggedInUser={loggedInUser}
         />
       </div>
 

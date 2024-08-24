@@ -8,8 +8,19 @@ import DegreeSelectionMenu from './DegreeSelectionMenu';
 import InfoButton from './InfoButton';
 import AddStudyPlansButton from './AddStudyPlansButton';
 import LoginButton from './LoginButton';
+import LogoutButton from './LogoutButton';
 
-export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handleSearch, baseURL, selectedDegreeName, newCoursePlan, setNewCoursePlan}) => {
+export const Navbar = ({
+  handleDegreeChange,
+  listOfDegrees,
+  axiosInstance,
+  handleSearch,
+  baseURL,
+  selectedDegreeName,
+  newCoursePlan,
+  setNewCoursePlan,
+  loggedInUser,
+}) => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [isAddStudyPlansOpen, setIsAddStudyPlansOpen] = useState(false);
   const [isAddPrerequisitesOpen, setIsAddPrerequisitesOpen] = useState(false);
@@ -34,6 +45,11 @@ export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handl
   const login = () => {
     window.location.href = import.meta.env.BASE_URL;
   }
+  
+  const logout = () => {
+    const baseURL = import.meta.env.BASE_URL.replace('/esitieto', '');
+    window.location.href = baseURL + "/Shibboleth.sso/Logout";
+  }
 
   return (
     <nav className="nav">
@@ -46,7 +62,7 @@ export const Navbar = ({ handleDegreeChange, listOfDegrees, axiosInstance, handl
         </li>
         <li><SearchBar axiosInstance={axiosInstance} handleSearch={handleSearch} /></li>
         <li className='degree-name'>{selectedDegreeName}</li>
-        <li><LoginButton onClick={login}/></li>
+        <li>{loggedInUser ? <LogoutButton onClick={logout}/> : <LoginButton onClick={login}/>}</li>
         <li><InfoButton onClick={openInfoBox}/></li>
         <li><InfoBox isOpen={isInfoBoxOpen} onClose={() => setIsInfoBoxOpen(false)} baseURL={baseURL} /></li>
         <li><AddStudyPlansButton onClick={openAddStudyPlans} /></li>

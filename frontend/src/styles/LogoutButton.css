@@ -1,6 +1,10 @@
 .logout-button {
     border: none;
     position: absolute;
-    right: 6%;
-    top: 20%;
+    background-color: var(--upper-button-backround-color);
+    color: var(--upper-button-text-color);
+    right: 3%;
+    top: 0%;
+    border-radius: 0%;
+    font-size: 0.6em;
 }
