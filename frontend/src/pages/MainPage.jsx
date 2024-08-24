@@ -6,7 +6,7 @@ import Messenger from '../components/messager/MessagerComponent';
 import { error as displayError } from '../components/messager/messager';
 import { Navbar } from '../components/Navbar.jsx';
 
-const MainPage = ({ axiosInstance }) => {
+const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   const [listOfDegrees, setDegreeToList] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedCourseName, setSelectedCourseName] = useState('');
@@ -16,8 +16,7 @@ const MainPage = ({ axiosInstance }) => {
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
-  const [loggedInUser, setLoggedInUser] = useState(false);
-  const [userUid, setUserUid] = useState(null);
+  const [userUid, setUserUid] = useState(user?.username || null);
 
   console.log("courses", courses)
 
@@ -132,34 +131,6 @@ const MainPage = ({ axiosInstance }) => {
     setCurrentPlanId(degree.plan_id)
     fetchDegreeCourses(degree);
   };
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const response = await fetch('/api/kirjauduttu', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const data = await response.json();
-
-        setLoggedInUser(data.kirjauduttu);
-        
-        if (data.kirjauduttu && data.user) {
-          setUserUid(data.user.username);
-        } else {
-          setUserUid(null);
-        }
-      } catch (error) {
-        console.error('Error checking login status:', error);
-        setLoggedInUser(false);
-        setUserUid(null);
-      }
-    };
-    checkLoginStatus();
-  }, []);
 
   return (
     <div>

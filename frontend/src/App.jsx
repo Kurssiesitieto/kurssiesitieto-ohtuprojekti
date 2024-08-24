@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import './styles/App.css'
 
-import GraphPosSavePage from './pages/GraphPosSavePage';
 import StartPage from './pages/StartPage';
 import MainPage from './pages/MainPage';
 import MissingPage from './pages/MissingPage';
@@ -15,6 +14,9 @@ import {
 } from 'react-router-dom';
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState(false);
+  const [user, setUserData] = useState(null);
+
   const axiosInstance = axios.create({
     baseURL: import.meta.env.BASE_URL //import.meta.env.BASE_URL is from vite.config.js. It refers to the base variable it the defineConfig
   });
@@ -29,8 +31,13 @@ function App() {
       console.log('kirjauduttu:', kirjauduttu);
       console.log('user:', user);
 
+      setLoggedInUser(kirjauduttu);
+      setUserData(user);
+
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoggedInUser(false);
+      setUserData(null);
     }
   };
 
@@ -47,7 +54,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path={import.meta.env.BASE_URL + "/"} element={<MainPage axiosInstance={axiosInstance}/>} />
+        <Route
+          path={import.meta.env.BASE_URL + "/"}
+          element={<MainPage
+            axiosInstance={axiosInstance}
+            loggedInUser={loggedInUser}
+            user={user}
+          />}
+        />
         <Route path={import.meta.env.BASE_URL + "/start"} element={<StartPage axiosInstance={axiosInstance} />} />
         <Route path={login_url} element={<LoginPage axiosInstance={axiosInstance}/>} />
         <Route path={import.meta.env.BASE_URL + "/public"} element={<MainPage axiosInstance={axiosInstance} />} />
