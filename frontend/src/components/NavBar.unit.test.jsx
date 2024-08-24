@@ -21,6 +21,12 @@ vi.mock('./DegreeSelectionMenu', () => ({
 vi.mock('./InfoButton', () => ({
   default: ({ onClick }) => <button onClick={onClick}>InfoButton</button>,
 }));
+vi.mock('./LoginButton', () => ({
+  default: ({ onClick }) => <button onClick={onClick}>LoginButton</button>,
+}));
+vi.mock('./LogoutButton', () => ({
+  default: ({ onClick }) => <button onClick={onClick}>LogoutButton</button>,
+}));
 
 describe('Navbar', () => {
   const mockHandleDegreeChange = vi.fn();
@@ -39,6 +45,7 @@ describe('Navbar', () => {
         handleSearch={mockHandleSearch}
         baseURL={mockBaseURL}
         selectedDegreeName={mockSelectedDegreeName}
+        loggedInUser={false}
       />
     );
 
@@ -48,6 +55,7 @@ describe('Navbar', () => {
     expect(screen.getByText('InfoButton')).toBeInTheDocument();
     expect(screen.getByText('InfoBox is closed')).toBeInTheDocument();
     expect(screen.getByText(mockSelectedDegreeName)).toBeInTheDocument();
+    expect(screen.getByText('LoginButton')).toBeInTheDocument();
   });
 
   it('toggles InfoBox visibility when InfoButton is clicked', () => {
@@ -59,8 +67,13 @@ describe('Navbar', () => {
         handleSearch={mockHandleSearch}
         baseURL={mockBaseURL}
         selectedDegreeName={mockSelectedDegreeName}
+        loggedInUser={true}
       />
     );
+
+    // Check if LogoutButton is rendered
+    expect(screen.queryByText('LoginButton')).not.toBeInTheDocument();
+    expect(screen.getByText('LogoutButton')).toBeInTheDocument();
 
     // Initially, the InfoBox should be closed
     expect(screen.getByText('InfoBox is closed')).toBeInTheDocument();
