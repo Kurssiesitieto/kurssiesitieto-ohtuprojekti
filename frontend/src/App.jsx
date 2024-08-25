@@ -29,9 +29,14 @@ function App() {
       
       const kirjauduttu = response.data.kirjauduttu;
       const user = response.data.user;
+
+      console.log('res.data.kirjauduttu', kirjauduttu)
+      console.log('res.data.user', user)
       
       setLoggedInUser(kirjauduttu);
       setUserData(user);
+
+      //drop mockUser locally for /public page
       process.env.NODE_ENV === 'production' ? setPublicUser(user) : setPublicUser(null);
       process.env.NODE_ENV === 'production' ? setLoggedInPublicPage(kirjauduttu) : setLoggedInPublicPage(false);
 
