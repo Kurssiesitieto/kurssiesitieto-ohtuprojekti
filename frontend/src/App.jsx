@@ -37,20 +37,25 @@ function App() {
       setUserData(user);
 
       //drop mockUser locally for /public page
-      process.env.NODE_ENV === 'production' ? setPublicUser(user) : setPublicUser(null);
-      process.env.NODE_ENV === 'production' ? setLoggedInPublicPage(kirjauduttu) : setLoggedInPublicPage(false);
-
-      console.log('logged in user:', loggedInUser);
-      console.log('user:', user);
-      console.log('logged in public page:', loggedInPublicPage);
-      console.log('public user:', publicUser);
+      const isProduction = process.env.NODE_ENV === 'production';
+      setPublicUser(isProduction ? user : null);
+      setLoggedInPublicPage(isProduction ? kirjauduttu : false);
 
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoggedInUser(false);
       setUserData(null);
+      setPublicUser(null);
+      setLoggedInPublicPage(false);
     }
   };
+
+  useEffect(() => {
+    console.log('loggedInUser:', loggedInUser);
+    console.log('user:', user);
+    console.log('loggedInPublicPage:', loggedInPublicPage);
+    console.log('publicUser:', publicUser);
+  }, [loggedInUser, user, loggedInPublicPage, publicUser]);
 
   useEffect(() => {
     fetchData();
