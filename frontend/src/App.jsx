@@ -16,6 +16,8 @@ import {
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(false);
   const [user, setUserData] = useState(null);
+  const [publicUser, setPublicUser] = useState(null);
+  const [loggedInPublicPage, setLoggedInPublicPage] = useState(false);
 
   const axiosInstance = axios.create({
     baseURL: import.meta.env.BASE_URL //import.meta.env.BASE_URL is from vite.config.js. It refers to the base variable it the defineConfig
@@ -28,11 +30,15 @@ function App() {
       const kirjauduttu = response.data.kirjauduttu;
       const user = response.data.user;
       
-      console.log('kirjauduttu:', kirjauduttu);
-      console.log('user:', user);
-
       setLoggedInUser(kirjauduttu);
       setUserData(user);
+      process.env.NODE_ENV === 'production' ? setPublicUser(user) : setPublicUser(null);
+      process.env.NODE_ENV === 'production' ? setLoggedInPublicPage(kirjauduttu) : setLoggedInPublicPage(false);
+
+      console.log('logged in user:', loggedInUser);
+      console.log('user:', user);
+      console.log('logged in public page:', loggedInPublicPage);
+      console.log('public user:', publicUser);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -75,8 +81,8 @@ function App() {
           path={import.meta.env.BASE_URL + "/public"}
           element={<MainPage
             axiosInstance={axiosInstance}
-            loggedInUser={loggedInUser}
-            user={user}
+            loggedInUser={loggedInPublicPage}
+            user={publicUser}
           />}
         />
         <Route path={import.meta.env.BASE_URL + "*"} element={<MissingPage axiosInstance={axiosInstance} />} />
