@@ -51,9 +51,12 @@ function App() {
     fetchData();
   }, []);
 
-  //const padding = { Commented out for lint, but if someone intended to use this for something leaving here. Otherwise nuke away.
-  //  padding: 5
-  //}
+  useEffect(() => {
+    console.log('loggedInUser:', loggedInUser);
+    console.log('user:', user);
+    console.log('loggedInPublicPage:', loggedInPublicPage);
+    console.log('publicUser:', publicUser);
+  }, [loggedInUser, user, loggedInPublicPage, publicUser]);
 
   const login_url = import.meta.env.BASE_URL.replace('esitieto', 'esitietologin');
 
