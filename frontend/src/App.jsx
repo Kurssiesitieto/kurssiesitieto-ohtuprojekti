@@ -30,8 +30,8 @@ function App() {
       const kirjauduttu = response.data.kirjauduttu;
       const user = response.data.user;      
 
-      console.log(kirjauduttu);
-      console.log(user);
+      console.log('req.data.kirjauduttu:', kirjauduttu);
+      console.log('req.data.user', user);
       
       setLoggedInUser(kirjauduttu);
       setUserData(user);
