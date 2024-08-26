@@ -20,6 +20,7 @@ export const Navbar = ({
   newCoursePlan,
   setNewCoursePlan,
   loggedInUser,
+  userUid,
 }) => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [isAddStudyPlansOpen, setIsAddStudyPlansOpen] = useState(false);
@@ -66,7 +67,7 @@ export const Navbar = ({
         <li><InfoButton onClick={openInfoBox}/></li>
         <li><InfoBox isOpen={isInfoBoxOpen} onClose={() => setIsInfoBoxOpen(false)} baseURL={baseURL} /></li>
         <li>{loggedInUser && <AddStudyPlansButton onClick={openAddStudyPlans} />}</li>
-        <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} setNewCoursePlan={setNewCoursePlan} onClick={openAddStudyPlans}/></li>
+        <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} setNewCoursePlan={setNewCoursePlan} onClick={openAddStudyPlans} userUid={userUid}/></li>
         <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={changeOpenAddPrerequisites} newCoursePlan={newCoursePlan} DegreeChange={handleDegreeChange}/></li>
       </ul>
     </nav>

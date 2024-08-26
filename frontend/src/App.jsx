@@ -28,10 +28,7 @@ function App() {
       const response = await axiosInstance.get('/api/kirjauduttu');
       
       const kirjauduttu = response.data.kirjauduttu;
-      const user = response.data.user;
-
-      console.log('res.data.kirjauduttu', kirjauduttu)
-      console.log('res.data.user', user)
+      const user = response.data.user;      
       
       setLoggedInUser(kirjauduttu);
       setUserData(user);
@@ -49,13 +46,6 @@ function App() {
       setLoggedInPublicPage(false);
     }
   };
-
-  useEffect(() => {
-    console.log('loggedInUser:', loggedInUser);
-    console.log('user:', user);
-    console.log('loggedInPublicPage:', loggedInPublicPage);
-    console.log('publicUser:', publicUser);
-  }, [loggedInUser, user, loggedInPublicPage, publicUser]);
 
   useEffect(() => {
     fetchData();

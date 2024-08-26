@@ -8,11 +8,10 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onClick }) => {
+const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onClick, userUid }) => {
   const [newName, setNewName] = useState('')
   const [listOfDegrees, setDegreeToList] = useState([]);
   const [selectedDegree, setSelectedDegree] = useState("");
-
 
   const fetchDegrees = async () => {  
     try {
@@ -38,7 +37,7 @@ const AddStudyPlans = ({ isOpen, axiosInstance, onCreate, setNewCoursePlan, onCl
     const studyPlanObject = {
       degree_id: selectedDegree.id,
       name: newName,      
-      uid: 'root'  // Needs to give an uid when the functionality is available
+      uid: userUid
     };
 
     try {

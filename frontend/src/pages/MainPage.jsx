@@ -16,9 +16,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
-  const [userUid, setUserUid] = useState(user?.username || null);
-
-  console.log("courses", courses)
+  const [userUid, setUserUid] = useState(user?.username || null); 
 
   const fetchDegreeCourses = async (degree) => {    
     try {
@@ -77,9 +75,9 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
     setCourses(convertedCourses);
   };
 
-  const fetchDegrees = async () => {
+  const fetchDegrees = async (userUid) => {
     try {
-      const response = await axiosInstance.get(`/api/degrees/plans_by_root`); //Needs to update when uid available
+      const response = await axiosInstance.post(`/api/degrees/plans_by_root_and_user`, { uid: userUid });
       if (response == null) {
         displayError("Palvelimelle ei saatu yhteyttä");
         return;
@@ -126,6 +124,12 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
       fetchDegreeCourses(newCoursePlan);
     }
   }, [newCoursePlan]);
+
+  useEffect(() => {
+    if (user && user.username) {
+      setUserUid(user.username);
+    }
+  }, [user]);
 
   const handleDegreeChange = (degree) => {
     setCurrentPlanId(degree.plan_id)
