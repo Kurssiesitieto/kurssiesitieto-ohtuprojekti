@@ -29,6 +29,9 @@ function App() {
       
       const kirjauduttu = response.data.kirjauduttu;
       const user = response.data.user;      
+
+      console.log(kirjauduttu);
+      console.log(user);
       
       setLoggedInUser(kirjauduttu);
       setUserData(user);
