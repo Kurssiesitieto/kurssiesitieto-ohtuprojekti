@@ -17,7 +17,7 @@ flowchart TD
     end
     subgraph Application
     D --"/esitieto/public"--> G["/esitieto/public"]
-    C -- "/esitieto/start" --> H["/esitieto/start"]
+    D -- "/esitieto/start" --> H["/esitieto/start"]
     E --"Login information in headers"--> F["/esitieto"]
     end
 ```
