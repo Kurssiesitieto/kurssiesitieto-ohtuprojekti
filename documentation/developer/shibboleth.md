@@ -7,18 +7,21 @@ flowchart TD
     subgraph User
     A["/esitieto"]
     B["/esitieto/public"]
+    C["/esitieto/start"]
     end
     subgraph Shibboleth
-    A --> C[Shibboleth reititys]
-    B --> C
-    C --"/esitieto"--> E["Kirjautumisruutu"]
+    A --> D[Shibboleth reititys]
+    B --> D
+    C --> D
+    D --"/esitieto"--> E["Kirjautumisruutu"]
     end
     subgraph Application
-    C --"/esitieto/public"--> D["/esitieto/public"]
+    D --"/esitieto/public"--> G["/esitieto/public"]
+    C --> "/esitieto/start" --> H["/esitieto/start"]
     E --"Login information in headers"--> F["/esitieto"]
     end
 ```
-As you can see from the above diagram, all traffic passes through Shibboleth before it reaches our application. Depending on which route you are using Shibboleth will redirect you to a login screen. When logged in, Shibboleth will pass the login credentials as headers in the requests. Our Middleware strips this info out of the headers. (The middleware might not be working currently as it has been never tested.)
+As you can see from the above diagram, all traffic passes through Shibboleth before it reaches our application. Depending on which route you are using Shibboleth will redirect you to a login screen. When logged in, Shibboleth will pass the login credentials as headers in the requests. Our Middleware strips this info out of the headers. Middleware passes the infomation (kirjauduttu, user-object) to frontend.
 
 ## Configuring Shibboleth
 As an OHTU Project student you will have access to the [OpenShift ohtuprojekti-staging](https://console-openshift-console.apps.ocp-test-0.k8s.it.helsinki.fi/topology/ns/ohtuprojekti-staging?view=graph) 
@@ -39,6 +42,7 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
 ```
 <Location /esitieto/start>
     Satisfy Any   
+    ShibUseHeaders On
     Allow from all   
     AuthType None   
     Require all granted  
@@ -60,12 +64,10 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
 </Location>
 
 <Location /esitieto/api>
-    Satisfy Any   
+    AuthType shibboleth
     ShibUseHeaders On
-
-    Allow from all   
-    AuthType None   
-    Require all granted  
+    ShibRequestSetting requireSession 1
+    require shib-session
 
     ProxyPreserveHost On
     ProxyPass http://kurssiesitieto-staging:3001/api retry=0 disablereuse=Off
@@ -93,11 +95,9 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
     ProxyPass http://kurssiesitieto-staging:3001 retry=0 disablereuse=On
     ProxyPassReverse http://kurssiesitieto-staging:3001
 </Location>
-
-RedirectMatch ^/esitietologin$ https://kurssiesitieto-staging:3001/esitietologin?target=https://kurssiesitieto-staging:3001/esitieto/public
 ```
 
-Here you can see /esitieto, /esitieto/public and /esitieto/api paths. The stuff inside determines if it is just a pass through route like /esitieto/public or a SSO route like /esitieto/api or /esitieto. Shibboleth config was created together with Toska-group.
+Here you can see /esitieto, /esitieto/public, /esitieto/start and /esitieto/api paths. The stuff inside determines if it is just a pass through route like /esitieto/public or a SSO route like /esitieto/api or /esitieto. Shibboleth config was created together with Toska-group.
 
 **Every time you change the config you need to restart the Shibboleth pod**
 
