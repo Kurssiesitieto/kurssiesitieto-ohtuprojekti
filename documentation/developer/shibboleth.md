@@ -64,10 +64,10 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
 </Location>
 
 <Location /esitieto/api>
-    AuthType shibboleth
-    ShibUseHeaders On
-    ShibRequestSetting requireSession 1
-    require shib-session
+    Satisfy Any   
+    Allow from all   
+    AuthType None   
+    Require all granted  
 
     ProxyPreserveHost On
     ProxyPass http://kurssiesitieto-staging:3001/api retry=0 disablereuse=Off
