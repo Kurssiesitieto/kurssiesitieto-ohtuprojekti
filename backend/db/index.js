@@ -366,6 +366,18 @@ const getPlansByRootAndUser = async (uid) => {
 };
 
 const createStudyPlan = async (degree_id, name, uid = 'root') => {
+    /*Accepts numbers letters underscores and dashes*/
+    // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
+    // and allows spaces between words.
+  var pattern = /^[\p{L}0-9-:_]+( [\p{L}0-9-:_]+)*$/u;
+  
+  if (! (pattern.test(name) && name.length > 4 && name.length < 20)) {
+    logger.verbose(`Plan with name ${name} is not valid.`);
+    return;
+  } else {
+
+ 
+
   const planRows = await addStudyPlan(degree_id, name);
   const plan_id = planRows.id;
   //TODO: add/use function for getting hy_degree_id and degree_years from degree_info (?)
@@ -381,6 +393,7 @@ const createStudyPlan = async (degree_id, name, uid = 'root') => {
   };
   logger.info('@createStudyPlan, addedPlan', addedPlan)
   return addedPlan;
+}
 };
 
 const addStudyPlan = async (degree_id, name) => {
