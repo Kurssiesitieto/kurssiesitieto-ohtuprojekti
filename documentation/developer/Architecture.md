@@ -2,7 +2,9 @@
 ```mermaid
 flowchart TD
     subgraph Frontend
-    A["MainPage"]
+    AA["StartPage"]
+    AA --> J["LoginButton"]
+    J --> A["MainPage"]
     A --> B["CourseGraph"]
     A --> C["DegreeSelectionMenu"]
     B --> D["SearchBar"]
@@ -10,6 +12,9 @@ flowchart TD
     E --> F["InfoBox"]
     A --> G["SideBar"]
     G --> H["CourseDescription"]
+    A --> O["LogoutButton"]
+    A --> P["AddStudyPlansButton"]
+    P --> Q["AddStudyPlans"]
     end
 
     subgraph Router
