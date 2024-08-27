@@ -16,9 +16,11 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
-  const [userUid, setUserUid] = useState(user?.username || null); 
+  const [userUid, setUserUid] = useState(user?.username || null);
+
 
   const fetchDegreeCourses = async (degree) => {    
+    console.log("fetchDegreeCourses degree", degree)
     try {
       if (degree == null) {
         displayError("Jokin meni pieleen tutkintotietoja haettaessa!");
@@ -46,6 +48,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
       ));      
       setCourses(convertedCourses);
       setSelectedDegreeName(degree.plan_name);
+      setCurrentPlanId(degree.plan_id)
       if (!convertedCourses ) {
         throw new Error("Kurssitietoja ei löytynyt!");
       }      
@@ -76,6 +79,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   };
 
   const fetchDegrees = async (userUid) => {
+    console.log("fetchDegreeCourses fetchDegrees", userUid)
     try {
       const response = await axiosInstance.post(`/api/degrees/plans_by_root_and_user`, { uid: userUid });
       if (response == null) {
@@ -90,7 +94,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   };
 
   useEffect(() => {    
-    fetchDegrees();
+    fetchDegrees(userUid);
   }, []);
 
   useEffect(() => {    
@@ -109,21 +113,23 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
         localStorage.removeItem('selectedDegree');
         setStartDegree(null)
       } else {        
+        if(!currentPlanId) {
         const degreeToFetch = listOfDegrees.find(degree => degree.degree_name === 'Tietojenkäsittelytieteen kandidaattitutkinto 2023-2026');
         if (degreeToFetch) {
           fetchDegreeCourses(degreeToFetch);
         } else {
           fetchDegreeCourses(listOfDegrees[0]);
-        }
+        }}
       }
     }
   }, [listOfDegrees]);
 
   useEffect(() => {    
-    if (newCoursePlan) {
+    if (newCoursePlan) {      
       fetchDegreeCourses(newCoursePlan);
+      fetchDegrees(userUid)
     }
-  }, [newCoursePlan]);
+  }, [newCoursePlan]); //tääää
 
   useEffect(() => {
     if (user && user.username) {
@@ -135,6 +141,10 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
     setCurrentPlanId(degree.plan_id)
     fetchDegreeCourses(degree);
   };
+
+  if (!currentPlanId) {
+    return <div>Loading...</div>; 
+  }
 
   return (
     <div>
@@ -160,6 +170,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
           setNewCoursePlan={setNewCoursePlan}
           loggedInUser={loggedInUser}
           userUid={userUid}
+          currentPlanId={currentPlanId}
         />
       </div>
 

@@ -21,6 +21,7 @@ export const Navbar = ({
   setNewCoursePlan,
   loggedInUser,
   userUid,
+  currentPlanId
 }) => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [isAddStudyPlansOpen, setIsAddStudyPlansOpen] = useState(false);
@@ -61,7 +62,7 @@ export const Navbar = ({
             listOfDegrees={listOfDegrees}
           />
         </li>
-        <li><SearchBar axiosInstance={axiosInstance} handleSearch={handleSearch} /></li>
+        <li><SearchBar axiosInstance={axiosInstance} handleSearch={handleSearch} currentPlanId={currentPlanId} /></li>//
         <li className='degree-name'>{selectedDegreeName}</li>
         <li>{loggedInUser ? <LogoutButton onClick={logout}/> : <LoginButton onClick={login}/>}</li>
         <li><InfoButton onClick={openInfoBox}/></li>

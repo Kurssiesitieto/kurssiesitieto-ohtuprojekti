@@ -18,6 +18,7 @@ function App() {
   const [user, setUserData] = useState(null);
   const [publicUser, setPublicUser] = useState(null);
   const [loggedInPublicPage, setLoggedInPublicPage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const axiosInstance = axios.create({
     baseURL: import.meta.env.BASE_URL //import.meta.env.BASE_URL is from vite.config.js. It refers to the base variable it the defineConfig
@@ -47,8 +48,9 @@ function App() {
       setUserData(null);
       setPublicUser(null);
       setLoggedInPublicPage(false);
-    }
-  };
+    } finally {
+      setLoading(false);
+  }};
 
   useEffect(() => {
     fetchData();
@@ -62,6 +64,10 @@ function App() {
   }, [loggedInUser, user, loggedInPublicPage, publicUser]);
 
   const login_url = import.meta.env.BASE_URL.replace('esitieto', 'esitietologin');
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>

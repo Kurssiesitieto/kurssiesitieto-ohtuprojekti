@@ -8,18 +8,19 @@ import Box from '@mui/material/Box';
 export const SearchBar = (props) => {
   const [searchText, setSearchText] = useState('');
   const [dbCourses, setDbCourses] = useState([]);
+  const [currentPlanId, setCurrentPlanId] = useState(props.currentPlanId);
   const axios = props.axiosInstance;
 
+  
   const fetchDatabaseSearchSuggestions = async (axios) => {
-    try {        
-        const response = await axios.get('/api/courses/databaseGetCoursesByPlan/1');
-        setDbCourses(response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching courses for plan 1", error);
-    }
+    try {
+      const response = await axios.post('/api/courses/databaseGetCoursesByPlan', { plan_id: currentPlanId });
+      setDbCourses(response.data);
+      return response.data;
+  } catch (error) {
+      console.error(`Error fetching courses for plan ${currentPlanId}`, error);
+  }
 }
-  console.log("dbCourses", dbCourses)
 
   useEffect(() => {
     fetchDatabaseSearchSuggestions(axios)
@@ -44,6 +45,14 @@ export const SearchBar = (props) => {
       handleSubmit(event, newValue.hy_course_id)  
     }
   }
+
+  useEffect(() => {
+    setCurrentPlanId(props.currentPlanId);
+  }, [props.currentPlanId]);
+
+  useEffect(() => {
+    fetchDatabaseSearchSuggestions(axios)
+  }, [currentPlanId])
 
   return ( 
     <div className='searchbar'>   

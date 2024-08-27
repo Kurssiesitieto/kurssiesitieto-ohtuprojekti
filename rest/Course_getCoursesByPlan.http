@@ -1,1 +1,7 @@
-GET http://localhost:3001/api/courses/databaseGetCoursesByPlan/2
+
+POST http://localhost:3001/api/courses/databaseGetCoursesByPlan/
+Content-Type: application/json
+
+{
+    "plan_id": "5"
+}
