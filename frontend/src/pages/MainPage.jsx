@@ -129,7 +129,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
       fetchDegreeCourses(newCoursePlan);
       fetchDegrees(userUid)
     }
-  }, [newCoursePlan]); //tääää
+  }, [newCoursePlan]);
 
   useEffect(() => {
     if (user && user.username) {

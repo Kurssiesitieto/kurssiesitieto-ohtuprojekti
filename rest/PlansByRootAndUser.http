@@ -2,5 +2,5 @@ POST http://localhost:3001/api/degrees/plans_by_root_and_user
 Content-Type: application/json
 
 {
-    "uid": "rest"
+    "uid": "testUser"
 }

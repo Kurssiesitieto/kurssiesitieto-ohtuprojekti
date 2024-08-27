@@ -1,7 +1,7 @@
 import axiosMock from 'axios';
 import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import SearchBar from './SearchBar.jsx';
 
 vi.mock('axios');
@@ -26,7 +26,7 @@ describe("SearchBar unit testing", () => {
   const mockHandleChange = vi.fn();
 
   beforeEach(() => {
-    axiosMock.get.mockResolvedValueOnce({ data: mockCourses });
+    axiosMock.post.mockResolvedValueOnce({ data: mockCourses });
     vi.clearAllMocks();
   });
 
@@ -37,6 +37,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Ensuring currentPlanId is provided
         />
       );
     });
@@ -45,18 +46,20 @@ describe("SearchBar unit testing", () => {
     expect(textField).toBeInTheDocument();
   });
 
-  it("Courses are fetched when SearchBar is rendered", async () => {
+  it("Courses are fetched correctly with expected plan_id", async () => {
     await act(async () => {
       render(
         <SearchBar 
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Ensuring currentPlanId is provided
         />
       );
     });
 
-    await waitFor(() => expect(axiosMock.get).toHaveBeenCalledTimes(1));
+    // Check that axios.post was called with the correct endpoint and plan_id
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledWith('/api/courses/databaseGetCoursesByPlan', { plan_id: 1 }));
   });
 
   it("Text input changes correctly", async () => {
@@ -66,6 +69,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Ensuring currentPlanId is provided
         />
       );
     });
@@ -83,6 +87,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Ensuring currentPlanId is provided
         />
       );
     });
@@ -91,12 +96,10 @@ describe("SearchBar unit testing", () => {
     fireEvent.click(input);
     fireEvent.change(input, { target: { value: 'Raja-arvot' } });
 
-    const option = await screen.findByText((content, element) => {
-      return element.tagName.toLowerCase() === 'li' && content.includes('Raja-arvot');
-    });
-    fireEvent.click(option);
+    // Wait for the option to appear and select it
+    await waitFor(() => screen.getByText(/Raja-arvot/));
+    fireEvent.click(screen.getByText(/Raja-arvot/));
 
     await waitFor(() => expect(mockHandleSearch).toHaveBeenCalledWith('MAT11003'));
   });
 });
-
