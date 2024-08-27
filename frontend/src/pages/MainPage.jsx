@@ -15,8 +15,11 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   const [selectedDegreeName, setSelectedDegreeName] = useState('');
   const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
-  const [currentPlanId, setCurrentPlanId] = useState(null);
-  const [userUid, setUserUid] = useState(user?.username || null); 
+  const [currentPlanId, setCurrentPlanId] = useState(1);
+  const [userUid, setUserUid] = useState(user?.username || null);
+
+  console.log("Mainpage userUid", userUid)
+  console.log("Mainpage currentPlanId", currentPlanId)
 
   const fetchDegreeCourses = async (degree) => {    
     try {
@@ -76,6 +79,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   };
 
   const fetchDegrees = async (userUid) => {
+    console.log("Mainpage fetchDegrees userUid", userUid)
     try {
       const response = await axiosInstance.post(`/api/degrees/plans_by_root_and_user`, { uid: userUid });
       if (response == null) {
@@ -90,8 +94,8 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   };
 
   useEffect(() => {    
-    fetchDegrees();
-  }, []);
+    fetchDegrees(userUid);
+  }, [newCoursePlan, userUid]);
 
   useEffect(() => {    
     const degreeParam = localStorage.getItem('selectedDegree');        
@@ -160,6 +164,7 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
           setNewCoursePlan={setNewCoursePlan}
           loggedInUser={loggedInUser}
           userUid={userUid}
+          currentPlanId={currentPlanId}
         />
       </div>
 

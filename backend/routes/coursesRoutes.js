@@ -56,12 +56,18 @@ router.post('/addCourse', asyncHandler(async (req, res) => {
   res.json(addedCourse);
 }));
 
-router.get('/databaseGetCoursesByPlan/:plan_id', asyncHandler(async (req, res) => {
-  const { plan_id } = req.params;
-  logger.info('plan_id: ', plan_id)
-  const courses = await getCoursesByPlan(plan_id);
-  logger.debug("Courses from database for a gicen plan_id", courses);
-  res.json(courses);
+router.post('/databaseGetCoursesByPlan', asyncHandler(async (req, res) => {
+  const { plan_id } = req.body;
+  logger.info('plan_id: ', plan_id);
+
+  try {
+    const courses = await getCoursesByPlan(plan_id);
+    logger.debug("Courses from database for the given plan_id", courses);
+    res.json(courses);
+  } catch (err) {
+    logger.error("Error fetching courses: ", err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }));
 
 router.get('/databaseGetCourseWithRequirements/:plan_id/:course_id', asyncHandler(async (req, res) => {
