@@ -1,7 +1,7 @@
 import axiosMock from 'axios';
 import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import SearchBar from './SearchBar.jsx';
 
 vi.mock('axios');
@@ -26,7 +26,7 @@ describe("SearchBar unit testing", () => {
   const mockHandleChange = vi.fn();
 
   beforeEach(() => {
-    axiosMock.get.mockResolvedValueOnce({ data: mockCourses });
+    axiosMock.post.mockResolvedValueOnce({ data: mockCourses });
     vi.clearAllMocks();
   });
 
@@ -37,6 +37,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Varmistetaan, että currentPlanId annetaan
         />
       );
     });
@@ -52,11 +53,12 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Varmistetaan, että currentPlanId annetaan
         />
       );
     });
 
-    await waitFor(() => expect(axiosMock.get).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(axiosMock.post).toHaveBeenCalledTimes(1));
   });
 
   it("Text input changes correctly", async () => {
@@ -66,6 +68,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Varmistetaan, että currentPlanId annetaan
         />
       );
     });
@@ -83,6 +86,7 @@ describe("SearchBar unit testing", () => {
           axiosInstance={axiosMock} 
           handleSearch={mockHandleSearch}
           handleChange={mockHandleChange}
+          currentPlanId={1} // Varmistetaan, että currentPlanId annetaan
         />
       );
     });
@@ -91,12 +95,10 @@ describe("SearchBar unit testing", () => {
     fireEvent.click(input);
     fireEvent.change(input, { target: { value: 'Raja-arvot' } });
 
-    const option = await screen.findByText((content, element) => {
-      return element.tagName.toLowerCase() === 'li' && content.includes('Raja-arvot');
-    });
-    fireEvent.click(option);
+    // Odota, että vaihtoehto tulee näkyviin ja valitse se
+    await waitFor(() => screen.getByText(/Raja-arvot/));
+    fireEvent.click(screen.getByText(/Raja-arvot/));
 
     await waitFor(() => expect(mockHandleSearch).toHaveBeenCalledWith('MAT11003'));
   });
 });
-

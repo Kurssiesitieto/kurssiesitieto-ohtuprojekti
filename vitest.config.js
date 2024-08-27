@@ -11,10 +11,6 @@ export default defineConfig({
       'frontend/**/*.test.{js,jsx,ts,tsx}',  // This will include only test files under the frontend directory
       'frontend/**/__tests__/*.{js,jsx,ts,tsx}'  // This will include only files in __tests__ directories under the frontend directory
     ],
-    exclude: [
-      'frontend/src/components/SearchBar.unit.test.jsx',
-    ],
-
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json', 'lcov', 'clover'],
