@@ -1,48 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../styles/StartPage.css';
-import { error as displayError } from '../components/messager/messager';
-import { Menu, MenuItem} from '@mui/material'; 
 
-const StartPage = ({ axiosInstance }) => {
-  const [listOfDegrees, setDegreeToList] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
+const StartPage = () => {
 
-  const fetchDegrees = async () => {
-    try {
-      const response = await axiosInstance.get(`/api/degrees/plans_by_root`);
-      if (response == null) {
-        displayError("Palvelimelle ei saatu yhteyttä")
-        return;
-      }
-      setDegreeToList(response.data);
-    } catch (error) {
-      console.error("Error when fetching degree data: ", error);
-      displayError("Jokin meni pieleen. Yritä uudestaan myöhemmin.")
-    }
-  };
-
-  useEffect(() => {
-    fetchDegrees();
-  }, []);
-
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDegreeClick = (degree) => {
-    setAnchorEl(null);
-    localStorage.setItem('selectedDegree', JSON.stringify(degree));
-    const baseURL = import.meta.env.BASE_URL.replace('/esitieto', '');
-      window.location.href = baseURL + "public";
-  };
-        
     const handleLoginClick = () => {
       window.location.href = import.meta.env.BASE_URL;        
-    }    
+    }
   
   return (
     <div className="start-page">
@@ -58,22 +21,8 @@ const StartPage = ({ axiosInstance }) => {
         <p>Tämä sovellus on luotu Ohjelmistotuotanto-kurssin projektityönä Helsingin yliopistolle.</p>
         <p>Lähdekoodi löytyy <a href="https://github.com/Kurssiesitieto/kurssiesitieto-ohtuprojekti">täältä</a></p>
                 
-        <div className="buttons">
-          <button onClick={handleMenuClick}>
-            Näytä tutkinnot
-          </button>        
+        <div className="buttons">                  
           <button onClick={handleLoginClick}>Kirjaudu sisään</button>          
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            {listOfDegrees.map((degree) => (
-              <MenuItem key={degree.plan_id} onClick={() => handleDegreeClick(degree)}>
-                {degree.degree_name}
-              </MenuItem>
-            ))}
-          </Menu>
         </div>
       </div>
     </div>

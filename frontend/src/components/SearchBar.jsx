@@ -12,7 +12,7 @@ export const SearchBar = (props) => {
   const axios = props.axiosInstance;
 
   
-  const fetchDatabaseSearchSuggestions = async (axios) => {
+  const fetchDatabaseSearchSuggestions = async () => {
     try {
       const response = await axios.post('/api/courses/databaseGetCoursesByPlan', { plan_id: currentPlanId });
       setDbCourses(response.data);
@@ -23,7 +23,7 @@ export const SearchBar = (props) => {
 }
 
   useEffect(() => {
-    fetchDatabaseSearchSuggestions(axios)
+    fetchDatabaseSearchSuggestions()
   }, [])
 
   const handleSubmit = (event, searchQuery) => {

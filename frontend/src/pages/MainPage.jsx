@@ -13,7 +13,6 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
   const [selectedCourseGroupID, setSelectedCourseGroupID] = useState('');
   const [courses, setCourses] = useState([]);
   const [selectedDegreeName, setSelectedDegreeName] = useState('');
-  const [startDegree, setStartDegree] = useState(null);
   const [newCoursePlan, setNewCoursePlan] = useState(null);
   const [currentPlanId, setCurrentPlanId] = useState(null);
   const [userUid, setUserUid] = useState(user?.username || null);
@@ -97,31 +96,18 @@ const MainPage = ({ axiosInstance, loggedInUser, user }) => {
     fetchDegrees(userUid);
   }, []);
 
-  useEffect(() => {    
-    const degreeParam = localStorage.getItem('selectedDegree');        
-    if (degreeParam) {
-      const degree = JSON.parse(degreeParam);
-      setCurrentPlanId(degree.plan_id)
-      setStartDegree(degree);      
-    }
-  }, []);
 
   useEffect(() => {
-    if (listOfDegrees.length > 0) {      
-      if (startDegree) {
-        fetchDegreeCourses(startDegree);
-        localStorage.removeItem('selectedDegree');
-        setStartDegree(null)
-      } else {        
-        if(!currentPlanId) {
-        const degreeToFetch = listOfDegrees.find(degree => degree.degree_name === 'Tietojenkäsittelytieteen kandidaattitutkinto 2023-2026');
-        if (degreeToFetch) {
-          fetchDegreeCourses(degreeToFetch);
-        } else {
-          fetchDegreeCourses(listOfDegrees[0]);
-        }}
+    if (listOfDegrees.length > 0) {           
+      if(!currentPlanId) {
+      const degreeToFetch = listOfDegrees.find(degree => degree.degree_name === 'Tietojenkäsittelytieteen kandidaattitutkinto 2023-2026');
+      if (degreeToFetch) {
+        fetchDegreeCourses(degreeToFetch);
+      } else {
+        fetchDegreeCourses(listOfDegrees[0]);
+      }}
       }
-    }
+    
   }, [listOfDegrees]);
 
   useEffect(() => {    

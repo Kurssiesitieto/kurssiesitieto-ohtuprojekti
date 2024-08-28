@@ -26,7 +26,7 @@ describe("SearchBar unit testing", () => {
   const mockHandleChange = vi.fn();
 
   beforeEach(() => {
-    axiosMock.post.mockResolvedValueOnce({ data: mockCourses });
+    axiosMock.post.mockResolvedValue({ data: mockCourses }); // Fixed to use consistent mock return
     vi.clearAllMocks();
   });
 
