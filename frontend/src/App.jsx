@@ -88,15 +88,7 @@ function App() {
             user={user}
           />}
         />
-        <Route path={login_url} element={<LoginPage axiosInstance={axiosInstance}/>} />
-        <Route
-          path={import.meta.env.BASE_URL + "/public"}
-          element={<MainPage
-            axiosInstance={axiosInstance}
-            loggedInUser={loggedInPublicPage}
-            user={publicUser}
-          />}
-        />
+        <Route path={login_url} element={<LoginPage axiosInstance={axiosInstance}/>} />        
         <Route path={import.meta.env.BASE_URL + "*"} element={<MissingPage axiosInstance={axiosInstance} />} />
       </Routes>
     </Router>
