@@ -66,5 +66,3 @@ npm run prod
 
 Runs the app on http://localhost:3000/
 
-
-Where does the application go on it's day off? nowhere the application can't walk silly.
