@@ -189,29 +189,7 @@ describe('Database operations', () => {
       );
     });
     */
-  /* NOT WORKING, needs fix
-  describe('getCourses', () => {
-    it('should retrieve all courses from the database', async () => {
-      const mockCourses = [
-        { 
-          id: 1,
-          kori_id: 'CS101',
-          course_name: 'Intro to CS',
-          hy_course_id: 'IntroCS101'
-        }
-      ];
-  
-      require('pg').Pool().query.mockResolvedValueOnce(
-        { rows: mockCourses, rowCount: mockCourses.length });
-  
-      const result = await db.getCourses();
-  
-      expect(result).toEqual(mockCourses);
-      expect(require('pg').Pool().query).toHaveBeenCalledTimes(1);
-    });
-  });
-  */
-  
+   
   // --- Prerequisites ---
 
   describe('addPrerequisiteCourse', () => {

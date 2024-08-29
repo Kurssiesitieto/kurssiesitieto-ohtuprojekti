@@ -9,8 +9,6 @@ const shibboleth = require('./middleware/shibboleth')
 
 const app = express()
 const PORT = 3001; //process.env.PORT || 3001; adjust port later from .env, probably using dotenv
-//const { getCourses } = require('./database.js');
-const { getCourses } = require('./db');
 const { executeSchemaFile } = require('./dbStartup');
 const { insertPlansFromJson } = require('./dbStartup/insertDataFromJson');
 const { insertDegreeinfoFromJson } = require('./dbStartup/insertDataFromJson');
@@ -24,7 +22,7 @@ const initializeDatabase = async () => {
   try {
     await executeSchemaFile();
     await insertDegreeinfoFromJson();
-    await insertPlansFromJson(); //OLD DEGREE, needs change - NOT fully working yet
+    await insertPlansFromJson();
   } catch (error) {
     logger.error('Error during database initialization:', error);
     process.exit(1); // Exit the process with an error code
@@ -57,17 +55,6 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(shibboleth);
 app.use(userMiddleware);
-
-app.get('/api/getCourses', async (req, res) => {
-  try {
-    const courses = await getCourses();
-    logger.verbose("Courses from database",courses)
-    res.json(courses);
-  } catch (err) {
-    logger.error(err);
-    res.status(500).send('Server error');
-  }
-});
 
 app.use('/api/courses', coursesRoutes);
 app.use('/api/degrees', degreesRoutes);

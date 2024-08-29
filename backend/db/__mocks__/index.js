@@ -7,20 +7,6 @@ const addCourse = () => {
   };
 };
 
-const mockGetCourses = jest.fn(() => {
-  return Promise.resolve({
-    rows: [
-      {
-        "id": "1",
-        "kori_id": "CS101",
-        "course_name": "Intro to CS",
-        "hy_course_id": "IntroCS101"
-      }
-    ],
-    rowcount: 1
-  });
-});
-
 const mockGetCourseWithReqursivePrerequisites = jest.fn(() => {
   return Promise.resolve({
     //prerequisities for MAT21001 Lineaarialgebra ja matriisilaskenta II
@@ -81,7 +67,6 @@ const mockGetDegreeId = jest.fn(() => {
 
 module.exports = {
   addCourse,
-  getCourses: mockGetCourses,
   addPrerequisiteCourse,
   getCourseWithReqursivePrerequisites: mockGetCourseWithReqursivePrerequisites
 };

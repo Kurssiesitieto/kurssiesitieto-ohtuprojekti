@@ -79,13 +79,6 @@ const addManyCourses = async (listOfCourses) => {
 };
 
 
-
-const getCourses = async () => {
-  //Do we need to update this? or delete? we have getCoursesByPlan
-  const { rows } = await pool.query('SELECT * FROM courses');
-  return rows;
-};
-
 const getCourseWithReqursivePrerequisites = async (plan_id, hy_course_id) => {
   const query = `
   WITH RECURSIVE PrerequisitePath AS (
@@ -629,7 +622,6 @@ module.exports = {
   getAllCoursesWithPrerequisites,
   fetchCourseWithPrerequisites,
   addPrerequisiteCourse,
-  getCourses,
   getCourseWithReqursivePrerequisites,
   addCourse,
   addManyCourses,
