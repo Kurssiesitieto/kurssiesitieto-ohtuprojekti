@@ -23,6 +23,7 @@ flowchart TD
     C -."/api/degrees/search_by_degree".-> I
     D -."/api/courses/databaseGetCourses".-> I
     H -."/api/kori/search_by_name".->I
+    Q -."/api/degrees/create_studyplan".->I
     I --> L[MiddleWare]
     end
 
