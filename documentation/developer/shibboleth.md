@@ -1,6 +1,8 @@
 # Shibboleth
 Shibboleth is a Single Sign-On (SSO) services that the University of Helsinki uses in many of their tools. Our application uses Shibboleth.
 
+First our aim was to create Single Page app. The goal was to create an application where some of the features are available to everyone and some are only available to logged in users. Unfortunately we couldn't make the shibboleth work properly. After that we tried to the following setup. 
+
 How routing works for the application:
 ```mermaid
 flowchart TD
@@ -21,7 +23,7 @@ flowchart TD
     E --"Login information in headers"--> F["/esitieto"]
     end
 ```
-As you can see from the above diagram, all traffic passes through Shibboleth before it reaches our application. Depending on which route you are using Shibboleth will redirect you to a login screen. When logged in, Shibboleth will pass the login credentials as headers in the requests. Our Middleware strips this info out of the headers. Middleware passes the infomation (kirjauduttu, user-object) to frontend.
+As you can see from the above diagram, all traffic passes through Shibboleth before it reaches our application. Depending on which route you are using Shibboleth will redirect you to a login screen. When logged in, Shibboleth will pass the login credentials as headers in the requests. Our Middleware strips this info out of the headers. Middleware passes the infomation (kirjauduttu, user-object) to frontend. This setup also turned out to be too difficult to get working. Finally only the features of the logged in user are left and only /esitieto url is working.
 
 ## Configuring Shibboleth
 As an OHTU Project student you will have access to the [OpenShift ohtuprojekti-staging](https://console-openshift-console.apps.ocp-test-0.k8s.it.helsinki.fi/topology/ns/ohtuprojekti-staging?view=graph) 
@@ -40,18 +42,6 @@ Here you will find httpd-config under Volumes. Clicking the hyperlink will open 
 If you want to edit the config you will need to switch to the "YAML" side. When you scroll to the bottom of the config. It looks like this:
 
 ```
-<Location /esitieto/start>
-    Satisfy Any   
-    ShibUseHeaders On
-    Allow from all   
-    AuthType None   
-    Require all granted  
-
-    ProxyPreserveHost On
-    ProxyPass http://kurssiesitieto-staging:3001 retry=0 disablereuse=Off
-    ProxyPassReverse http://kurssiesitieto-staging:3001
-</Location>
-
 <Location /esitieto/assets>
     Satisfy Any   
     Allow from all   
@@ -64,10 +54,9 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
 </Location>
 
 <Location /esitieto/api>
-    Satisfy Any   
-    Allow from all   
-    AuthType None   
-    Require all granted  
+    AuthType shibboleth
+    ShibUseHearders On
+    Require shib-attr uid
 
     ProxyPreserveHost On
     ProxyPass http://kurssiesitieto-staging:3001/api retry=0 disablereuse=Off
@@ -84,20 +73,9 @@ If you want to edit the config you will need to switch to the "YAML" side. When 
     ProxyPass http://kurssiesitieto-staging:3001 retry=0 disablereuse=On
     ProxyPassReverse http://kurssiesitieto-staging:3001
 </Location>
-
-<Location /esitietologin>
-    AuthType shibboleth
-    ShibUseHeaders On
-    ShibRequestSetting requireSession 1
-    require shib-session
-
-    ProxyPreserveHost On
-    ProxyPass http://kurssiesitieto-staging:3001 retry=0 disablereuse=On
-    ProxyPassReverse http://kurssiesitieto-staging:3001
-</Location>
 ```
 
-Here you can see /esitieto, /esitieto/public, /esitieto/start and /esitieto/api paths. The stuff inside determines if it is just a pass through route like /esitieto/public or a SSO route like /esitieto/api or /esitieto. Shibboleth config was created together with Toska-group.
+Here you can see /esitieto. /esitieto/assets and /esitieto/api paths. The stuff inside determines if it is just a pass through route like /esitieto/assets or a SSO route like /esitieto/api or /esitieto.
 
 **Every time you change the config you need to restart the Shibboleth pod**
 
@@ -119,3 +97,7 @@ You will not have access to the production environment so just contact Matti Luu
 
 ### Testing the login
 When you go to the login route it should automatically prompt for hy test login. You can use ohtup_user as username and password or you can create more test accounts in [sp-registry](https://sp-registry.it.helsinki.fi/login/?next=/). Clicking the "https://shibboleth.ext.ocp-test-0.k8s.it.helsinki.fi" will show the test Shibboleth details. Under "Test Users" tab you will see all test users.
+
+### Suggestions to get public features to work
+- change Shibboleth to OIDC
+- use token in addition to Shibboleth
