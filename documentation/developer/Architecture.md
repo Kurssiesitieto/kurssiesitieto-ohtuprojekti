@@ -35,6 +35,7 @@ flowchart TD
     L --"/api/degrees/search_by_degree"--> K
     L --"/api/courses/databaseGetCourses"--> K
     L --"/api/degrees/create_studyplan" --> K
+    L --"/api/courses/addCourseToStudyplan" --> K
     L --"/api/kori/search_by_name"--> M
     K["db/index"]
     M[KoriInterface]
