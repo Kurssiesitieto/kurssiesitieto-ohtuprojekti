@@ -24,8 +24,9 @@ flowchart TD
     A -."/api/degrees".->I
     C -."/api/degrees/search_by_degree".-> I
     D -."/api/courses/databaseGetCourses".-> I
-    H -."/api/kori/search_by_name".->I
-    Q -."/api/degrees/create_studyplan".->I
+    H -."/api/kori/search_by_name".-> I
+    Q -."/api/degrees/create_studyplan".-> I
+    S -."/api/courses/addCourseToStudyplan".-> I
     I --> L[MiddleWare]
     end
 
