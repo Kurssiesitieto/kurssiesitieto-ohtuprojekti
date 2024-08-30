@@ -2,7 +2,7 @@
 ![example workflow](https://github.com/Kurssiesitieto/kurssiesitieto-ohtuprojekti/actions/workflows/staging.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Kurssiesitieto/kurssiesitieto-ohtuprojekti/graph/badge.svg?token=DPW7GY90EK)](https://codecov.io/gh/Kurssiesitieto/kurssiesitieto-ohtuprojekti)
 
-![Alt Text](https://github.com/Kurssiesitieto/kurssiesitieto-ohtuprojekti/blob/main/documentation/images/banner.gif)
+![Alt Text](https://github.com/Kurssiesitieto/kurssiesitieto-ohtuprojekti/blob/main/documentation/images/mainpage.png)
 
 This project is a web application designed to help students plan their studies by showcasing hierarchical relations between different courses. The app is built with React and Vite with the aim of creating intuitive and interactive way to visualize the relations between different courses. The project fetches course data from Sisu and will later take advantage of University of Helsnki login to fetch students personal data to help students further plan their studies. 
 
