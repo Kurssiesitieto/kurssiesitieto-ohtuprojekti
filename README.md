@@ -8,7 +8,7 @@ This project is a web application designed to help students plan their studies b
 
 This project is part of Software engineering course in University of Helsinki (Ohjelmistoprojekti TKT20007)
 
-[Link to the visualization tool](https://shibboleth.ext.ocp-test-0.k8s.it.helsinki.fi/esitieto/start) (username: esitieto, password: esitieto007)
+[Link to the visualization tool](https://study.cs.helsinki.fi/esitieto/) 
 
 # Table of Contents
 - [Prerequisite course visualization tool](#course-prerequisite-visualization-tool)
