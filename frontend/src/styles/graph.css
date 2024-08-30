@@ -1,26 +1,26 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 :root {
-    --background-color: var(--background-color-secondary);
-  }
+  --background-color: var(--background-color-secondary);
+}
 
 .reactflow-wrapper {
-    position: absolute;
-    top: 90px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--background-color-secondary);
+  position: absolute;
+  top: 90px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-color-secondary);
 }
 
 .edit {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 100;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
 }
 
 .edit-buttons {
-    position: absolute;
-    margin-left: 30%;
+  position: absolute;
+  margin-left: 30%;
 }

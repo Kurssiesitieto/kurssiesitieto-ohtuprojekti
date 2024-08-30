@@ -1,64 +1,64 @@
-{   "degrees": [
-        {
-            "degreeName": "Matemaattisten tieteiden kandiohjelma 2020-2023",
-            "degreeCode": "kh50_001",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "Tietojenkäsittelytieteen kandiohjelma 2020-2023",
-            "degreeCode": "kh50_005",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "Fysikaalisten tieteiden kandiohjelma 2020-2023",
-            "degreeCode": "kh50_002",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "Kemian kandiohjelma 2020-2023",
-            "degreeCode": "kh50_003",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "Maantieteen kandiohjelma 2020-2023",
-            "degreeCode": "kh50_007",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "MaFyKe-opettajan kandiohjelma 2020-2023",
-            "degreeCode": "kh50_004",
-            "degreeYears": "2020-2023"
-        },
-        {
-            "degreeName": "Matemaattisten tieteiden kandiohjelma 2023-2026",
-            "degreeCode": "kh50_001",
-            "degreeYears": "2023-2026"
-        },
-        {
-            "degreeName": "Tietojenkäsittelytieteen kandiohjelma 2023-2026",
-            "degreeCode": "kh50_005",
-            "degreeYears": "2023-2026"
-        },
-        {
-            "degreeName": "Fysikaalisten tieteiden kandiohjelma 2023-2026",
-            "degreeCode": "kh50_002",
-            "degreeYears": "2023-2026"
-        },
-        {
-            "degreeName": "Kemian kandiohjelma 2023-2026",
-            "degreeCode": "kh50_003",
-            "degreeYears": "2023-2026"
-        },
-        {
-            "degreeName": "Maantieteen kandiohjelma 2023-2026",
-            "degreeCode": "kh50_007",
-            "degreeYears": "2023-2026"
-        },
-        {
-            "degreeName": "MaFyKe-opettajan kandiohjelma 2023-2026",
-            "degreeCode": "kh50_004",
-            "degreeYears": "2023-2026"
-        }
-    ]
-    
+{
+  "degrees": [
+    {
+      "degreeName": "Matemaattisten tieteiden kandiohjelma 2020-2023",
+      "degreeCode": "kh50_001",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "Tietojenkäsittelytieteen kandiohjelma 2020-2023",
+      "degreeCode": "kh50_005",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "Fysikaalisten tieteiden kandiohjelma 2020-2023",
+      "degreeCode": "kh50_002",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "Kemian kandiohjelma 2020-2023",
+      "degreeCode": "kh50_003",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "Maantieteen kandiohjelma 2020-2023",
+      "degreeCode": "kh50_007",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "MaFyKe-opettajan kandiohjelma 2020-2023",
+      "degreeCode": "kh50_004",
+      "degreeYears": "2020-2023"
+    },
+    {
+      "degreeName": "Matemaattisten tieteiden kandiohjelma 2023-2026",
+      "degreeCode": "kh50_001",
+      "degreeYears": "2023-2026"
+    },
+    {
+      "degreeName": "Tietojenkäsittelytieteen kandiohjelma 2023-2026",
+      "degreeCode": "kh50_005",
+      "degreeYears": "2023-2026"
+    },
+    {
+      "degreeName": "Fysikaalisten tieteiden kandiohjelma 2023-2026",
+      "degreeCode": "kh50_002",
+      "degreeYears": "2023-2026"
+    },
+    {
+      "degreeName": "Kemian kandiohjelma 2023-2026",
+      "degreeCode": "kh50_003",
+      "degreeYears": "2023-2026"
+    },
+    {
+      "degreeName": "Maantieteen kandiohjelma 2023-2026",
+      "degreeCode": "kh50_007",
+      "degreeYears": "2023-2026"
+    },
+    {
+      "degreeName": "MaFyKe-opettajan kandiohjelma 2023-2026",
+      "degreeCode": "kh50_004",
+      "degreeYears": "2023-2026"
+    }
+  ]
 }

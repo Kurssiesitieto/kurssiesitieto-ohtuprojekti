@@ -1,24 +1,22 @@
-require('dotenv').config();
-const logger = require('../middleware/logger');
+require("dotenv").config();
+const logger = require("../middleware/logger");
 logger.info(`DATABASE_HOST: ${process.env.DATABASE_HOST}`);
 logger.info(`DATABASE_PORT: ${process.env.DATABASE_PORT}`);
 logger.info(`DATABASE_NAME: ${process.env.DATABASE_NAME}`);
-const KoriInterface = require('../interfaces/koriInterface');
+const KoriInterface = require("../interfaces/koriInterface");
 
-
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 const kori = new KoriInterface();
-
 
 const selectPool = () => {
   //SEEMS OK
   if (process.env.DATABASE_POOLMODE === "direct") {
-    logger.info("Using direct DATABASE_POOLMODE")
+    logger.info("Using direct DATABASE_POOLMODE");
     return new Pool({
-      connectionString: process.env.DATABASE_DIRECT
+      connectionString: process.env.DATABASE_DIRECT,
     });
   } else {
-    logger.info("Using default DATABASE_POOLMODE")
+    logger.info("Using default DATABASE_POOLMODE");
     return new Pool({
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
@@ -38,9 +36,11 @@ const addCourse = async (addedCourse) => {
   addManyCourses takes a list of coursecodes = ['MAT11001, MAT11002']
   Uses somehow KoriInterface to get the course name and group_id
   A separate route api/courses/addCourse is created for developer use
-  */ 
+  */
   const response = await kori.searchCourses(addedCourse);
-  const exactMatch = response.searchResults.find(course => course.name === addedCourse || course.code === addedCourse);
+  const exactMatch = response.searchResults.find(
+    (course) => course.name === addedCourse || course.code === addedCourse
+  );
   if (!exactMatch) {
     logger.error(`No exact match found for course ${addedCourse}`);
     return;
@@ -73,11 +73,12 @@ const addManyCourses = async (listOfCourses) => {
   
   Note: Course names might not be unique, but the course ids are.
   */
-  await Promise.all(listOfCourses.map(async course => {
-    await addCourse(course);
-  }))
+  await Promise.all(
+    listOfCourses.map(async (course) => {
+      await addCourse(course);
+    })
+  );
 };
-
 
 const getCourseWithReqursivePrerequisites = async (plan_id, hy_course_id) => {
   const query = `
@@ -151,7 +152,11 @@ const updateCourse = async (id, official_course_id, course_name, kori_name) => {
 
 // Dependency
 
-const addPrerequisiteCourse = async (plan_id, course_hy_id, prerequisite_course_hy_id) => {
+const addPrerequisiteCourse = async (
+  plan_id,
+  course_hy_id,
+  prerequisite_course_hy_id
+) => {
   //console.log('@addPrerequisiteCourse, plan_id', plan_id);
   const query = `
   INSERT INTO prerequisite_courses (plan_id, course_id, prerequisite_course_id)
@@ -160,14 +165,19 @@ const addPrerequisiteCourse = async (plan_id, course_hy_id, prerequisite_course_
        (SELECT id FROM courses WHERE hy_course_id = $3) AS c2
   ON CONFLICT ON CONSTRAINT unique_course_prerequisite DO NOTHING
   RETURNING *`;
-  const { rows } = await pool.query(
-    query,
-    [plan_id, course_hy_id, prerequisite_course_hy_id]
-  );
+  const { rows } = await pool.query(query, [
+    plan_id,
+    course_hy_id,
+    prerequisite_course_hy_id,
+  ]);
   return rows[0];
 };
 
-const addManyPrerequisiteCourses = async (planId, courseCode, prerequisiteCodes) => {
+const addManyPrerequisiteCourses = async (
+  planId,
+  courseCode,
+  prerequisiteCodes
+) => {
   //OLD SCHEMA, needs alteration
   /* Accepts plan_id, courseCode, and a list of prerequisiteCodes.
 
@@ -182,7 +192,11 @@ const addManyPrerequisiteCourses = async (planId, courseCode, prerequisiteCodes)
   const course_hy_id = courseCode;
   for (const prerequisite_course_hy_id of prerequisiteCodes) {
     try {
-      const result = await addPrerequisiteCourse(plan_id, course_hy_id, prerequisite_course_hy_id);
+      const result = await addPrerequisiteCourse(
+        plan_id,
+        course_hy_id,
+        prerequisite_course_hy_id
+      );
       if (result) {
         logger.info(`Prerequisite for course ${course_hy_id} with prerequisite ${prerequisite_course_hy_id}
           of type successfully added to the database.`);
@@ -191,12 +205,14 @@ const addManyPrerequisiteCourses = async (planId, courseCode, prerequisiteCodes)
           prerequisite ${prerequisite_course_hy_id}. It might already exist.`);
       }
     } catch (err) {
-      logger.error(`Error adding prerequisite for course ${course_hy_id} with prerequisite ${prerequisite_course_hy_id}
-        to the database:`, err);
+      logger.error(
+        `Error adding prerequisite for course ${course_hy_id} with prerequisite ${prerequisite_course_hy_id}
+        to the database:`,
+        err
+      );
     }
   }
 };
-
 
 // Complex, need to move them to a separate file later!
 
@@ -206,7 +222,9 @@ async function fetchCourseWithPrerequisites(courseKoriName) {
   const allCourses = await fetchAllCoursesWithDirectPrerequisites();
 
   // Create a mapping of kori_name to official_course_id for direct lookup
-  const koriNameToOfficialIdMap = new Map(allCourses.map(course => [course.course, course.official_course_id]));
+  const koriNameToOfficialIdMap = new Map(
+    allCourses.map((course) => [course.course, course.official_course_id])
+  );
 
   function buildCourseGraph(koriName, coursesMap, visited = new Set()) {
     if (visited.has(koriName)) {
@@ -225,13 +243,17 @@ async function fetchCourseWithPrerequisites(courseKoriName) {
       identifier: course.official_course_id,
       koriName: koriName, // Adding koriName to the course object
       dependencies: course.direct_prerequisites
-        .map(prerequisiteKoriName => buildCourseGraph(prerequisiteKoriName, coursesMap, visited))
-        .filter(Boolean) // Ensure only valid courses are included
+        .map((prerequisiteKoriName) =>
+          buildCourseGraph(prerequisiteKoriName, coursesMap, visited)
+        )
+        .filter(Boolean), // Ensure only valid courses are included
     };
     return courseWithDependencies;
   }
 
-  const coursesMap = new Map(allCourses.map(course => [course.course, course]));
+  const coursesMap = new Map(
+    allCourses.map((course) => [course.course, course])
+  );
 
   const courseGraph = buildCourseGraph(courseKoriName, coursesMap);
 
@@ -244,12 +266,14 @@ async function fetchCourseWithPrerequisites(courseKoriName) {
         kori_name: courseGraph.koriName,
         official_course_id: courseGraph.identifier,
         // Replace kori_names in dependencies with official_course_id using the map
-        dependencies: courseGraph.dependencies.map(dep => koriNameToOfficialIdMap.get(dep.koriName)).filter(Boolean)
+        dependencies: courseGraph.dependencies
+          .map((dep) => koriNameToOfficialIdMap.get(dep.koriName))
+          .filter(Boolean),
       };
       array.push(courseObject);
 
       // Recursively process each dependency to flatten the structure
-      courseGraph.dependencies.forEach(dependency => {
+      courseGraph.dependencies.forEach((dependency) => {
         transformGraphToArray(dependency, array);
       });
     }
@@ -276,8 +300,11 @@ async function fetchAllCoursesWithDirectPrerequisites() {
   return rows;
 }
 
-
-const addCourseToStudyplan = async (planId, hyCourseId, relationType = 'compulsory') => {
+const addCourseToStudyplan = async (
+  planId,
+  hyCourseId,
+  relationType = "compulsory"
+) => {
   //TODO
   //adds course_plan relation
   try {
@@ -295,28 +322,36 @@ const addCourseToStudyplan = async (planId, hyCourseId, relationType = 'compulso
     );
 
     if (rows.length === 0) {
-      logger.verbose(`Course ${hyCourseId} already exists in the studyplan ${planId}.`);
+      logger.verbose(
+        `Course ${hyCourseId} already exists in the studyplan ${planId}.`
+      );
       return;
     }
     return rows[0];
   } catch (error) {
-    logger.verbose('Error inserting data into course_degree_relation table:', error);
+    logger.verbose(
+      "Error inserting data into course_degree_relation table:",
+      error
+    );
   }
-}
+};
 
-const addCourseAndPrerequisitesToStudyplan = async (plan_id, courseCode, prerequisiteCodes = []) => {
+const addCourseAndPrerequisitesToStudyplan = async (
+  plan_id,
+  courseCode,
+  prerequisiteCodes = []
+) => {
   /* A higher function that calls helper functions
   Adds courses and presequisitecourses to courses-table
   Adds course-prerequisitecourse -relations to prerequisites-table (with plan_id)
   */
-  const allCourses = [courseCode, ...prerequisiteCodes]
+  const allCourses = [courseCode, ...prerequisiteCodes];
   await addManyCourses(allCourses);
   await addManyPrerequisiteCourses(plan_id, courseCode, prerequisiteCodes);
   for (const course of allCourses) {
     await addCourseToStudyplan(plan_id, course);
   }
-}
-
+};
 
 const getPlansByRoot = async () => {
   const query = `
@@ -328,11 +363,11 @@ const getPlansByRoot = async () => {
   `;
 
   const { rows } = await pool.query(query);
-  
-  const plans = rows.map(row => ({
-      plan_id: row.plan_id,
-      plan_name: row.plan_name,
-      degree_name: row.degree_name
+
+  const plans = rows.map((row) => ({
+    plan_id: row.plan_id,
+    plan_name: row.plan_name,
+    degree_name: row.degree_name,
   }));
 
   return plans;
@@ -349,44 +384,44 @@ const getPlansByRootAndUser = async (uid) => {
 
   const { rows } = await pool.query(query, [uid]);
 
-  const plans = rows.map(row => ({
-      plan_id: row.plan_id,
-      plan_name: row.plan_name,
-      degree_name: row.degree_name
+  const plans = rows.map((row) => ({
+    plan_id: row.plan_id,
+    plan_name: row.plan_name,
+    degree_name: row.degree_name,
   }));
 
   return plans;
 };
 
-const createStudyPlan = async (degree_id, name, uid = 'root') => {
-    /*Accepts numbers letters underscores and dashes*/
-    // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
-    // and allows spaces between words.
+const createStudyPlan = async (degree_id, name, uid = "root") => {
+  /*Accepts numbers letters underscores and dashes*/
+  // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
+  // and allows spaces between words.
   var pattern = /^[\p{L}0-9-:_]+( [\p{L}0-9-:_]+)*$/u;
-  
-  if (! (pattern.test(name) && name.length > 4 && name.length < 20)) {
+
+  if (!(pattern.test(name) && name.length > 4 && name.length < 20)) {
     logger.verbose(`Plan with name ${name} is not valid.`);
     return;
   } else {
-
- 
-
-  const planRows = await addStudyPlan(degree_id, name);
-  const plan_id = planRows.id;
-  //TODO: add/use function for getting hy_degree_id and degree_years from degree_info (?)
-  //is that necessary? When starting, json-file has degree_id included
-  //is this info available, when the user has selected the study program from dropdown menu?
-  const userPlanRelationRows = await addUserPlanRelation(plan_id, uid);
-  logger.info('@addStudyPlan, userPlanRelationRows[0]', userPlanRelationRows[0])
-  const addedPlan = {
-    plan_id: plan_id,
-    name: name,
-    degree_id: degree_id,
-    uid: uid
-  };
-  logger.info('@createStudyPlan, addedPlan', addedPlan)
-  return addedPlan;
-}
+    const planRows = await addStudyPlan(degree_id, name);
+    const plan_id = planRows.id;
+    //TODO: add/use function for getting hy_degree_id and degree_years from degree_info (?)
+    //is that necessary? When starting, json-file has degree_id included
+    //is this info available, when the user has selected the study program from dropdown menu?
+    const userPlanRelationRows = await addUserPlanRelation(plan_id, uid);
+    logger.info(
+      "@addStudyPlan, userPlanRelationRows[0]",
+      userPlanRelationRows[0]
+    );
+    const addedPlan = {
+      plan_id: plan_id,
+      name: name,
+      degree_id: degree_id,
+      uid: uid,
+    };
+    logger.info("@createStudyPlan, addedPlan", addedPlan);
+    return addedPlan;
+  }
 };
 
 const addStudyPlan = async (degree_id, name) => {
@@ -404,7 +439,7 @@ const addStudyPlan = async (degree_id, name) => {
     return nameExists;
   };
 
-  const nameInUse = await planNameIsNotUnique(name)
+  const nameInUse = await planNameIsNotUnique(name);
   if (nameInUse) {
     logger.verbose(`Plan with name ${name} already exists in the database.`);
     return;
@@ -416,12 +451,12 @@ const addStudyPlan = async (degree_id, name) => {
     RETURNING *;`,
     [degree_id, name]
   );
-  logger.info('@addStudyPlan, added rows', rows);
+  logger.info("@addStudyPlan, added rows", rows);
   return rows[0];
 };
 
-const addUserPlanRelation = async (plan_id, uid = 'root') => {
-  logger.info("@addUserPlanRelation, input plan_id, uid", plan_id, uid)
+const addUserPlanRelation = async (plan_id, uid = "root") => {
+  logger.info("@addUserPlanRelation, input plan_id, uid", plan_id, uid);
   const { rows } = await pool.query(
     `INSERT INTO user_plan_relation (uid, plan_id)
     VALUES ($1, $2)
@@ -467,9 +502,15 @@ const addSingleDegreeinfo = async (degreeCode, degreeName, degreeYears) => {
 };
 
 const addDegreeinfo = async (degreeMappings) => {
-  await Promise.all(degreeMappings.map(async degree => {
-    await addSingleDegreeinfo(degree.degreeCode, degree.degreeName, degree.degreeYears);
-  }));
+  await Promise.all(
+    degreeMappings.map(async (degree) => {
+      await addSingleDegreeinfo(
+        degree.degreeCode,
+        degree.degreeName,
+        degree.degreeYears
+      );
+    })
+  );
 };
 
 const getAllCoursesWithPrerequisites = async () => {
@@ -527,25 +568,28 @@ const getDegreeNames = async () => {
     const { rows: degreeRows } = await pool.query(query);
     return degreeRows;
   } catch (error) {
-    logger.debug('Failed to retrieve degreenames from database', error);
+    logger.debug("Failed to retrieve degreenames from database", error);
     return false;
   }
 };
 
 const getDegreeinfoId = async (degreeCode, degreeYears) => {
   //TODO, connect to route (?)
-  try {  
+  try {
     const degreeQuery = `
     SELECT id 
     FROM degreeinfo
     WHERE hy_degree_id = $1 AND degree_years = $2`;
 
-    const { rows: degreeRows } = await pool.query(degreeQuery, [degreeCode, degreeYears]);
+    const { rows: degreeRows } = await pool.query(degreeQuery, [
+      degreeCode,
+      degreeYears,
+    ]);
 
     if (degreeRows.length === 0) {
       return false;
     }
-    logger.info('degreeRows[0]', degreeRows[0])
+    logger.info("degreeRows[0]", degreeRows[0]);
     return degreeRows;
   } catch (error) {
     console.error("Error in getDegreeinfoId:", error);
@@ -561,7 +605,7 @@ const getDegreeinfo = async (degreeId) => {
     FROM degreeinfo
     WHERE id = $1`;
 
-    const {infoRows } = await pool.query(infoQuery, [degreeId]);
+    const { infoRows } = await pool.query(infoQuery, [degreeId]);
 
     if (infoRows.length === 0) {
       return false;
@@ -573,47 +617,50 @@ const getDegreeinfo = async (degreeId) => {
   }
 };
 
-
 const savePositions = async (degreeId, coursePositions) => {
   try {
-    await pool.query('DELETE FROM course_positions WHERE degree_id = $1', [degreeId]);
-    const courseIds = coursePositions.map(course => course.id);
+    await pool.query("DELETE FROM course_positions WHERE degree_id = $1", [
+      degreeId,
+    ]);
+    const courseIds = coursePositions.map((course) => course.id);
     const courseQuery = `
       SELECT id, hy_course_id
       FROM courses
       WHERE hy_course_id = ANY($1)`;
-  
+
     const { rows: courseRows } = await pool.query(courseQuery, [courseIds]);
-  
+
     if (courseRows.length !== coursePositions.length) {
       return false;
     }
-  
-    let insertValues = '';
-    coursePositions.forEach(position => {
-      const matchingCourse = courseRows.find(course => course.hy_course_id === position.id);
+
+    let insertValues = "";
+    coursePositions.forEach((position) => {
+      const matchingCourse = courseRows.find(
+        (course) => course.hy_course_id === position.id
+      );
       if (matchingCourse) {
-          insertValues += `(${degreeId}, ${matchingCourse.id}, ${position.position.x}, ${position.position.y}), `;
+        insertValues += `(${degreeId}, ${matchingCourse.id}, ${position.position.x}, ${position.position.y}), `;
       }
     });
-  
+
     insertValues = insertValues.slice(0, -2);
-  
+
     const insertQuery = `
       INSERT INTO course_positions(degree_id, course_id, x, y)
       VALUES ${insertValues}`;
     await pool.query(insertQuery);
-    return true
+    return true;
   } catch (error) {
-      console.error('Error saving positions:', error);
-      return false
+    console.error("Error saving positions:", error);
+    return false;
   }
 };
 
-const resetPositions = async ( degreeId ) => {
+const resetPositions = async (degreeId) => {
   const resetQuery = `DELETE FROM course_positions WHERE degree_id = $1`;
-  await pool.query(resetQuery, [degreeId]);}
-
+  await pool.query(resetQuery, [degreeId]);
+};
 
 module.exports = {
   query: (text, params, callback) => {
@@ -644,4 +691,3 @@ module.exports = {
     await pool.end();
   },
 };
-

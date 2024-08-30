@@ -1,99 +1,99 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 .study-plans-view {
-    position: fixed;
-    top: 9.7%;
-    right: 0;
-    width: 32%;
-    height: 100%;
-    color: var(--sidebar-text-color);
-    background-color: var(--sidebar-background-color);
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-    padding: 2%;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
+  position: fixed;
+  top: 9.7%;
+  right: 0;
+  width: 32%;
+  height: 100%;
+  color: var(--sidebar-text-color);
+  background-color: var(--sidebar-background-color);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 2%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
 }
 
 .study-plans-view h3 {
-    font-size: 160%;
-    color: #0a455c;
-    margin-bottom: 10%;
+  font-size: 160%;
+  color: #0a455c;
+  margin-bottom: 10%;
 }
 
 .dropdown {
-    position: relative;
-    display: block;
-    margin-bottom: 1%;
+  position: relative;
+  display: block;
+  margin-bottom: 1%;
 }
-  
+
 .dropdown-button {
-    cursor: pointer;
-    color: #0a455c;
-    background-color: white;
-    font-size: 100%;
-    padding: 1% 24%;
-    border-color: #0a455c;
-    border-radius: 0%;
+  cursor: pointer;
+  color: #0a455c;
+  background-color: white;
+  font-size: 100%;
+  padding: 1% 24%;
+  border-color: #0a455c;
+  border-radius: 0%;
 }
 
 .buttons {
-    display: flex;
-    justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .selected-degree {
-    font-size: 80%;
-    color: #333;
-    margin-top: 8%;
+  font-size: 80%;
+  color: #333;
+  margin-top: 8%;
 }
-  
+
 .selected-degree:empty {
-    padding: 0;
-    border: none;
-    background-color: transparent;
+  padding: 0;
+  border: none;
+  background-color: transparent;
 }
 
 .form-label {
-    font-size: 18px;
-    margin-left: 0;
-    padding-left: 0; 
-    text-align: left;
-    display: block;
-    margin-top: 20%;
+  font-size: 18px;
+  margin-left: 0;
+  padding-left: 0;
+  text-align: left;
+  display: block;
+  margin-top: 20%;
 }
 
 .form-input {
-    width: 100%;
-    height: 40px;
-    background-color: #c3d9e2;
-    font-size: 25px;
-    color: #666b6d;
+  width: 100%;
+  height: 40px;
+  background-color: #c3d9e2;
+  font-size: 25px;
+  color: #666b6d;
 }
 
 .submit-button {
-    display: flex;
-    justify-content: left;
-    padding: 8px 12px;
-    font-size: 16px;
-    width: auto;
-    background-color: #0e688b;
-    color: white;
-    border: none;
-    border-radius: 0px;
-    cursor: pointer;
+  display: flex;
+  justify-content: left;
+  padding: 8px 12px;
+  font-size: 16px;
+  width: auto;
+  background-color: #0e688b;
+  color: white;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
 }
 
 .submit-button:hover {
-    background-color: #1386b4;
+  background-color: #1386b4;
 }
 
 .close-button {
-    border-radius: 100%;
+  border-radius: 100%;
 }
 
 .close-button:hover {
-    background-color: #c3d9e2;
+  background-color: #c3d9e2;
 }

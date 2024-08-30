@@ -1,5 +1,5 @@
 class KoriInterface {
-    /*
+  /*
     MOCK Interface to communicate with KORI API.
 
     Methods:
@@ -7,9 +7,9 @@ class KoriInterface {
     
     searchCourses - Used to list all courses that contain the <search> string.
     */
-   
-    constructor() {
-        this.courses = JSON.parse(`{
+
+  constructor() {
+    this.courses = JSON.parse(`{
             "searchResults": [
                 {
                     "id": "otm-eb0cf926-57aa-4c8e-9ddc-8b6611930674",
@@ -82,53 +82,57 @@ class KoriInterface {
                 }
             ]
         }`);
-    }
-    
-  
-    isValidInput(input) {
-        // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
-        // commas, and allows spaces between words.
-        var pattern = /^[\p{L}0-9-:,_]+( [\p{L}0-9-:,_]+)*$/u;
-  
-        return pattern.test(input);
-    }
-  
-    async courseInfo(id, hyYearCode='hy-lv-74') {
-        /*
+  }
+
+  isValidInput(input) {
+    // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
+    // commas, and allows spaces between words.
+    var pattern = /^[\p{L}0-9-:,_]+( [\p{L}0-9-:,_]+)*$/u;
+
+    return pattern.test(input);
+  }
+
+  async courseInfo(id, hyYearCode = "hy-lv-74") {
+    /*
         Get the course info using <id> which should be the course groupId. Gives the <hyYearCode> implementation of the course.
 
         Return the course info in JSON format.
         */
-        if (this.isValidInput(id)) {
-            const course = this.courses.searchResults.find(course => course.code === id);
-            if (course.curriculumPeriodIds.includes(hyYearCode)) {
-                return course
-            }
-            return null
-        } else {
-            return "Virheellinen syöte"
-        }
+    if (this.isValidInput(id)) {
+      const course = this.courses.searchResults.find(
+        (course) => course.code === id
+      );
+      if (course.curriculumPeriodIds.includes(hyYearCode)) {
+        return course;
+      }
+      return null;
+    } else {
+      return "Virheellinen syöte";
     }
+  }
 
-    async searchCourses(search, hyYearCode='hy-lv-74') {
-        /*
+  async searchCourses(search, hyYearCode = "hy-lv-74") {
+    /*
         Lists max 200 courses that contain the <search> string. Gives the <hyYearCode> implementation of the courses.
 
         Returns list of courses in JSON format.
         */
-        if (this.isValidInput(search)) {
-            const results = [];
-            this.courses.searchResults.forEach(course => {
-                if ((course.name.includes(search) || course.code.includes(search)) && course.curriculumPeriodIds.includes(hyYearCode)) {
-                    results.push(course);
-                }
-            });
-            const resultsJSON = {"searchResults": results}
-            return resultsJSON
-        } else {
-            return "Virheellinen syöte"
+    if (this.isValidInput(search)) {
+      const results = [];
+      this.courses.searchResults.forEach((course) => {
+        if (
+          (course.name.includes(search) || course.code.includes(search)) &&
+          course.curriculumPeriodIds.includes(hyYearCode)
+        ) {
+          results.push(course);
         }
+      });
+      const resultsJSON = { searchResults: results };
+      return resultsJSON;
+    } else {
+      return "Virheellinen syöte";
     }
+  }
 }
 
 module.exports = KoriInterface;

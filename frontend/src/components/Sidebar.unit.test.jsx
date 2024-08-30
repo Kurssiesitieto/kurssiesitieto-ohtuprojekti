@@ -1,24 +1,24 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Sidebar from './sidebar';
-import * as CourseFunctions from '../functions/CourseFunctions';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import Sidebar from "./sidebar";
+import * as CourseFunctions from "../functions/CourseFunctions";
 
-vi.mock('../functions/CourseFunctions', () => ({
+vi.mock("../functions/CourseFunctions", () => ({
   handleFetchKORIByName: vi.fn(),
   handleFetchKORICourseInfo: vi.fn(),
 }));
 
-describe('Sidebar Component Tests', () => {
+describe("Sidebar Component Tests", () => {
   const mockCloseSidebar = vi.fn();
   const mockAxiosInstance = {};
   const mockCourseInfo = {
-    groupId: '123',
-    outcomes: { fi: ['Testi kuvaus'] },
+    groupId: "123",
+    outcomes: { fi: ["Testi kuvaus"] },
     credits: { max: 5 },
-    additional: { fi: 'Järjestämisajankohta Testi kuvaus Opintokokonaisuus' },
-    code: 'TKT123',
-    id: ''
+    additional: { fi: "Järjestämisajankohta Testi kuvaus Opintokokonaisuus" },
+    code: "TKT123",
+    id: "",
   };
 
   CourseFunctions.handleFetchKORICourseInfo.mockResolvedValue([mockCourseInfo]);
@@ -27,7 +27,7 @@ describe('Sidebar Component Tests', () => {
     vi.clearAllMocks();
   });
 
-  it('renders correctly when isOpen is true', () => {
+  it("renders correctly when isOpen is true", () => {
     render(
       <Sidebar
         isOpen={true}
@@ -36,11 +36,11 @@ describe('Sidebar Component Tests', () => {
         axiosInstance={mockAxiosInstance}
       />
     );
-    expect(screen.getByText('X')).toBeInTheDocument();
-    expect(screen.getByText('Testi kurssi')).toBeInTheDocument();
+    expect(screen.getByText("X")).toBeInTheDocument();
+    expect(screen.getByText("Testi kurssi")).toBeInTheDocument();
   });
 
-  it('fetches course information', async () => {
+  it("fetches course information", async () => {
     render(
       <Sidebar
         isOpen={true}
@@ -50,6 +50,11 @@ describe('Sidebar Component Tests', () => {
         axiosInstance={mockAxiosInstance}
       />
     );
-    await waitFor(() => expect(CourseFunctions.handleFetchKORICourseInfo).toHaveBeenCalledWith(mockAxiosInstance, '123'));
+    await waitFor(() =>
+      expect(CourseFunctions.handleFetchKORICourseInfo).toHaveBeenCalledWith(
+        mockAxiosInstance,
+        "123"
+      )
+    );
   });
 });

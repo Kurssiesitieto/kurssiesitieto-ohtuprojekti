@@ -1,4 +1,4 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 .prerequisites-view {
   position: fixed;
@@ -21,13 +21,12 @@
   font-size: 160%;
   color: #0a455c;
   margin-bottom: 5%;
-
 }
 
 .form-label-give-course {
   font-size: 85%;
   margin-left: 0;
-  padding-left: 0; 
+  padding-left: 0;
   text-align: left;
   display: block;
   margin-top: 20%;
@@ -44,7 +43,7 @@
 .form-label-course-prerequisites {
   font-size: 85%;
   margin-left: 0;
-  padding-left: 0; 
+  padding-left: 0;
   text-align: left;
   display: block;
   margin-top: 20%;

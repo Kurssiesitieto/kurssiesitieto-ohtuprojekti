@@ -1,14 +1,14 @@
-@media screen and (prefers-color-scheme:dark) {
+@media screen and (prefers-color-scheme: dark) {
   .infoscreen-content {
-  --text_color: #d3d3d3;
-  --backgroud_color: #302f39;
+    --text_color: #d3d3d3;
+    --backgroud_color: #302f39;
   }
 }
 
-@media screen and (prefers-color-scheme:light) {
+@media screen and (prefers-color-scheme: light) {
   .infoscreen-content {
-  --text_color: #000000;
-  --backgroud_color: #b9b9b9;
+    --text_color: #000000;
+    --backgroud_color: #b9b9b9;
   }
 }
 
@@ -22,14 +22,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; 
+  z-index: 1050;
 }
 
 .infoscreen-content {
   background-color: var(--backgroud_color);
   padding: 20px;
   border-radius: 5px;
-  z-index: 1051; 
+  z-index: 1051;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;

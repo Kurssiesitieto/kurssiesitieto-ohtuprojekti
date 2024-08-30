@@ -1,4 +1,4 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 .info-window {
   position: fixed;
@@ -17,7 +17,6 @@
 .closing-button {
   background-color: var(--button-background-color);
   color: var(--text-color-primary);
-
 }
 
 .dev-portal-button {

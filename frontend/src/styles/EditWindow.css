@@ -1,32 +1,32 @@
 .edit-window1 {
-    position: absolute;
-    margin-top: 10%;
-    margin-left: 35%;
-    height: 250px;
-    width: 450px;
-    background-color: #0e688b;
-    color: rgb(177, 177, 177);
-    z-index: 99999;
+  position: absolute;
+  margin-top: 10%;
+  margin-left: 35%;
+  height: 250px;
+  width: 450px;
+  background-color: #0e688b;
+  color: rgb(177, 177, 177);
+  z-index: 99999;
 }
 
 .edit-window2 {
-    position: absolute;
-    margin-top: 10%;
-    margin-left: 35%;
-    height: 350px;
-    width: 450px;
-    background-color: #0e688b;
-    color: rgb(177, 177, 177);
-    z-index: 99999;
+  position: absolute;
+  margin-top: 10%;
+  margin-left: 35%;
+  height: 350px;
+  width: 450px;
+  background-color: #0e688b;
+  color: rgb(177, 177, 177);
+  z-index: 99999;
 }
 
 .edit-window3 {
-    position: absolute;
-    margin-top: 10%;
-    margin-left: 35%;
-    height: 450px;
-    width: 450px;
-    background-color: #0e688b;
-    color: rgb(177, 177, 177);
-    z-index: 99999;
+  position: absolute;
+  margin-top: 10%;
+  margin-left: 35%;
+  height: 450px;
+  width: 450px;
+  background-color: #0e688b;
+  color: rgb(177, 177, 177);
+  z-index: 99999;
 }

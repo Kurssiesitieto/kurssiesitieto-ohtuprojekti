@@ -1,26 +1,25 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 .messenger {
-    position: fixed;
-    bottom: 5%;
-    left: 3%;
-    z-index: 1050;
-    padding: 20px;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, .8);
-    text-align: center;
-    max-width: 40%;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.75);
+  position: fixed;
+  bottom: 5%;
+  left: 3%;
+  z-index: 1050;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  max-width: 40%;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.75);
 }
-  
+
 .messenger-info {
-    color: var(--messenger-text-color);
-    background-image: var(--messenger-background-info);
+  color: var(--messenger-text-color);
+  background-image: var(--messenger-background-info);
 }
-  
+
 .messenger-error {
-    color: var(--messenger-text-color);
-    background-image: var(--messenger-background-error);
+  color: var(--messenger-text-color);
+  background-image: var(--messenger-background-error);
 }
-  

@@ -1,19 +1,19 @@
 {
-    "degreeName": "Tutkinnon nimi",
-    "degreeCode": "tutkinnon koodi, esim: 'KH50_005', joka on TKT kandi. Koodi löytyy SISU:sta Opintojen rakenne sivulta tutkinnon otsikon alta sininen teksti.",
-    "degreeYear": "aloitusvuosi tutkinnon voimassaololle",
-    "courses": [
-        {
-            "courseCode": "kurssin virallinen koodi, esim 'TKT10003'",
-            "prerequisiteCourses": [
-                "kurssin esitietovaatimukset erotettuna pilkuilla, esim 'TKT10002'",
-                "toinen esitietovaatimus"
-            ]
-        },
-        {
-            "courseCode": "kurssi, joka ei ole pakollinen tutkinnossa",
-            "prerequisiteCourses": [],
-            "courseType": "optional"
-        }     
-    ]
+  "degreeName": "Tutkinnon nimi",
+  "degreeCode": "tutkinnon koodi, esim: 'KH50_005', joka on TKT kandi. Koodi löytyy SISU:sta Opintojen rakenne sivulta tutkinnon otsikon alta sininen teksti.",
+  "degreeYear": "aloitusvuosi tutkinnon voimassaololle",
+  "courses": [
+    {
+      "courseCode": "kurssin virallinen koodi, esim 'TKT10003'",
+      "prerequisiteCourses": [
+        "kurssin esitietovaatimukset erotettuna pilkuilla, esim 'TKT10002'",
+        "toinen esitietovaatimus"
+      ]
+    },
+    {
+      "courseCode": "kurssi, joka ei ole pakollinen tutkinnossa",
+      "prerequisiteCourses": [],
+      "courseType": "optional"
+    }
+  ]
 }

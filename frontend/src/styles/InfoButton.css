@@ -1,10 +1,10 @@
 .info-button {
-    border: none;
-    color: var(--upper-button-text-color);
-    background-color: var(--upper-button-backround-color);
-    position: absolute;
-    right: 0%;
-    top: 0%;
-    border-radius: 0%;
-    font-size: 0.6em;
+  border: none;
+  color: var(--upper-button-text-color);
+  background-color: var(--upper-button-backround-color);
+  position: absolute;
+  right: 0%;
+  top: 0%;
+  border-radius: 0%;
+  font-size: 0.6em;
 }

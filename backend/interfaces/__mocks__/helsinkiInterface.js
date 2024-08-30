@@ -1,15 +1,14 @@
-
 class HelsinkiInterface {
-    /*
+  /*
     MOCK Interface to communicate with helsinki.fi APIs.
 
     Methods:
     degreeStructure - Gets degree structure using degree code
     */
 
-    constructor() {
-        // TKT kanditutkinnon hy-lv-74 perusopinnot eduviewer apin rakenteen tyyliin.
-        this.degree = JSON.parse(`{
+  constructor() {
+    // TKT kanditutkinnon hy-lv-74 perusopinnot eduviewer apin rakenteen tyyliin.
+    this.degree = JSON.parse(`{
             "id": "hy-EDU-114256325-2017",
             "code": "KM-TIETOJENK-KOUL",
             "name": {
@@ -241,28 +240,27 @@ class HelsinkiInterface {
                     "min": 180
                 }
             }
-        }`)
-    }
+        }`);
+  }
 
+  isValidInput(input) {
+    /*Accepts numbers letters underscores and dashes*/
+    //var pattern = /^[\p{L}0-9_-]+( [\p{L}0-9_-]+)*$/u;
 
-    isValidInput(input) {
-        /*Accepts numbers letters underscores and dashes*/
-        //var pattern = /^[\p{L}0-9_-]+( [\p{L}0-9_-]+)*$/u;
+    // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
+    // commas, and allows spaces between words.
+    var pattern = /^[\p{L}0-9-:,_]+( [\p{L}0-9-:,_]+)*$/u;
 
-        // This regex accepts numbers, letters (including Unicode letters), dashes, colons, underscores,
-        // commas, and allows spaces between words.
-        var pattern = /^[\p{L}0-9-:,_]+( [\p{L}0-9-:,_]+)*$/u;
-  
-        return pattern.test(input);
-    }
+    return pattern.test(input);
+  }
 
-    async getlvNames() {
-        /*
+  async getlvNames() {
+    /*
         Gets list of "lv_names" Academic year codes.
 
         Returns the list of lv_names in JSON format.
         */
-        return JSON.parse(`{
+    return JSON.parse(`{
             "hy-lv-1": "1950-51",
             "hy-lv-2": "1951-52",
             "hy-lv-3": "1952-53",
@@ -341,28 +339,28 @@ class HelsinkiInterface {
             "hy-lv-76": "2025-26",
             "hy-lv-77": "2026-27",
             "hy-lv-78": "2027-28"
-        }`)
+        }`);
+  }
 
-    }
-  
-    async degreeStructure(id, lvName='hy-lv-74') {
-        /*
+  async degreeStructure(id, lvName = "hy-lv-74") {
+    /*
         Gets the degree structure using <id> which should be the degree code.
         Shows the <period> specific structure.
 
         Returns the selected periods degree stucture in JSON format.
         */
-        if (this.isValidInput(id) && this.isValidInput(lvName)) {
-            if ((id.toUpperCase() === "KH50_005") &&(lvName.toLowerCase() === "hy-lv-74")) {
-                return this.degree
-            }
-            return ""
-        } else {
-            return "Virheellinen syöte"
-        }
+    if (this.isValidInput(id) && this.isValidInput(lvName)) {
+      if (
+        id.toUpperCase() === "KH50_005" &&
+        lvName.toLowerCase() === "hy-lv-74"
+      ) {
+        return this.degree;
+      }
+      return "";
+    } else {
+      return "Virheellinen syöte";
     }
-
-
+  }
 }
 
 module.exports = HelsinkiInterface;

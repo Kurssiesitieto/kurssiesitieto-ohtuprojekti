@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
-import '../styles/DegreeSelectionMenu.css';
-
+import React, { useState } from "react";
+import { Button, Menu, MenuItem } from "@mui/material";
+import "../styles/DegreeSelectionMenu.css";
 
 function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -20,17 +19,17 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
     onDegreeChange(degree);
     handleClose();
   };
-  
+
   return (
     <div>
-     <Button
+      <Button
         id="degreeSelectionButton"
         aria-controls="degree-menu"
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}        
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
       >
-        {'Valitse tutkinto'}
+        {"Valitse tutkinto"}
       </Button>
       <Menu
         id="degree-menu"
@@ -42,7 +41,9 @@ function DegreeSelectionMenu({ onDegreeChange, listOfDegrees }) {
           <MenuItem
             key={degreeOption.plan_id}
             onClick={() => handleSelect(degreeOption)}
-            id={`degree-option-${degreeOption.degree_name.replace(/\s+/g, '-').toLowerCase()}`}
+            id={`degree-option-${degreeOption.degree_name
+              .replace(/\s+/g, "-")
+              .toLowerCase()}`}
           >
             {degreeOption.plan_name}
           </MenuItem>

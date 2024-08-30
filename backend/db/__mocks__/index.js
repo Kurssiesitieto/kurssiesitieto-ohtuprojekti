@@ -12,32 +12,28 @@ const mockGetCourseWithReqursivePrerequisites = jest.fn(() => {
     //prerequisities for MAT21001 Lineaarialgebra ja matriisilaskenta II
     rows: [
       {
-        "id": "10",
-        "kori_id": "hy-CU-117375394",
-        "course_name": "Lineaarialgebra ja matriisilaskenta I",
-        "identifier": "MAT11002",
-        "dependencies": [
-          "MAT11001"
-        ]
+        id: "10",
+        kori_id: "hy-CU-117375394",
+        course_name: "Lineaarialgebra ja matriisilaskenta I",
+        identifier: "MAT11002",
+        dependencies: ["MAT11001"],
       },
       {
-        "id": "5",
-        "kori_id": "hy-CU-117375151",
-        "course_name": "Johdatus yliopistomatematiikkaan",
-        "hy_course_id": "MAT11001",
-        "dependencies": []
+        id: "5",
+        kori_id: "hy-CU-117375151",
+        course_name: "Johdatus yliopistomatematiikkaan",
+        hy_course_id: "MAT11001",
+        dependencies: [],
       },
       {
-        "id": "16",
-        "kori_id": "hy-CU-117375754",
-        "course_name": "Lineaarialgebra ja matriisilaskenta II",
-        "identifier": "MAT21001",
-        "dependencies": [
-          "MAT11002"
-        ]
-      }
+        id: "16",
+        kori_id: "hy-CU-117375754",
+        course_name: "Lineaarialgebra ja matriisilaskenta II",
+        identifier: "MAT21001",
+        dependencies: ["MAT11002"],
+      },
     ],
-    rowcount: 3
+    rowcount: 3,
   });
 });
 
@@ -64,9 +60,8 @@ const mockGetDegreeId = jest.fn(() => {
 });
 */
 
-
 module.exports = {
   addCourse,
   addPrerequisiteCourse,
-  getCourseWithReqursivePrerequisites: mockGetCourseWithReqursivePrerequisites
+  getCourseWithReqursivePrerequisites: mockGetCourseWithReqursivePrerequisites,
 };

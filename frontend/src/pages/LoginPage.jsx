@@ -1,7 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 const LoginPage = ({ axiosInstance }) => {
-
   return <Navigate to={import.meta.env.BASE_URL + "/"} />;
 };
 

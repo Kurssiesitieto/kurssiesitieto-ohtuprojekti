@@ -1,12 +1,12 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import CourseGraph from './CourseGraph';
-import { getLayoutedElements } from '../utils/layout';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import CourseGraph from "./CourseGraph";
+import { getLayoutedElements } from "../utils/layout";
 
 // Mock the dependencies
-vi.mock('reactflow', async () => {
-  const actual = await vi.importActual('reactflow');
+vi.mock("reactflow", async () => {
+  const actual = await vi.importActual("reactflow");
   return {
     __esModule: true,
     ...actual,
@@ -16,13 +16,13 @@ vi.mock('reactflow', async () => {
   };
 });
 
-vi.mock('../utils/layout', () => {
+vi.mock("../utils/layout", () => {
   return {
     getLayoutedElements: vi.fn(),
   };
 });
 
-vi.mock('../styles/CustomEdge.jsx', () => {
+vi.mock("../styles/CustomEdge.jsx", () => {
   return {
     __esModule: true,
     default: () => <div>CustomEdge</div>,
@@ -31,20 +31,20 @@ vi.mock('../styles/CustomEdge.jsx', () => {
 
 const mockCourses = [
   {
-    id: '1',
+    id: "1",
     createNode: vi.fn(() => ({
-      id: '1',
+      id: "1",
       position: { x: null, y: null },
-      data: { name: 'Course 1', groupID: 'group1' },
+      data: { name: "Course 1", groupID: "group1" },
     })),
-    createEdges: vi.fn(() => [{ id: 'e1-2', source: '1', target: '2' }]),
+    createEdges: vi.fn(() => [{ id: "e1-2", source: "1", target: "2" }]),
   },
   {
-    id: '2',
+    id: "2",
     createNode: vi.fn(() => ({
-      id: '2',
+      id: "2",
       position: { x: null, y: null },
-      data: { name: 'Course 2', groupID: 'group2' },
+      data: { name: "Course 2", groupID: "group2" },
     })),
     createEdges: vi.fn(() => []),
   },
@@ -59,7 +59,7 @@ class ResizeObserver {
 
 global.ResizeObserver = ResizeObserver;
 
-describe('CourseGraph', () => {
+describe("CourseGraph", () => {
   beforeEach(() => {
     getLayoutedElements.mockReturnValue({
       nodes: mockCourses.map((course) => course.createNode()),
@@ -71,7 +71,7 @@ describe('CourseGraph', () => {
     vi.clearAllMocks();
   });
 
-  it('renders CourseGraph correctly', () => {
+  it("renders CourseGraph correctly", () => {
     render(
       <CourseGraph
         axiosInstance={vi.fn()}
@@ -83,8 +83,8 @@ describe('CourseGraph', () => {
       />
     );
 
-    expect(screen.getByText('Controls')).toBeInTheDocument();
-    expect(screen.getByText('Background')).toBeInTheDocument();
-    expect(screen.getByText('CustomEdge')).toBeInTheDocument();
+    expect(screen.getByText("Controls")).toBeInTheDocument();
+    expect(screen.getByText("Background")).toBeInTheDocument();
+    expect(screen.getByText("CustomEdge")).toBeInTheDocument();
   });
 });

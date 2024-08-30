@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-import './styles/App.css'
+import "./styles/App.css";
 
-import StartPage from './pages/StartPage';
-import MainPage from './pages/MainPage';
-import MissingPage from './pages/MissingPage';
-import LoginPage from './pages/LoginPage';
+import StartPage from "./pages/StartPage";
+import MainPage from "./pages/MainPage";
+import MissingPage from "./pages/MissingPage";
+import LoginPage from "./pages/LoginPage";
 
-import {
-  BrowserRouter as Router,
-  Routes, Route
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(false);
@@ -21,49 +18,52 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const axiosInstance = axios.create({
-    baseURL: import.meta.env.BASE_URL //import.meta.env.BASE_URL is from vite.config.js. It refers to the base variable it the defineConfig
+    baseURL: import.meta.env.BASE_URL, //import.meta.env.BASE_URL is from vite.config.js. It refers to the base variable it the defineConfig
   });
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get('/api/kirjauduttu');
-      
-      const kirjauduttu = response.data.kirjauduttu;
-      const user = response.data.user;      
+      const response = await axiosInstance.get("/api/kirjauduttu");
 
-      console.log('req.data.kirjauduttu:', kirjauduttu);
-      console.log('req.data.user', user);
-      
+      const kirjauduttu = response.data.kirjauduttu;
+      const user = response.data.user;
+
+      console.log("req.data.kirjauduttu:", kirjauduttu);
+      console.log("req.data.user", user);
+
       setLoggedInUser(kirjauduttu);
       setUserData(user);
 
       //drop mockUser locally for /public page
-      const isProduction = process.env.NODE_ENV === 'production';
+      const isProduction = process.env.NODE_ENV === "production";
       setPublicUser(isProduction ? user : null);
       setLoggedInPublicPage(isProduction ? kirjauduttu : false);
-
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       setLoggedInUser(false);
       setUserData(null);
       setPublicUser(null);
       setLoggedInPublicPage(false);
     } finally {
       setLoading(false);
-  }};
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    console.log('loggedInUser:', loggedInUser);
-    console.log('user:', user);
-    console.log('loggedInPublicPage:', loggedInPublicPage);
-    console.log('publicUser:', publicUser);
+    console.log("loggedInUser:", loggedInUser);
+    console.log("user:", user);
+    console.log("loggedInPublicPage:", loggedInPublicPage);
+    console.log("publicUser:", publicUser);
   }, [loggedInUser, user, loggedInPublicPage, publicUser]);
 
-  const login_url = import.meta.env.BASE_URL.replace('esitieto', 'esitietologin');
+  const login_url = import.meta.env.BASE_URL.replace(
+    "esitieto",
+    "esitietologin"
+  );
 
   if (loading) {
     return <div>Loading...</div>;
@@ -74,25 +74,34 @@ function App() {
       <Routes>
         <Route
           path={import.meta.env.BASE_URL + "/"}
-          element={<MainPage
-            axiosInstance={axiosInstance}
-            loggedInUser={loggedInUser}
-            user={user}
-          />}
+          element={
+            <MainPage
+              axiosInstance={axiosInstance}
+              loggedInUser={loggedInUser}
+              user={user}
+            />
+          }
         />
         <Route
           path={import.meta.env.BASE_URL + "/start"}
-          element={<StartPage
-            axiosInstance={axiosInstance}
-            loggedInUser={loggedInUser}
-            user={user}
-          />}
+          element={
+            <StartPage
+              axiosInstance={axiosInstance}
+              loggedInUser={loggedInUser}
+              user={user}
+            />
+          }
         />
-        <Route path={login_url} element={<LoginPage axiosInstance={axiosInstance}/>} />        
-        <Route path={import.meta.env.BASE_URL + "*"} element={<MissingPage axiosInstance={axiosInstance} />} />
+        <Route
+          path={login_url}
+          element={<LoginPage axiosInstance={axiosInstance} />}
+        />
+        <Route
+          path={import.meta.env.BASE_URL + "*"}
+          element={<MissingPage axiosInstance={axiosInstance} />}
+        />
       </Routes>
     </Router>
-
   );
 }
 

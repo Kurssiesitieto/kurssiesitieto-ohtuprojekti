@@ -1,4 +1,4 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 #degreeSelectionButton {
   position: absolute;
@@ -12,7 +12,7 @@
   font: inherit;
   text-transform: none;
 }
-  
-  #degreeSelectionButton:hover {
-    background-color: var(--button-background-color-hover);
-  }
+
+#degreeSelectionButton:hover {
+  background-color: var(--button-background-color-hover);
+}

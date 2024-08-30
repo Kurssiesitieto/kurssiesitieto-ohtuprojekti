@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "../styles/navbar.css";
-import SearchBar from './SearchBar';
-import InfoBox from './InfoBox';
-import AddStudyPlans from './AddStudyPlans';
-import AddPrerequisites from './AddPrerequisites'
-import DegreeSelectionMenu from './DegreeSelectionMenu';
-import InfoButton from './InfoButton';
-import AddStudyPlansButton from './AddStudyPlansButton';
-import LoginButton from './LoginButton';
-import LogoutButton from './LogoutButton';
+import SearchBar from "./SearchBar";
+import InfoBox from "./InfoBox";
+import AddStudyPlans from "./AddStudyPlans";
+import AddPrerequisites from "./AddPrerequisites";
+import DegreeSelectionMenu from "./DegreeSelectionMenu";
+import InfoButton from "./InfoButton";
+import AddStudyPlansButton from "./AddStudyPlansButton";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
 
 export const Navbar = ({
   handleDegreeChange,
@@ -21,7 +21,7 @@ export const Navbar = ({
   setNewCoursePlan,
   loggedInUser,
   userUid,
-  currentPlanId
+  currentPlanId,
 }) => {
   const [isInfoBoxOpen, setIsInfoBoxOpen] = useState(false);
   const [isAddStudyPlansOpen, setIsAddStudyPlansOpen] = useState(false);
@@ -32,26 +32,26 @@ export const Navbar = ({
   };
 
   const openAddStudyPlans = () => {
-    setIsAddStudyPlansOpen(!isAddStudyPlansOpen)
+    setIsAddStudyPlansOpen(!isAddStudyPlansOpen);
   };
 
   const openAddPrerequisites = () => {
-    setIsAddStudyPlansOpen(!isAddStudyPlansOpen)
-    setIsAddPrerequisitesOpen(!isAddPrerequisitesOpen)
+    setIsAddStudyPlansOpen(!isAddStudyPlansOpen);
+    setIsAddPrerequisitesOpen(!isAddPrerequisitesOpen);
   };
 
   const changeOpenAddPrerequisites = () => {
-    setIsAddPrerequisitesOpen(!isAddPrerequisitesOpen)
+    setIsAddPrerequisitesOpen(!isAddPrerequisitesOpen);
   };
 
   const login = () => {
     window.location.href = import.meta.env.BASE_URL;
-  }
-  
+  };
+
   const logout = () => {
-    const baseURL = import.meta.env.BASE_URL.replace('/esitieto', '');
+    const baseURL = import.meta.env.BASE_URL.replace("/esitieto", "");
     window.location.href = baseURL + "/Shibboleth.sso/Logout";
-  }
+  };
 
   return (
     <nav className="nav">
@@ -62,14 +62,53 @@ export const Navbar = ({
             listOfDegrees={listOfDegrees}
           />
         </li>
-        <li><SearchBar axiosInstance={axiosInstance} handleSearch={handleSearch} currentPlanId={currentPlanId}/></li>
-        <li className='degree-name'>{selectedDegreeName}</li>
-        <li>{loggedInUser ? <LogoutButton onClick={logout}/> : <LoginButton onClick={login}/>}</li>
-        <li><InfoButton onClick={openInfoBox}/></li>
-        <li><InfoBox isOpen={isInfoBoxOpen} onClose={() => setIsInfoBoxOpen(false)} baseURL={baseURL} /></li>
-        <li>{loggedInUser && <AddStudyPlansButton onClick={openAddStudyPlans} />}</li>
-        <li><AddStudyPlans isOpen={isAddStudyPlansOpen} axiosInstance={axiosInstance} onCreate={openAddPrerequisites} setNewCoursePlan={setNewCoursePlan} onClick={openAddStudyPlans} userUid={userUid}/></li>
-        <li><AddPrerequisites isOpen={isAddPrerequisitesOpen} axiosInstance={axiosInstance} onClick={changeOpenAddPrerequisites} newCoursePlan={newCoursePlan} DegreeChange={handleDegreeChange}/></li>
+        <li>
+          <SearchBar
+            axiosInstance={axiosInstance}
+            handleSearch={handleSearch}
+            currentPlanId={currentPlanId}
+          />
+        </li>
+        <li className="degree-name">{selectedDegreeName}</li>
+        <li>
+          {loggedInUser ? (
+            <LogoutButton onClick={logout} />
+          ) : (
+            <LoginButton onClick={login} />
+          )}
+        </li>
+        <li>
+          <InfoButton onClick={openInfoBox} />
+        </li>
+        <li>
+          <InfoBox
+            isOpen={isInfoBoxOpen}
+            onClose={() => setIsInfoBoxOpen(false)}
+            baseURL={baseURL}
+          />
+        </li>
+        <li>
+          {loggedInUser && <AddStudyPlansButton onClick={openAddStudyPlans} />}
+        </li>
+        <li>
+          <AddStudyPlans
+            isOpen={isAddStudyPlansOpen}
+            axiosInstance={axiosInstance}
+            onCreate={openAddPrerequisites}
+            setNewCoursePlan={setNewCoursePlan}
+            onClick={openAddStudyPlans}
+            userUid={userUid}
+          />
+        </li>
+        <li>
+          <AddPrerequisites
+            isOpen={isAddPrerequisitesOpen}
+            axiosInstance={axiosInstance}
+            onClick={changeOpenAddPrerequisites}
+            newCoursePlan={newCoursePlan}
+            DegreeChange={handleDegreeChange}
+          />
+        </li>
       </ul>
     </nav>
   );

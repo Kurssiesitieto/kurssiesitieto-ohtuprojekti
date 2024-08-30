@@ -1,38 +1,38 @@
-const request = require('supertest');
-const express = require('express');
-const loginRoutes = require('./loginRoutes');
+const request = require("supertest");
+const express = require("express");
+const loginRoutes = require("./loginRoutes");
 
-describe('GET /', () => {
+describe("GET /", () => {
   let app;
 
   beforeEach(() => {
     app = express();
     app.use((req, res, next) => {
       req.kirjauduttu = true;
-      req.user = { username: 'testUser' };
+      req.user = { username: "testUser" };
       next();
     });
-    app.use('/api/kirjauduttu', loginRoutes);
+    app.use("/api/kirjauduttu", loginRoutes);
   });
 
-  test('should return kirjauduttu and user as JSON', async () => {
-    const response = await request(app).get('/api/kirjauduttu');
+  test("should return kirjauduttu and user as JSON", async () => {
+    const response = await request(app).get("/api/kirjauduttu");
 
     expect(response.status).toBe(200);
     expect(response.body.kirjauduttu).toBe(true);
-    expect(response.body.user.username).toBe('testUser');
+    expect(response.body.user.username).toBe("testUser");
   });
 
-  test('should return null for user if not logged in', async () => {
+  test("should return null for user if not logged in", async () => {
     const app = express();
     app.use((req, res, next) => {
       req.kirjauduttu = false;
       req.user = null;
       next();
     });
-    app.use('/api/kirjauduttu', loginRoutes);
+    app.use("/api/kirjauduttu", loginRoutes);
 
-    const response = await request(app).get('/api/kirjauduttu');
+    const response = await request(app).get("/api/kirjauduttu");
 
     expect(response.status).toBe(200);
     expect(response.body.kirjauduttu).toBe(false);

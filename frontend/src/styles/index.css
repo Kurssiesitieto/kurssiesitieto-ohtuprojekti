@@ -1,7 +1,7 @@
-@import url('./Colors.css');
+@import url("./Colors.css");
 
 :root {
-  font-family:"Open Sans",Helvetica,Arial,sans-serif;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

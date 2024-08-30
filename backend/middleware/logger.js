@@ -1,6 +1,6 @@
-const winston = require('winston');
+const winston = require("winston");
 const { format, transports } = winston;
-const { consoleFormat } = require('winston-console-format');
+const { consoleFormat } = require("winston-console-format");
 
 const customLevels = {
   levels: {
@@ -11,29 +11,29 @@ const customLevels = {
     verbose: 4,
   },
   colors: {
-    error: 'red',
-    warn: 'yellow',
-    verbose: 'green',
-    info: 'white',
-    debug: 'cyan',
+    error: "red",
+    warn: "yellow",
+    verbose: "green",
+    info: "white",
+    debug: "cyan",
   },
 };
 
 winston.addColors(customLevels.colors);
 
-const level = process.env.LOGGING_LEVEL || 'debug';
+const level = process.env.LOGGING_LEVEL || "debug";
 
 const logger = winston.createLogger({
   levels: customLevels.levels,
   format: format.combine(
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     format.errors({ stack: true }),
     format.splat(),
     format.colorize({ all: true }),
     format.padLevels(), // Does NOT like custom message types.
     consoleFormat({
       showMeta: true,
-      metaStrip: ['timestamp', 'service'],
+      metaStrip: ["timestamp", "service"],
       inspectOptions: {
         depth: Infinity,
         colors: true,
@@ -48,14 +48,13 @@ const logger = winston.createLogger({
       level,
     }),
     new winston.transports.File({
-      filename: 'combined.log',
+      filename: "combined.log",
     }),
     new winston.transports.File({
-      filename: 'app.error.log',
-      level: 'error'
-    })
+      filename: "app.error.log",
+      level: "error",
+    }),
   ],
 });
-
 
 module.exports = logger;

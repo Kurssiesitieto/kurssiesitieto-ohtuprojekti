@@ -72,32 +72,30 @@ const config = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: [
-    "node_modules"
-  ],
+  moduleDirectories: ["node_modules"],
 
   // An array of file extensions your modules use
   moduleFileExtensions: [
-     "js",
-     "mjs",
-     "cjs",
-     "jsx",
-     "ts",
-     "tsx",
-     "json",
-     "node"
-   ],
+    "js",
+    "mjs",
+    "cjs",
+    "jsx",
+    "ts",
+    "tsx",
+    "json",
+    "node",
+  ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  moduleNameMapper: {"\\.(css|less|scss|sass)$": "identity-obj-proxy"},
+  moduleNameMapper: { "\\.(css|less|scss|sass)$": "identity-obj-proxy" },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   modulePathIgnorePatterns: [
-  "kurssiesitieto-ohtuprojekti/backend/archive/",
-  "kurssiesitieto-ohtuprojekti/backend/coverage/",
-  "kurssiesitieto-ohtuprojekti/backend/dist/",
-  "kurssiesitieto-ohtuprojekti/backend/index.integration.test.js",
-  "kurssiesitieto-ohtuprojekti/backend/routes/degreesRoutes.test.js"
+    "kurssiesitieto-ohtuprojekti/backend/archive/",
+    "kurssiesitieto-ohtuprojekti/backend/coverage/",
+    "kurssiesitieto-ohtuprojekti/backend/dist/",
+    "kurssiesitieto-ohtuprojekti/backend/index.integration.test.js",
+    "kurssiesitieto-ohtuprojekti/backend/routes/degreesRoutes.test.js",
   ],
 
   // Activates notifications for test results

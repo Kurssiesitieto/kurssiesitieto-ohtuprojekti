@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
-jest.mock('pg', () => {
+jest.mock("pg", () => {
   const mPool = {
     query: jest.fn(),
     end: jest.fn(),
@@ -8,7 +8,7 @@ jest.mock('pg', () => {
   return { Pool: jest.fn(() => mPool) };
 });
 
-describe('index.js tests', () => {
+describe("index.js tests", () => {
   let OLD_ENV;
 
   beforeAll(() => {
@@ -26,23 +26,23 @@ describe('index.js tests', () => {
     process.env = { ...OLD_ENV }; // Restore to original environment
 
     // Set the environment variables for the test
-    process.env.DATABASE_POOLMODE = 'default';
-    process.env.POSTGRES_USER = 'testuser';
-    process.env.POSTGRES_PASSWORD = 'testpassword';
-    process.env.DATABASE_HOST = 'localhost';
-    process.env.DATABASE_PORT = '5432';
-    process.env.DATABASE_NAME = 'testdb';
+    process.env.DATABASE_POOLMODE = "default";
+    process.env.POSTGRES_USER = "testuser";
+    process.env.POSTGRES_PASSWORD = "testpassword";
+    process.env.DATABASE_HOST = "localhost";
+    process.env.DATABASE_PORT = "5432";
+    process.env.DATABASE_NAME = "testdb";
   });
 
   afterEach(() => {
     jest.clearAllMocks(); // Clear mocks after each test
   });
 
-  test('should use default database pool mode', () => {
-    const poolSpy = jest.spyOn(require('pg'), 'Pool');
+  test("should use default database pool mode", () => {
+    const poolSpy = jest.spyOn(require("pg"), "Pool");
 
     // Load index.js after setting env variables
-    require('./index');
+    require("./index");
 
     console.log(Pool.mock.calls); // Log mock calls
 
@@ -56,14 +56,15 @@ describe('index.js tests', () => {
     });
   });
 
-  test('should use direct database pool mode', () => {
-    process.env.DATABASE_POOLMODE = 'direct';
-    process.env.DATABASE_DIRECT = 'postgres://testuser:testpassword@localhost:5432/testdb';
+  test("should use direct database pool mode", () => {
+    process.env.DATABASE_POOLMODE = "direct";
+    process.env.DATABASE_DIRECT =
+      "postgres://testuser:testpassword@localhost:5432/testdb";
 
-    const poolSpy = jest.spyOn(require('pg'), 'Pool');
+    const poolSpy = jest.spyOn(require("pg"), "Pool");
 
     // Load index.js after setting env variables
-    require('./index');
+    require("./index");
 
     console.log(Pool.mock.calls); // Log mock calls
 
